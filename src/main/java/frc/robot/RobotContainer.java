@@ -1,6 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
@@ -15,14 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-//hi
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
       public static final SwerveDrivetrain drive = new SwerveDrivetrain();
 
@@ -30,14 +20,11 @@ public class RobotContainer {
      // private final CommandXboxController controller1 = new CommandXboxController(1);
 
 
-  // The robot's subsystems and commands are defined here...
   public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
@@ -53,12 +40,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
     m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
   }
 
