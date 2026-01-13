@@ -3,8 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import frc.robot.commands.FieldCentricDrive;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-import frc.robot.Constants.OperatorConstants;
+
+import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -21,6 +24,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+      public static final SwerveDrivetrain drive = new SwerveDrivetrain();
+
+      private final CommandXboxController controller0 = new CommandXboxController(0);
+     // private final CommandXboxController controller1 = new CommandXboxController(1);
+
+
   // The robot's subsystems and commands are defined here...
   public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
@@ -62,8 +71,20 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(exampleSubsystem);
   }
-    public Command prototypeCommand() {
-      return exampleSubsystem.exampleMethodCommand();
+  
+    public Command defaultDriveCommand() {
+        return new FieldCentricDrive(
+                drive,
+                () -> -controller0.getLeftY(),
+                () -> -controller0.getLeftX(),
+                () -> -controller0.getRightX(),
+                () -> controller0.getHID().getLeftBumperButton(),
+                () -> false,
+                // () -> controller0.getHID().getYButton(),
+                () -> controller0.getHID().getXButton(),
+                () -> controller0.getHID().getBButton(),
+                () -> controller0.getHID().getRightBumperButton());
     }
+
   
 }
