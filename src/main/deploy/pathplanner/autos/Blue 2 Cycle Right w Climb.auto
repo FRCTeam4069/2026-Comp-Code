@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 2 Cycle Right 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 2 Cycle Right 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 2 Cycle Right 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 2 Cycle Right 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Right Climb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
