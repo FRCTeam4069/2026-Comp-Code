@@ -1,18 +1,18 @@
 package frc.robot.constants;
 
 public class DeviceIDs {
-    public static final byte DRIVE_FL = 1;
-    public static final byte DRIVE_FR = 2;
-    public static final byte DRIVE_BL = 3;
-    public static final byte DRIVE_BR = 4;
+    public static final byte DRIVE_FL = 4;
+    public static final byte DRIVE_FR = 3;
+    public static final byte DRIVE_BL = 2;
+    public static final byte DRIVE_BR = 1;
     
-    public static final byte STEER_FL = 21;
-    public static final byte STEER_FR = 22;
-    public static final byte STEER_BL = 23;
-    public static final byte STEER_BR = 24;
+    public static final byte STEER_FL = 24;
+    public static final byte STEER_FR = 23;
+    public static final byte STEER_BL = 22;
+    public static final byte STEER_BR = 21;
 
-    public static final byte ENCODER_FL = 31;
-    public static final byte ENCODER_FR = 32;
-    public static final byte ENCODER_BL = 33;
-    public static final byte ENCODER_BR = 34;
+    public static final byte ENCODER_FL = 34;
+    public static final byte ENCODER_FR = 33;
+    public static final byte ENCODER_BL = 32;
+    public static final byte ENCODER_BR = 31;
 }

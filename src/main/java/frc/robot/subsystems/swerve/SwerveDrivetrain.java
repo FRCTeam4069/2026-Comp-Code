@@ -109,10 +109,10 @@ public class SwerveDrivetrain extends SubsystemBase {
                                 Units.inchesToMeters(11.875)),
                 new Rotation3d(Math.toRadians(2.60), Math.toRadians(-9.0), Math.toRadians(177.0)));
 
-    private Vision visionLF;
-    private Vision visionRF;
-    private Vision visionLB;
-    private Vision visionRB;
+  //  private Vision visionLF;
+   // private Vision visionRF;
+   // private Vision visionLB;
+   // private Vision visionRB;
 
     public SwerveDrivetrain() {
         fl = new SwerveModule(DrivetrainConstants.flConfig, DrivetrainConstants.flCoefficients);
@@ -128,12 +128,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
         poseEstimator = new SwerveDriveOdometry(kinematics, getRawRotation2d(), getModulePositions(), startingPose);
         visionPoseEstimator = new SwerveDrivePoseEstimator(kinematics, getRawRotation2d(), getModulePositions(), startingPose, VecBuilder.fill(0.8, 0.8, 0.05), VecBuilder.fill(0.5, 0.5, 2.0));
-        visionLF = new Vision("Left_Front", leftFrontTransform, startingPose);
-        visionRF = new Vision("Right_Front", rightFrontTransform, startingPose);
+       // visionLF = new Vision("Left_Front", leftFrontTransform, startingPose);
+       // visionRF = new Vision("Right_Front", rightFrontTransform, startingPose);
         // visionLB = new VisionBetter("Left_Side", leftBackTransform, startingPose, VecBuilder.fill(5.0, 5.0, 5.0), VecBuilder.fill(0.8, 0.8, 3.0));
         // visionRB = new VisionBetter("Right_Side", rightBackTransform, startingPose, VecBuilder.fill(5.0, 5.0, 5.0), VecBuilder.fill(0.8, 0.8, 3.0));
-        visionLB = new Vision("Left_Side", leftBackTransform, startingPose);
-        visionRB = new Vision("Right_Side", rightBackTransform, startingPose);
+       // visionLB = new Vision("Left_Side", leftBackTransform, startingPose);
+       // visionRB = new Vision("Right_Side", rightBackTransform, startingPose);
 
         try{
             DrivetrainConstants.config = RobotConfig.fromGUISettings();
@@ -390,36 +390,36 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator.update(getRawRotation2d(), getModulePositions());
         visionPoseEstimator.update(getRawRotation2d(), getModulePositions());
 
-        var estimatedLF = visionLF.getEstimatedGlobalPose();
-        if (estimatedLF.isPresent()) {
-            leftVision3dPosePublisher.set(estimatedLF.get().estimatedPose);
-            addVisionMeasurement(estimatedLF.get().estimatedPose.toPose2d(), estimatedLF.get().timestampSeconds, visionLF.getStdDeviations());
-        }
+        // var estimatedLF = visionLF.getEstimatedGlobalPose();
+        // if (estimatedLF.isPresent()) {
+        //     leftVision3dPosePublisher.set(estimatedLF.get().estimatedPose);
+        //     addVisionMeasurement(estimatedLF.get().estimatedPose.toPose2d(), estimatedLF.get().timestampSeconds, visionLF.getStdDeviations());
+        // }
 
-        var estimatedRF = visionRF.getEstimatedGlobalPose();
-        if (estimatedRF.isPresent()) {
-            rightVision3dPosePublisher.set(estimatedRF.get().estimatedPose);
-            addVisionMeasurement(estimatedRF.get().estimatedPose.toPose2d(), estimatedRF.get().timestampSeconds, visionRF.getStdDeviations());
-        }
+        // var estimatedRF = visionRF.getEstimatedGlobalPose();
+        // if (estimatedRF.isPresent()) {
+        //     rightVision3dPosePublisher.set(estimatedRF.get().estimatedPose);
+        //     addVisionMeasurement(estimatedRF.get().estimatedPose.toPose2d(), estimatedRF.get().timestampSeconds, visionRF.getStdDeviations());
+        // }
 
-        var estimatedLB = visionLB.getEstimatedGlobalPose();
-        if (estimatedLB.isPresent()) {
-            leftBackVision3dPosePublisher.set(estimatedLB.get().estimatedPose);
-            addVisionMeasurement(estimatedLB.get().estimatedPose.toPose2d(), estimatedLB.get().timestampSeconds, visionLB.getStdDeviations());
-        }
+        // var estimatedLB = visionLB.getEstimatedGlobalPose();
+        // if (estimatedLB.isPresent()) {
+        //     leftBackVision3dPosePublisher.set(estimatedLB.get().estimatedPose);
+        //     addVisionMeasurement(estimatedLB.get().estimatedPose.toPose2d(), estimatedLB.get().timestampSeconds, visionLB.getStdDeviations());
+        // }
 
-        var estimatedRB = visionRB.getEstimatedGlobalPose();
-        if (estimatedRB.isPresent()) {
-            rightBackVision3dPosePublisher.set(estimatedRB.get().estimatedPose);
-            addVisionMeasurement(estimatedRB.get().estimatedPose.toPose2d(), estimatedRB.get().timestampSeconds, visionRB.getStdDeviations());
-        }
+        // var estimatedRB = visionRB.getEstimatedGlobalPose();
+        // if (estimatedRB.isPresent()) {
+        //     rightBackVision3dPosePublisher.set(estimatedRB.get().estimatedPose);
+        //     addVisionMeasurement(estimatedRB.get().estimatedPose.toPose2d(), estimatedRB.get().timestampSeconds, visionRB.getStdDeviations());
+        // }
 
-        visionPosePublisher.set(visionPoseEstimator.getEstimatedPosition());
-        swervePublisher.set(getModuleStates());
-        desiredSwervePublisher.set(desiredState);
-        posePublisher.set(poseEstimator.getPoseMeters());
-        var speeds = getRobotRelativeSpeeds();
-        speedsPublisher.set(speeds);
+        // visionPosePublisher.set(visionPoseEstimator.getEstimatedPosition());
+        // swervePublisher.set(getModuleStates());
+        // desiredSwervePublisher.set(desiredState);
+        // posePublisher.set(poseEstimator.getPoseMeters());
+        // var speeds = getRobotRelativeSpeeds();
+        // speedsPublisher.set(speeds);
         // SmartDashboard.putNumber("max speed", Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
 
         // var wheelDiameter = SmartDashboard.getNumber("drive wheel diameter", DrivetrainConstants.wheelDiameter);

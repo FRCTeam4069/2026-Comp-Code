@@ -22,38 +22,35 @@ public class DrivetrainConstants {
 
     public static final int driveCurrentLimit = 50;
     public static final int steerCurrentLimit = 25;
-    public volatile static double wheelDiameter = 3.99; // 3.94in
+    public volatile static double wheelDiameter = 3.9; // 3.94in
     //bl 3.955 -> 3.912
     //fl 3.9545
     //fr 3.950
     //br 3.945
-    public static final double driveConversionFactor = ((wheelDiameter * Math.PI) * 0.0254) / 6.75;
+    public static final double driveConversionFactor = ((wheelDiameter * Math.PI) * 0.0254) / 6.12;
     public static final double steerConversionFactor = 16.8;
 
     public static final boolean driveInverted = true;
     public static final boolean steerInverted = true;
     public static final boolean encoderInverted = true;
 
-    public static final double flEncoderOffset = -0.179932;
-    public static final double frEncoderOffset = 0.48364295;
-    public static final double blEncoderOffset = 0.425049;
-    public static final double brEncoderOffset = -0.4025;
+    public static final double flEncoderOffset = -0.02929722222; 
+    public static final double frEncoderOffset = -0.91626111111;
+    public static final double blEncoderOffset = -0.0708;
+    public static final double brEncoderOffset = -0.1739;
 
     public static final Pigeon2Configuration gyroConfig = new Pigeon2Configuration().withMountPose(new MountPoseConfigs().withMountPoseYaw(0.0));
 
     public static final double moduleOffset = Units.inchesToMeters(10.375);
     
-    public static final double maxVelocity = Units.feetToMeters(17.6);
+    public static final double maxVelocity = Units.feetToMeters(19.3);
     public static final double maxAngularVelocity = maxVelocity / new Rotation2d(moduleOffset, moduleOffset).getRadians();
 
     public static final double angularVelocityCoefficient = 0.04;
     public static final double angularVelocityDeadband = 0.01;
     public static final double headingCorrectionDeadband = 0.05;
 
-    public static final double humanPlayerLeft = Degrees.of(-52.5).in(Radians);
-    public static final double humanPlayerRight = Degrees.of(52.5).in(Radians);
-
-    public static final double mass = Pounds.of(135.0).in(Kilograms);
+    public static final double mass = Pounds.of(123.0).in(Kilograms);
 
     public static final Rotation2d[] snapAngles = new Rotation2d[]{
         Rotation2d.fromDegrees(0.0),
@@ -64,7 +61,7 @@ public class DrivetrainConstants {
         Rotation2d.fromDegrees(-60.0)
     };
 
-    public static final Pose2d[] blueLeftReefPoses = new Pose2d[]{
+     public static final Pose2d[] blueLeftReefPoses = new Pose2d[]{
         new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(60.0)), //g
         new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(0.0)), //g
         new Pose2d(4.02, 5.22, Rotation2d.fromDegrees(-60.0)), //g
@@ -204,8 +201,8 @@ public class DrivetrainConstants {
 
     public static RobotConfig config;
 
-    public static PIDConstants translationPIDConstants = new PIDConstants(7.0, 0.0, 0.0);
-    public static PIDConstants rotationPIDConstants = new PIDConstants(4.0, 0.0, 0.0);
+    public static final PIDConstants translationPIDConstants = new PIDConstants(0.5, 0.0, 0.0);
+    public static final PIDConstants rotationPIDConstants = new PIDConstants(0.1, 0.0, 0.0);
 
     public static double yScalar = 0.93;
 
@@ -213,6 +210,7 @@ public class DrivetrainConstants {
      * 26ft 5in x 57ft 6(7/8)in
      * 8.052m x 17.548m
      */
+    
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         new Translation2d(moduleOffset, moduleOffset),

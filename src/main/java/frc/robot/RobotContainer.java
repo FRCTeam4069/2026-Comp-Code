@@ -40,7 +40,7 @@ public class RobotContainer {
 
       autoChooser = AutoBuilder.buildAutoChooser();
 
-      SmartDashboard.putData("Auto Chooser", autoChooser);
+      //SmartDashboard.putData("Auto Chooser", autoChooser);
 
     configureBindings();
   }
@@ -55,10 +55,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    new Trigger(exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(exampleSubsystem));
+    // new Trigger(exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(exampleSubsystem));
 
-    m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+    // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
   }
 
   /**
@@ -67,7 +67,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+      //An example command will be run in autonomous
       return autoChooser.getSelected();
     
   }

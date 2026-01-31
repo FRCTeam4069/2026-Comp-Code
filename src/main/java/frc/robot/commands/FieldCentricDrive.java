@@ -102,11 +102,6 @@ public class FieldCentricDrive extends Command {
             } else {
                 lastHeading = drive.getRotation2d().getRadians();
             }
-        } else if (humanPlayerLeft.getAsBoolean()) {
-            outputSpeeds.omegaRadiansPerSecond = headingController.calculate(drive.getRotation2d().getRadians(), DrivetrainConstants.humanPlayerLeft);
-
-        } else if (humanPlayerRight.getAsBoolean()) {
-            outputSpeeds.omegaRadiansPerSecond = headingController.calculate(drive.getRotation2d().getRadians(), DrivetrainConstants.humanPlayerRight);
         } else if (snapHeading.getAsBoolean()) {
             var currentHeading = drive.getRotation2d();
             var closestAngle = DrivetrainConstants.snapAngles[0];
