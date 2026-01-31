@@ -23,7 +23,7 @@ public class Vision {
     private Optional<EstimatedRobotPose> pose;
     private PhotonPipelineResult result;
 
-    private final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    private final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private Matrix<N3, N1> bad = VecBuilder.fill(6.0, 6.0, 5.0);
     private Matrix<N3, N1> good = VecBuilder.fill(0.6, 0.6, 2.0);
@@ -69,7 +69,7 @@ public class Vision {
 
     private double lowestDistance = Double.MAX_VALUE;
 
-    private static final double tooFar = 1.3;
+    private static final double tooFar = 5;//FIXME, was 1.3
     private static final double closeEnough = 5;//FIXME, TWAS 2.7
 
     public Matrix<N3, N1> getStdDeviations() {

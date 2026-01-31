@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,19 +21,23 @@ public class FieldCentricDrive extends Command {
     private final DoubleSupplier forwardSpeed;
     private final DoubleSupplier strafeSpeed;
     private final DoubleSupplier turnSpeed;
-    private final BooleanSupplier halfSpeed;
+    private final BooleanSupplier autoAlign;
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(100.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(100.0);
     private PIDController headingController = new PIDController(
         DrivetrainConstants.teleOpHeadingCoefficients.kP(), 
         DrivetrainConstants.teleOpHeadingCoefficients.kI(), 
         DrivetrainConstants.teleOpHeadingCoefficients.kD());
-    private BooleanSupplier headingCorrection;
-    private BooleanSupplier humanPlayerLeft;
-    private BooleanSupplier humanPlayerRight;
-    private BooleanSupplier snapHeading;
-    private double lastHeading = 0.0;
+    private Pose2d currentPosition;
+    private double desiredHeading = 0.0;
     private Alliance alliance = Alliance.Blue;
+    private final double redHubX = 469.1;
+    private final double redHubY = 158.85;
+    private final double blueHubX = 182.1;
+    private final double blueHubY = 158.85;
+    private double deltaX = 0.0;
+    private double deltaY = 0.0;
+
 
     private static double controllerDeadband = 0.05;
     /**
@@ -41,35 +46,27 @@ public class FieldCentricDrive extends Command {
      * @param forwardSpeed -1.0 to 1.0
      * @param strafeSpeed -1.0 to 1.0
      * @param turnSpeed -1.0 to 1.0
-     * @param halfSpeed 
-     * @param headingCorrection whether to run pid controller on the heading
+     * @param autoAlign true for align to goal
      */
     public FieldCentricDrive(
         SwerveDrivetrain drive, 
         DoubleSupplier forwardSpeed, 
         DoubleSupplier strafeSpeed, 
         DoubleSupplier turnSpeed, 
-        BooleanSupplier halfSpeed, 
-        BooleanSupplier headingCorrection,
-        BooleanSupplier humanPlayerLeft,
-        BooleanSupplier humanPlayerRight,
-        BooleanSupplier snapHeading) {
+        BooleanSupplier autoAlign) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
         this.forwardSpeed = forwardSpeed;
         this.strafeSpeed = strafeSpeed;
-        this.halfSpeed = halfSpeed;
-        this.headingCorrection = headingCorrection;
-        this.humanPlayerLeft = humanPlayerLeft;
-        this.humanPlayerRight = humanPlayerRight;
-        this.snapHeading = snapHeading;
+        this.autoAlign = autoAlign;
 
         addRequirements(drive);
     }
     @Override
     public void initialize() {
         headingController.enableContinuousInput(-Math.PI, Math.PI);
+        currentPosition= drive.getPose();
 
         var result = DriverStation.getAlliance();
         if (result.isPresent()) {
@@ -79,42 +76,33 @@ public class FieldCentricDrive extends Command {
 
     @Override
     public void execute() {
-        double speedMultiplier = halfSpeed.getAsBoolean() ? 0.5 : 1.0;
 
         var outputSpeeds = new ChassisSpeeds(
-            xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble() * speedMultiplier)),
-            ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble() * speedMultiplier)),
+            xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
+            ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
             Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
         
-        SmartDashboard.putNumber("lastHeading", lastHeading);
+        SmartDashboard.putNumber("desiredHeading", desiredHeading);
 
-        int totalDesiredActions = (headingCorrection.getAsBoolean() ? 1 : 0) + (humanPlayerLeft.getAsBoolean() ? 1 : 0) + (humanPlayerRight.getAsBoolean() ? 1 : 0) + (snapHeading.getAsBoolean() ? 1 : 0);
+        if (autoAlign.getAsBoolean()){
+            currentPosition= drive.getPose();
 
-        if (totalDesiredActions != 1) {
-            ;
-        }
-        else if (headingCorrection.getAsBoolean()) {
-            if (Math.abs(outputSpeeds.omegaRadiansPerSecond) < DrivetrainConstants.headingCorrectionDeadband
-                && (Math.abs(outputSpeeds.vxMetersPerSecond) > DrivetrainConstants.headingCorrectionDeadband 
-                || Math.abs(outputSpeeds.vyMetersPerSecond) > DrivetrainConstants.headingCorrectionDeadband)) 
-            {
-                outputSpeeds.omegaRadiansPerSecond = headingController.calculate(drive.getRotation2d().getRadians(), lastHeading);
-            } else {
-                lastHeading = drive.getRotation2d().getRadians();
+            if (alliance == Alliance.Blue){
+
+                deltaX = blueHubX - currentPosition.getX();
+                deltaY = blueHubY - currentPosition.getY();
             }
-        } else if (snapHeading.getAsBoolean()) {
-            var currentHeading = drive.getRotation2d();
-            var closestAngle = DrivetrainConstants.snapAngles[0];
-            double closestDistance = Math.abs(currentHeading.minus(closestAngle).getRadians());
-            for (var angle : DrivetrainConstants.snapAngles) {
-                double distance = Math.abs(currentHeading.minus(angle).getRadians());
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closestAngle = angle;
-                }
-            }
-            outputSpeeds.omegaRadiansPerSecond = headingController.calculate(currentHeading.getRadians(), closestAngle.getRadians());
 
+            else{
+
+                deltaX = redHubX - currentPosition.getX();
+                deltaY = redHubY - currentPosition.getY();
+            }
+
+            desiredHeading = Math.atan2(deltaY, deltaX);
+            
+
+            outputSpeeds.omegaRadiansPerSecond = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
         }
 
         if (alliance == Alliance.Blue) {
