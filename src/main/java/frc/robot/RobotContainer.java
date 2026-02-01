@@ -78,7 +78,8 @@ public class RobotContainer {
                 () -> -controller0.getLeftY(),
                 () -> -controller0.getLeftX(),
                 () -> -controller0.getRightX(),
-                () -> controller0.getHID().getAButton());
+                () -> controller0.getHID().getAButton(),
+                () -> controller0.getHID().getYButton());
     }
 
   

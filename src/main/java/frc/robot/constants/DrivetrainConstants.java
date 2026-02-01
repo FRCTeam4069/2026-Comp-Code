@@ -30,7 +30,7 @@ public class DrivetrainConstants {
     public static final double driveConversionFactor = ((wheelDiameter * Math.PI) * 0.0254) / 6.12;
     public static final double steerConversionFactor = 16.8;
 
-    public static final boolean driveInverted = true;
+    public static final boolean driveInverted = false;
     public static final boolean steerInverted = true;
     public static final boolean encoderInverted = true;
 
@@ -213,10 +213,10 @@ public class DrivetrainConstants {
     
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d(moduleOffset, moduleOffset),
-        new Translation2d(moduleOffset, -moduleOffset),
-        new Translation2d(-moduleOffset, moduleOffset),
-        new Translation2d(-moduleOffset, -moduleOffset)
+        new Translation2d(moduleOffset, moduleOffset),//FL
+        new Translation2d(moduleOffset, -moduleOffset),//FR
+        new Translation2d(-moduleOffset, moduleOffset),//BL
+        new Translation2d(-moduleOffset, -moduleOffset) //BR
     );
 
     public record PIDCoefficients (

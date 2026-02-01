@@ -5,15 +5,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +26,7 @@ public class FieldCentricDrive extends Command {
     private final DoubleSupplier strafeSpeed;
     private final DoubleSupplier turnSpeed;
     private final BooleanSupplier autoAlign;
+    private final BooleanSupplier resetOdometry;
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(100.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(100.0);
     private PIDController headingController = new PIDController(
@@ -68,13 +68,15 @@ public class FieldCentricDrive extends Command {
         DoubleSupplier forwardSpeed, 
         DoubleSupplier strafeSpeed, 
         DoubleSupplier turnSpeed, 
-        BooleanSupplier autoAlign) {
+        BooleanSupplier autoAlign,
+        BooleanSupplier resetOdometry) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
         this.forwardSpeed = forwardSpeed;
         this.strafeSpeed = strafeSpeed;
         this.autoAlign = autoAlign;
+        this.resetOdometry = resetOdometry;
 
         addRequirements(drive);
     }
@@ -126,17 +128,26 @@ public class FieldCentricDrive extends Command {
             }
         }
 
-        
+             outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
+
 
         if (alliance == Alliance.Blue) {
-            drive.fieldOrientedDrive(outputSpeeds);
+          drive.fieldOrientedDrive(outputSpeeds);
+
         } else {
             drive.fieldOrientedDrive(outputSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
+
+
         }
 
        
+        if (resetOdometry.getAsBoolean()){
+            drive.resetDrivePose(currentPosition);
+       }     
 
     }
+
+    
     
     @Override
     public boolean isFinished() {
