@@ -7,8 +7,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,12 +36,22 @@ public class FieldCentricDrive extends Command {
     private Pose2d currentPosition;
     private double desiredHeading = 0.0;
     private Alliance alliance = Alliance.Blue;
-    private final double redHubX = 469.1;
-    private final double redHubY = 158.85;
-    private final double blueHubX = 182.1;
-    private final double blueHubY = 158.85;
+    private final double redHubX = Units.inchesToMeters(469.1);
+    private final double redHubY = Units.inchesToMeters(158.85);
+    private final double blueHubX = Units.inchesToMeters(182.1);
+    private final double blueHubY = Units.inchesToMeters(158.85);
     private double deltaX = 0.0;
     private double deltaY = 0.0;
+    private double tolerance = 2.0;
+    double rotationalSpeed = 0.0;
+
+    private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("desiredHeading").publish();
+    private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("deltaX").publish();
+    private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("deltaY").publish();
+
 
 
     private static double controllerDeadband = 0.05;
@@ -82,34 +97,44 @@ public class FieldCentricDrive extends Command {
             ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
             Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
         
-        SmartDashboard.putNumber("desiredHeading", desiredHeading);
+        currentPosition= drive.getPose();
 
-        if (autoAlign.getAsBoolean()){
-            currentPosition= drive.getPose();
+        if (alliance == Alliance.Blue){
 
-            if (alliance == Alliance.Blue){
-
-                deltaX = blueHubX - currentPosition.getX();
-                deltaY = blueHubY - currentPosition.getY();
-            }
-
-            else{
-
-                deltaX = redHubX - currentPosition.getX();
-                deltaY = redHubY - currentPosition.getY();
-            }
-
-            desiredHeading = Math.atan2(deltaY, deltaX);
-            
-
-            outputSpeeds.omegaRadiansPerSecond = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+            deltaX = blueHubX - currentPosition.getX();
+            deltaY = blueHubY - currentPosition.getY();
         }
+
+        else{
+
+            deltaX = redHubX - currentPosition.getX();
+            deltaY = redHubY - currentPosition.getY();
+        }
+
+        desiredHeading = Math.atan(deltaY / deltaX);
+        SmartDashboard.putNumber("desiredHeading", desiredHeading);
+        desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
+        deltaXDoublePublisher.set(deltaX);
+        deltaYDoublePublisher.set(deltaY);
+
+            
+        if (autoAlign.getAsBoolean()){
+            rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+
+            if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            }
+        }
+
+        
 
         if (alliance == Alliance.Blue) {
             drive.fieldOrientedDrive(outputSpeeds);
         } else {
             drive.fieldOrientedDrive(outputSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
         }
+
+       
 
     }
     

@@ -270,7 +270,7 @@ public class DrivetrainConstants {
         new Tolerances(0.04, 0.40), 
         new Tolerances(0.04, 0.30));
     
-    public static final PIDCoefficients teleOpHeadingCoefficients = new PIDCoefficients(13.0, 0.0, 0.0);
+    public static final PIDCoefficients teleOpHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
 
     public record ModuleCoefficients(
         double steerKS,
