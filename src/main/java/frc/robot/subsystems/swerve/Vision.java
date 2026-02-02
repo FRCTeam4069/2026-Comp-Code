@@ -26,7 +26,7 @@ public class Vision {
     private final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private Matrix<N3, N1> bad = VecBuilder.fill(6.0, 6.0, 5.0);
-    private Matrix<N3, N1> good = VecBuilder.fill(0.6, 0.6, 2.0);
+    private Matrix<N3, N1> good = VecBuilder.fill(0.2, 0.6, 2.0); //TODO: Tune x , find and tune y, find and tune theta
 
     public Vision(String name, Transform3d robotToCam, Pose2d startingPose) {
         this(name, robotToCam, startingPose, VecBuilder.fill(6.0, 6.0, 5.0), VecBuilder.fill(0.6, 0.6, 2.0));
@@ -69,8 +69,8 @@ public class Vision {
 
     private double lowestDistance = Double.MAX_VALUE;
 
-    private static final double tooFar = 5;//FIXME, was 1.3
-    private static final double closeEnough = 5;//FIXME, TWAS 2.7
+    private static final double tooFar = 2.7;//FIXME, was 1.3
+    private static final double closeEnough = 3.0; //TODO:tune checking that autoalign still works far
 
     public Matrix<N3, N1> getStdDeviations() {
         if (!pose.isPresent()) {
