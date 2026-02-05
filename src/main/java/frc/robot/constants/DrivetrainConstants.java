@@ -1,10 +1,8 @@
 package frc.robot.constants;
 
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.Radians;
 
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -52,106 +50,57 @@ public class DrivetrainConstants {
 
     public static final double mass = Pounds.of(123.0).in(Kilograms);
 
-    public static final Rotation2d[] snapAngles = new Rotation2d[]{
-        Rotation2d.fromDegrees(0.0),
-        Rotation2d.fromDegrees(60.0),
-        Rotation2d.fromDegrees(120.0),
-        Rotation2d.fromDegrees(180.0),
-        Rotation2d.fromDegrees(-120.0),
-        Rotation2d.fromDegrees(-60.0)
+
+     public static final Pose2d[] redShooterPoses = new Pose2d[]{
+        new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(60.0)), //red left //TODO
+        new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(0.0)), //red right //TODO
     };
 
-     public static final Pose2d[] blueLeftReefPoses = new Pose2d[]{
-        new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(60.0)), //g
-        new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(0.0)), //g
-        new Pose2d(4.02, 5.22, Rotation2d.fromDegrees(-60.0)), //g
-        new Pose2d(4.96, 5.20, Rotation2d.fromDegrees(-120.0)), //g
-        new Pose2d(5.75, 4.20, Rotation2d.fromDegrees(180.0)), //g
-        new Pose2d(5.25, 3.02, Rotation2d.fromDegrees(120.0)) //g
+    public static final Pose2d[] blueShooterPoses = new Pose2d[]{
+        new Pose2d(2.304, 7.402, Rotation2d.fromDegrees(-52.5)), //blue left
+        new Pose2d(2.304, 0.668, Rotation2d.fromDegrees(52.5)), //blue right
     };
 
-    public static final Pose2d[] blueRightReefPoses = new Pose2d[]{
-        new Pose2d(4.00, 2.87, Rotation2d.fromDegrees(60.0)), //g
-        new Pose2d(3.24, 3.88, Rotation2d.fromDegrees(0.0)), //g
-        new Pose2d(3.72, 5.03, Rotation2d.fromDegrees(-60.0)), //g
-        new Pose2d(5.30, 5.02, Rotation2d.fromDegrees(-120.0)), //g
-        new Pose2d(5.76, 3.83, Rotation2d.fromDegrees(180.0)), //g
-        new Pose2d(4.97, 2.83, Rotation2d.fromDegrees(120.0)) //g
-    };
-
-    public static final Pose2d[] redLeftReefPoses = new Pose2d[]{
-        new Pose2d(12.57, 2.86, Rotation2d.fromDegrees(60)),
-        new Pose2d(11.81, 3.89, Rotation2d.fromDegrees(0)),
-        new Pose2d(12.29, 5.02, Rotation2d.fromDegrees(-60)),
-        new Pose2d(13.86, 5.03, Rotation2d.fromDegrees(-120)),
-        new Pose2d(14.33, 3.84, Rotation2d.fromDegrees(180)),
-        new Pose2d(13.52, 2.84, Rotation2d.fromDegrees(120)),
-
-    };
-
-    public static final Pose2d[] redRightReefPoses = new Pose2d[]{
-        new Pose2d(12.26, 3.03, Rotation2d.fromDegrees(60)),
-        new Pose2d(11.78, 4.22, Rotation2d.fromDegrees(0)),
-        new Pose2d(12.59, 5.22, Rotation2d.fromDegrees(-60)),
-        new Pose2d(13.53, 5.20, Rotation2d.fromDegrees(-120)),
-        new Pose2d(14.31, 4.19, Rotation2d.fromDegrees(180)),
-        new Pose2d(13.82, 3.03, Rotation2d.fromDegrees(120))
-
-    };
 
     public static final Pose2d[] humanPlayerPoses = new Pose2d[]{
-        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(52.5)), // blue bottom
-        new Pose2d(1.518, 7.344, Rotation2d.fromDegrees(-52.5)), // blue top
-        new Pose2d(16.15, 0.81, Rotation2d.fromDegrees(127.5)), // red bottom
-        new Pose2d(16.28, 7.20, Rotation2d.fromDegrees(-127.5)), // red top
+        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(180)), // red.  //TODO
+        new Pose2d(0.489, 0.659, Rotation2d.fromDegrees(180)), // blue.  //TODO
     };
 
     public static Pose2d getHumanPlayerPose(HumanPlayerStations station) {
         switch (station) {
-            case BlueLeft:
+            case Red:
+                return humanPlayerPoses[0];
+            case Blue:
                 return humanPlayerPoses[1];
-            case BlueRight:
-                return humanPlayerPoses[0];
-            case RedLeft:
-                return humanPlayerPoses[2];
-            case RedRight:
-                return humanPlayerPoses[3];
             default:
-                return humanPlayerPoses[0];
-        }
-    }
+            throw new IllegalArgumentException("Invalid station: " + station);}
 
-    public static enum ReefPoses{
-        TopLeft,
-        MiddleLeft,
-        BottomLeft,
-        TopRight,
-        MiddleRight,
-        BottomRight;
+        }
+
+    public static enum ShooterPoses{
+       RedLeft,
+       RedRight,
+       BlueLeft,
+       BlueRight
     };
 
     public static enum HumanPlayerStations{
-        BlueLeft,
-        BlueRight,
-        RedLeft,
-        RedRight
+        Red,
+        Blue
     };
 
-    public static Pose2d getReefPose(HumanPlayerStations station, ReefPoses reefPose) {
+
+
+    public static Pose2d getShooterPose(HumanPlayerStations station, ShooterPoses shooterpose) {
         Pose2d[] array;
         
         switch (station) {
-            case BlueLeft:
-                array = blueLeftReefPoses;
+            case Red:
+                array = redShooterPoses;
                 break;
-            case BlueRight:
-                array = blueRightReefPoses;
-                break;
-            case RedLeft:
-                array = redLeftReefPoses;
-                break;
-            case RedRight:
-                array = redRightReefPoses;
+            case Blue:
+                array = blueShooterPoses;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid HumanPlayerStation: " + station);
@@ -159,43 +108,37 @@ public class DrivetrainConstants {
 
         Pose2d result = new Pose2d();
 
-        switch (reefPose) {
-            case BottomLeft:
+        switch (shooterpose) {
+            case RedLeft:
                 result = array[0];
                 break;
-            case MiddleLeft:
+            case RedRight:
                 result = array[1];
                 break;
-            case TopLeft:
+            case BlueLeft:
                 result = array[2];
                 break;
-            case TopRight:
+            case BlueRight:
                 result = array[3];
                 break;
-            case MiddleRight:
-                result = array[4];
-                break;
-            case BottomRight:
-                result = array[5];
-                break;
             default:
-                throw new IllegalArgumentException("Invalid ReefPose: " + reefPose);
+                throw new IllegalArgumentException("InvalidShooterPose: " + shooterpose);
         }
 
         return result;
     }
 
-    public static final Pose2d[] blueClimbPoses = new Pose2d[]{
-        new Pose2d(7.8, 7.26, Rotation2d.fromDegrees(180.0)),
-        new Pose2d(7.8, 6.160, Rotation2d.fromDegrees(180.0)),
-        new Pose2d(7.8, 5.15, Rotation2d.fromDegrees(180.0))
-    };
+    // public static final Pose2d[] blueClimbPoses = new Pose2d[]{
+    //     new Pose2d(7.8, 7.26, Rotation2d.fromDegrees(180.0)),//. //TODO
+    //     new Pose2d(7.8, 6.160, Rotation2d.fromDegrees(180.0)),//. //TODO
+    //     new Pose2d(7.8, 5.15, Rotation2d.fromDegrees(180.0))//. //TODO
+    // };
 
-    public static final Pose2d[] redClimbPoses = new Pose2d[]{
-        new Pose2d(9.75, 3.06, Rotation2d.fromDegrees(0.0)),
-        new Pose2d(9.75, 2.01, Rotation2d.fromDegrees(0.0)),
-        new Pose2d(9.75, 0.94, Rotation2d.fromDegrees(0.0))
-    };
+    // public static final Pose2d[] redClimbPoses = new Pose2d[]{
+    //     new Pose2d(9.75, 3.06, Rotation2d.fromDegrees(0.0)),//. //TODO
+    //     new Pose2d(9.75, 2.01, Rotation2d.fromDegrees(0.0)),//. //TODO
+    //     new Pose2d(9.75, 0.94, Rotation2d.fromDegrees(0.0))//. //TODO
+    // };
 
     // offset = 0.164m
 

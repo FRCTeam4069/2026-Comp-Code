@@ -1,11 +1,10 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.commands.DefaultArtCommand;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeController;
 import frc.robot.subsystems.IntakeController.positions;
@@ -13,14 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import frc.robot.commands.FeedIntakeCommand;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
@@ -111,5 +108,9 @@ public class RobotContainer {
 
     
 
-  
+    public Command driveCommand(){
+      return new ThroughTrench(
+        drive,
+        () -> controller0.getHID().getXButton()); 
+    }
 }
