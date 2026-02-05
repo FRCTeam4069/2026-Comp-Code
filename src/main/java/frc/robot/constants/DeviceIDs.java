@@ -15,4 +15,9 @@ public class DeviceIDs {
     public static final byte ENCODER_FR = 33;
     public static final byte ENCODER_BL = 32;
     public static final byte ENCODER_BR = 31;
+
+    //TODO test these IDS, from 2024 code but might be wrong
+    public static final byte INTAKE_ARTICULATE = 7; 
+    public static final byte INTAKE_FEED = 10; 
+    public static final byte FEEDER = 12;
 }

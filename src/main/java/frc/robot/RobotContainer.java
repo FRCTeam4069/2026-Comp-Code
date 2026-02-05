@@ -4,14 +4,18 @@ import frc.robot.commands.FieldCentricDrive;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.commands.DefaultArtCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeController;
+import frc.robot.subsystems.IntakeController.positions;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import frc.robot.commands.FeedIntakeCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,10 +25,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotContainer {
       public static final SwerveDrivetrain drive = new SwerveDrivetrain();
+      public static final IntakeController intake = new IntakeController();
 
 
       private final CommandXboxController controller0 = new CommandXboxController(0);
-     // private final CommandXboxController controller1 = new CommandXboxController(1);
+      private final CommandXboxController controller1 = new CommandXboxController(1);
 
       private final SendableChooser<Command> autoChooser;
 
@@ -32,11 +37,16 @@ public class RobotContainer {
 
   public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
+
+
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   public RobotContainer() {
     // Configure the trigger bindings
+
+      intake.setDefaultCommand(new DefaultArtCommand());
+      //intake.setDefaultCommand(defaultIntakeCommand());
 
       autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -81,6 +91,25 @@ public class RobotContainer {
                 () -> controller0.getHID().getAButton(),
                 () -> controller0.getHID().getYButton());
     }
+
+    //oh so come back pleeeeeek//
+    // public Command defaultIntakeCommand() {
+    //     return new FeedIntakeCommand(
+    //             intake,
+    //             () -> controller0.getHID().getYButton());
+    // }
+    // public Command defaultIntakeCommand() {
+    //     return intake.driveFeed(() -> -controller1.getAButton());
+    // }
+
+    public Command defaultIntakeCommand() {
+        var command = intake.defaultCommand(() -> controller1.getHID().getRightBumperButton(), () -> controller1.getHID().getLeftBumperButton());
+        command.addRequirements(intake);
+
+        return command;
+    }
+
+    
 
   
 }
