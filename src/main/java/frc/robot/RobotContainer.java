@@ -1,22 +1,18 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
@@ -82,5 +78,11 @@ public class RobotContainer {
                 () -> controller0.getHID().getYButton());
     }
 
-  
+    public Command driveCommand(){
+      return new ThroughTrench(
+        drive,
+        () -> controller0.getHID().getXButton()); 
+    }
+
+
 }
