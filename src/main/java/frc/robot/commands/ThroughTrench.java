@@ -25,10 +25,12 @@ public class ThroughTrench extends Command {
     private final double YTopTrench =7.44;
     private Pose2d setPoint;
     private Pose2d trenchAlign;
-    private final BooleanSupplier throughTrench;
     private double trenchY=0.0;
     private double deltaYTrench = 0.0;
-    private BooleanSupplier YAlignSupplier;
+
+    private final BooleanSupplier throughTrench;
+
+
 
     private final DrivetrainPIDController controller;   
 
@@ -42,11 +44,6 @@ public class ThroughTrench extends Command {
     Pose2d redRightPickup = new Pose2d(5.91, 4.02, Rotation2d.fromDegrees(180.0));//FIXME
     Pose2d blueLeftPickup = new Pose2d(6.2, 7.402, Rotation2d.fromDegrees(-52.5));
     Pose2d blueRightPickup = new Pose2d(6.2, 0.668, Rotation2d.fromDegrees(52.5));
-
-    private PIDController headingController = new PIDController(
-        DrivetrainConstants.teleOpHeadingCoefficients.kP(), 
-        DrivetrainConstants.teleOpHeadingCoefficients.kI(), 
-        DrivetrainConstants.teleOpHeadingCoefficients.kD());
 
     private Pose2d currentPosition;
     private Alliance alliance = Alliance.Blue;
@@ -67,7 +64,6 @@ public class ThroughTrench extends Command {
     
     @Override
     public void initialize() {
-        headingController.enableContinuousInput(-Math.PI, Math.PI);
         
         var result = DriverStation.getAlliance();
         if (result.isPresent()) {
@@ -83,21 +79,28 @@ public class ThroughTrench extends Command {
             if (X > 2 && X < 4 && Y > 6.75 && Y < 8){ // Blue right shooter to pickup
                 trenchY= YTopTrench;
                 setPoint = blueRightPickup;
+                return;
+
         }
 
           else if(X > 5.25 && X < 7.25 && Y > 6.75 && Y < 8){ // Blue right pickup to shooter
                 trenchY= YTopTrench;
-                setPoint = blueRightShoot;   
+                setPoint = blueRightShoot; 
+                return;
+  
             }
 
             else if(X > 2 && X < 4 && Y > 0 && Y < 1.3){ //Blue left shooter to pickup
                 trenchY= YBottomTrench;
                 setPoint= blueLeftPickup;
+                return;
+
             }
 
             else if(X > 5.25 && X < 7.25 && Y > 0 && Y < 1.3){ // blue left pickup to shooter
                 trenchY= YBottomTrench;
                 setPoint = blueLeftShoot;
+                return;
             }
 
         }
@@ -109,36 +112,39 @@ public class ThroughTrench extends Command {
             if (X > 12.54 && X < 14.54 && Y > 6.75 && Y < 8){ // red left shooter to pickup
                 trenchY= YTopTrench;
                 setPoint = redLeftPickup;
+                return;
             }
 
             else if(X > 9.29 && X < 11.29 && Y > 6.75 && Y < 8){ // red left pickup to shooter
                 trenchY= YTopTrench;
                 setPoint = redLeftShoot;
+                return;
+
             }
 
             else if(X > 12.54 && X < 14.54 && Y > 0 && Y < 1.3){ //red right shooter to pickup
                 trenchY= YBottomTrench;
                 setPoint = redRightPickup;
+                return;
+
             }
 
             else if(X > 9.29 && X < 11.29 && Y > 0 && Y < 1.3){ // red right pickup to shooter 
                 trenchY= YBottomTrench;
                 setPoint = redRightShoot;
+                return;
+
             }
         }
 
         currentPosition = drive.getPose();
-        trenchAlign = new Pose2d(currentPosition.getX(), trenchY, Rotation2d.fromDegrees(0));
+        trenchAlign = new Pose2d(currentPosition.getX(), trenchY, currentPosition.getRotation());
     }
    
     @Override
     public void execute() {
 
         if (!throughTrench.getAsBoolean()) {
-            return;
-        }
-
-        if (setPoint == null) {
             return;
         }
 
