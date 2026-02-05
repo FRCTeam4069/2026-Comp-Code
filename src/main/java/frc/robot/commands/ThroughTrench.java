@@ -159,5 +159,3 @@ public class ThroughTrench extends Command {
         ChassisSpeeds speeds = controller.calculate(drive.getPose(), setPoint);
         drive.drive(speeds);    }
 }
-
-git

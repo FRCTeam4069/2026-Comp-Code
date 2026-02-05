@@ -42,8 +42,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
 
-      intake.setDefaultCommand(new DefaultArtCommand());
-      //intake.setDefaultCommand(defaultIntakeCommand());
 
       autoChooser = AutoBuilder.buildAutoChooser();
 
