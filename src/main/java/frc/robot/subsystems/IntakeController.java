@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.security.AuthProvider;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -17,7 +18,7 @@ import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
 
 public class IntakeController extends SubsystemBase {
-    SparkMax feedMotor, artMotor1;
+    SparkMax feedMotor, pivotMotor;
 
     private SlewRateLimiter limit;
 
@@ -27,25 +28,25 @@ public class IntakeController extends SubsystemBase {
 
     public IntakeController(){
         feedMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
-        artMotor1 = new SparkMax(DeviceIDs.INTAKE_ARTICULATE, MotorType.kBrushless);
+        pivotMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
 
         feedMotor.configure(IntakeConstants.feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        artMotor1.configure(IntakeConstants.artConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        pivotMotor.configure(IntakeConstants.artConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //feedMotor.setIdleMode(IdleMode.kCoast);
-        //artMotor1.setIdleMode(IdleMode.kBrake);
-        // artMotor1.setSoftLimit(SoftLimitDirection.kForward, 0);
-        // artMotor1.setSoftLimit(SoftLimitDirection.kReverse, IntakeConstants.UPPER_POSITION);
+        //pivotMotor.setIdleMode(IdleMode.kBrake);
+        // pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
+        // pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, IntakeConstants.UPPER_POSITION);
 
-        artMotor1.getEncoder().setPosition(UPPER);
+        pivotMotor.getEncoder().setPosition(UPPER);
 
         limit = new SlewRateLimiter(.94);
 
-        //artMotor1.burnFlash();
+        //pivotrMotor.burnFlash();
         // feedMotor.burnFlash();
     }
 
-    public void driveFeedIn(){
+    public void driveFeed(){
         feedMotor.set((-0.85));
     }
 
@@ -60,15 +61,15 @@ public class IntakeController extends SubsystemBase {
         feedMotor.stopMotor();
     }
     public void driveArt(double speed){
-        artMotor1.set(speed);
+        pivotMotor.set(speed);
         //System.out.println("encoder" + getEncoder());
     }
     public void stopArt(){
-        artMotor1.stopMotor();
+        pivotMotor.stopMotor();
     }
 
     public double getEncoder(){
-        return artMotor1.getEncoder().getPosition();
+        return pivotMotor.getEncoder().getPosition();
     }
 
     public double getFeedSpeed(){
@@ -96,7 +97,7 @@ public class IntakeController extends SubsystemBase {
     public Command defaultCommand(BooleanSupplier in, BooleanSupplier out) {
     return run(() -> {
         if (in.getAsBoolean()) {
-            driveFeedIn();
+            driveFeed();
         } else if (out.getAsBoolean()) {
             driveFeedOut();
         }
@@ -120,7 +121,7 @@ public class IntakeController extends SubsystemBase {
     SparkMaxConfig tempConfig = new SparkMaxConfig();
     tempConfig.idleMode(index == 1 ? IdleMode.kCoast : IdleMode.kBrake);
 
-    artMotor1.configure(tempConfig,
+    pivotMotor.configure(tempConfig,
         ResetMode.kNoResetSafeParameters,
         PersistMode.kNoPersistParameters);
     }
@@ -128,19 +129,19 @@ public class IntakeController extends SubsystemBase {
     //TODO hi what is this
 
     public void ResetEncoder(){
-        artMotor1.getEncoder().setPosition(UPPER);
+        pivotMotor.getEncoder().setPosition(UPPER);
     }
 
     // public boolean getArtSensorError() {
-    //     return artMotor1.getFaults().sensor;
+    //     return pivotMotor.getFaults().sensor;
     // }
 
-    // public boolean getArtMotorError() {
-    //     return artMotor1.getFaults().motorType;
+    // public boolean getPivotMotorError() {
+    //     return pivotMotor.getFaults().motorType;
     // }
 
     // public Faults getArtErrors() {
-    //     return artMotor1.getFaults();
+    //     return pivotMotor.getFaults();
     // }
 
     // public boolean getFeedSensorError() {
