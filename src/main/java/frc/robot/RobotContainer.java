@@ -1,24 +1,18 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
-import frc.robot.commands.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeController;
-import frc.robot.subsystems.IntakeController.positions;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import frc.robot.commands.FeedIntakeCommand;
-
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
@@ -45,6 +39,15 @@ public class RobotContainer {
 
 
       autoChooser = AutoBuilder.buildAutoChooser();
+
+        // addSysIdCommands()
+
+        autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
+        autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        configureBindings();
 
       //SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -85,7 +88,8 @@ public class RobotContainer {
                 () -> -controller0.getLeftX(),
                 () -> -controller0.getRightX(),
                 () -> controller0.getHID().getAButton(),
-                () -> controller0.getHID().getYButton());
+                () -> controller0.getHID().getYButton(),
+                () -> controller0.getHID().getXButton());
     }
 
     //oh so come back pleeeeeek//
@@ -105,11 +109,4 @@ public class RobotContainer {
         return command;
     }
 
-    
-
-    public Command driveCommand(){
-      return new ThroughTrench(
-        drive,
-        () -> controller0.getHID().getXButton()); 
-    }
 }

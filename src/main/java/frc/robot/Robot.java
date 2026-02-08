@@ -4,8 +4,21 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import org.littletonrobotics.urcl.URCL;
+
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frc.robot.constants.DeviceIDs;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -16,15 +29,18 @@ public class Robot extends TimedRobot {
   //private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private Command m_autonomousCommand;
+  //private final PowerDistribution pdh = new PowerDistribution(DeviceIDs.POWER_DISTRIBUTION_HUB, ModuleType.kRev);
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+
+
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+     m_robotContainer = new RobotContainer();
+
+      DataLogManager.start();
+      DriverStation.startDataLog(DataLogManager.getLog());
+
+      FollowPathCommand.warmupCommand().schedule();
   }
 
   /**
@@ -36,11 +52,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+  
     CommandScheduler.getInstance().run();
+
+    //SmartDashboard.putNumber("voltage", PowerDistribution.getVoltage());
+    //SmartDashboard.putNumber("current", pdh.getTotalCurrent());
+    SmartDashboard.putNumber("match timer", DriverStation.getMatchTime());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -56,11 +73,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   CommandScheduler.getInstance().schedule(m_autonomousCommand);
+      m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+      m_robotContainer.drive.setDefaultCommand(m_robotContainer.drive.stopCommand());
+        
+        // schedule the autonomous command (example)
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
     // }
   }
 

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
+import frc.robot.commands.ThroughTrench;
 
 public class FieldCentricDrive extends Command {
     private final SwerveDrivetrain drive;
@@ -43,6 +44,7 @@ public class FieldCentricDrive extends Command {
     private double deltaY = 0.0;
     private double tolerance = 2.0;
     double rotationalSpeed = 0.0;
+    private final BooleanSupplier throughTrench;
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("desiredHeading").publish();
@@ -68,7 +70,8 @@ public class FieldCentricDrive extends Command {
         DoubleSupplier strafeSpeed, 
         DoubleSupplier turnSpeed, 
         BooleanSupplier autoAlign,
-        BooleanSupplier resetOdometry) {
+        BooleanSupplier resetOdometry,
+        BooleanSupplier throughTrench) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
@@ -76,6 +79,7 @@ public class FieldCentricDrive extends Command {
         this.strafeSpeed = strafeSpeed;
         this.autoAlign = autoAlign;
         this.resetOdometry = resetOdometry;
+        this.throughTrench = throughTrench;
 
         addRequirements(drive);
     }
@@ -142,7 +146,12 @@ public class FieldCentricDrive extends Command {
        
         if (resetOdometry.getAsBoolean()){
             drive.resetDrivePose(currentPosition);
-       }     
+       } 
+       
+       if (throughTrench.getAsBoolean()){
+
+
+       }
 
     }
 
