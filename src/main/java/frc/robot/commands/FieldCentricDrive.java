@@ -106,11 +106,6 @@ public class FieldCentricDrive extends Command {
     public void execute() {
 
         currentPosition= drive.getPose();
-
-
-         if (resetOdometry.getAsBoolean()){
-            drive.resetDrivePose(currentPosition);
-       } 
        
        if (throughTrench.getAsBoolean()){
 
@@ -127,7 +122,10 @@ public class FieldCentricDrive extends Command {
             trenchActive = false;
         }
 
-       
+         if (resetOdometry.getAsBoolean()){
+            drive.resetDrivePose(currentPosition);
+       } 
+
         var outputSpeeds = new ChassisSpeeds(
             xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
             ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
