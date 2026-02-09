@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.commands.ThroughTrench;
+import frc.robot.commands.PIDsAndThings.ThroughTrench;
+
 
 public class FieldCentricDrive extends Command {
     private final SwerveDrivetrain drive;
@@ -45,6 +46,8 @@ public class FieldCentricDrive extends Command {
     private double tolerance = 2.0;
     double rotationalSpeed = 0.0;
     private final BooleanSupplier throughTrench;
+    private final ThroughTrench trenchController;
+    private boolean trenchActive = false;
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("desiredHeading").publish();
@@ -81,6 +84,10 @@ public class FieldCentricDrive extends Command {
         this.resetOdometry = resetOdometry;
         this.throughTrench = throughTrench;
 
+        this.trenchController = new ThroughTrench(drive);
+
+
+
         addRequirements(drive);
     }
     @Override
@@ -92,18 +99,40 @@ public class FieldCentricDrive extends Command {
         if (result.isPresent()) {
             alliance = result.get();
         }
+
     }
 
     @Override
     public void execute() {
 
+        currentPosition= drive.getPose();
+
+
+         if (resetOdometry.getAsBoolean()){
+            drive.resetDrivePose(currentPosition);
+       } 
+       
+       if (throughTrench.getAsBoolean()){
+
+        if (!trenchActive) {
+             trenchController.initialize();
+             trenchActive = true;
+         }
+
+            ChassisSpeeds trenchSpeeds = trenchController.getSpeeds();
+            drive.drive(trenchSpeeds);
+            return;
+    }
+        else {
+            trenchActive = false;
+        }
+
+       
         var outputSpeeds = new ChassisSpeeds(
             xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
             ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
             Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
         
-        currentPosition= drive.getPose();
-
         if (alliance == Alliance.Blue){
 
             deltaX = blueHubX - currentPosition.getX();
@@ -142,16 +171,6 @@ public class FieldCentricDrive extends Command {
 
 
         }
-
-       
-        if (resetOdometry.getAsBoolean()){
-            drive.resetDrivePose(currentPosition);
-       } 
-       
-       if (throughTrench.getAsBoolean()){
-
-
-       }
 
     }
 
