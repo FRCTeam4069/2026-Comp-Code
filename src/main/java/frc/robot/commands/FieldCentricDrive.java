@@ -46,7 +46,7 @@ public class FieldCentricDrive extends Command {
     private double tolerance = 2.0;
     double rotationalSpeed = 0.0;
     private final BooleanSupplier throughTrench;
-    private final ThroughTrench trenchController;
+    private final ThroughTrench controller;
     private boolean trenchActive = false;
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
@@ -84,8 +84,7 @@ public class FieldCentricDrive extends Command {
         this.resetOdometry = resetOdometry;
         this.throughTrench = throughTrench;
 
-        this.trenchController = new ThroughTrench(drive);
-
+        this.controller = new ThroughTrench(drive);
 
 
         addRequirements(drive);
@@ -100,6 +99,12 @@ public class FieldCentricDrive extends Command {
             alliance = result.get();
         }
 
+        if (controller.isFinished()){
+
+            drive.stop();
+            
+        }
+
     }
 
     @Override
@@ -110,11 +115,11 @@ public class FieldCentricDrive extends Command {
        if (throughTrench.getAsBoolean()){
 
         if (!trenchActive) {
-             trenchController.initialize();
+             controller.initialize();
              trenchActive = true;
          }
 
-            ChassisSpeeds trenchSpeeds = trenchController.getSpeeds();
+            ChassisSpeeds trenchSpeeds = controller.getSpeeds();
             drive.drive(trenchSpeeds);
             return;
     }

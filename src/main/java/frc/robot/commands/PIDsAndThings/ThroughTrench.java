@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.commands.DrivetrainPIDController;
 import frc.robot.constants.DrivetrainConstants;
@@ -15,7 +16,7 @@ import static frc.robot.constants.DrivetrainConstants.getShooterPose;
 
 
 
-public class ThroughTrench {
+public class ThroughTrench extends Command {
     private final SwerveDrivetrain drive;
     private final double YBottomTrench =0.62;
     private final double YTopTrench =7.44;
@@ -135,5 +136,16 @@ public class ThroughTrench {
         return aligned
             ? controller.calculate(current, setPoint)
             : controller.calculate(current, trenchAlign);
+            
+    }
+      @Override
+    public void end(boolean interrupted) {
+        drive.stop();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return controller.atSetpoint();
     }
 }

@@ -52,8 +52,8 @@ public class DrivetrainConstants {
 
 
      public static final Pose2d[] redShooterPoses = new Pose2d[]{
-        new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(60.0)), //red left //TODO
-        new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(0.0)), //red right //TODO
+        new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(52.5)), //red left //TODO
+        new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(-52.5)), //red right //TODO
     };
 
     public static final Pose2d[] blueShooterPoses = new Pose2d[]{
@@ -63,7 +63,7 @@ public class DrivetrainConstants {
 
 
     public static final Pose2d[] humanPlayerPoses = new Pose2d[]{
-        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(180)), // red.  //TODO
+        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(0)), // red.  //TODO
         new Pose2d(0.489, 0.659, Rotation2d.fromDegrees(180)), // blue.  //TODO
     };
 
@@ -97,17 +97,16 @@ public class DrivetrainConstants {
         
         switch (station) {
             case Red:
-                array = redShooterPoses;
+                array = humanPlayerPoses;
                 break;
             case Blue:
-                array = blueShooterPoses;
+                array = humanPlayerPoses;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid HumanPlayerStation: " + station);
         }
 
         Pose2d result = new Pose2d();
-
         switch (shooterpose) {
             case RedLeft:
                 result = array[0];
@@ -116,10 +115,10 @@ public class DrivetrainConstants {
                 result = array[1];
                 break;
             case BlueLeft:
-                result = array[2];
+                result = array[0];
                 break;
             case BlueRight:
-                result = array[3];
+                result = array[1];
                 break;
             default:
                 throw new IllegalArgumentException("InvalidShooterPose: " + shooterpose);
