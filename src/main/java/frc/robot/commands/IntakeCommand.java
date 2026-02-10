@@ -55,12 +55,12 @@ public class IntakeCommand extends Command{
 
     @Override
     public void execute(){
-        intake.driveArt(controller.calculate(intake.getEncoder(), setpoint));
+        intake.drivePivot(controller.calculate(intake.getEncoder(), setpoint));
     }
 
     @Override
     public void end(boolean interrupted){
-        intake.stopArt();
+        intake.stopPivot();
     }
 
     @Override

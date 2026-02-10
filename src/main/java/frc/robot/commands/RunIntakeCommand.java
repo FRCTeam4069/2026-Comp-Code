@@ -9,7 +9,7 @@ import frc.robot.subsystems.IntakeController;
 
 public class FeedIntakeCommand extends Command{
     private final IntakeController intake;
-     private final BooleanSupplier feedSpeed;
+    private final BooleanSupplier feedSpeed;
 
     
     public FeedIntakeCommand(
@@ -20,7 +20,6 @@ public class FeedIntakeCommand extends Command{
         this.feedSpeed = feedSpeed;
 
         addRequirements(intake);
-        //addRequirements(RobotContainer.intake);
     }
 
     @Override

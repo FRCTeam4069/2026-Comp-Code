@@ -20,7 +20,7 @@ import frc.robot.constants.IntakeConstants;
 public class IntakeController extends SubsystemBase {
     SparkMax feedMotor, pivotMotor;
 
-    private SlewRateLimiter limit;
+   //private SlewRateLimiter limit;
 
     private final double LOWER = IntakeConstants.LOWER_POSITION - 6;
     private final double UPPER = IntakeConstants.UPPER_POSITION - 3;
@@ -31,22 +31,15 @@ public class IntakeController extends SubsystemBase {
         pivotMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
 
         feedMotor.configure(IntakeConstants.feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        pivotMotor.configure(IntakeConstants.artConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        //feedMotor.setIdleMode(IdleMode.kCoast);
-        //pivotMotor.setIdleMode(IdleMode.kBrake);
-        // pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
-        // pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, IntakeConstants.UPPER_POSITION);
+        pivotMotor.configure(IntakeConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         pivotMotor.getEncoder().setPosition(UPPER);
 
         limit = new SlewRateLimiter(.94);
 
-        //pivotrMotor.burnFlash();
-        // feedMotor.burnFlash();
     }
 
-    public void driveFeed(){
+    public void driveFeedIn(){
         feedMotor.set((-0.85));
     }
 
@@ -54,21 +47,20 @@ public class IntakeController extends SubsystemBase {
         feedMotor.set((0.85));
     }
 
-    public void backIntake(){
-        feedMotor.set(limit.calculate(1));
-    }
     public void stopFeed(){
         feedMotor.stopMotor();
     }
-    public void driveArt(double speed){
+
+    public void drivePivot(double speed){
         pivotMotor.set(speed);
-        //System.out.println("encoder" + getEncoder());
+        System.out.println("encoder" + getPivotEncoder());
     }
-    public void stopArt(){
+
+    public void stopPivot(){
         pivotMotor.stopMotor();
     }
 
-    public double getEncoder(){
+    public double getPivotEncoder(){
         return pivotMotor.getEncoder().getPosition();
     }
 
@@ -82,6 +74,11 @@ public class IntakeController extends SubsystemBase {
 
     //hey! its leticia! good luck coding pleas emake it good 
     
+     public enum positions{
+        UPPER,
+        LOWER
+    }
+
     positions p = positions.UPPER;
 
     public double getPositionValue(){
@@ -97,7 +94,7 @@ public class IntakeController extends SubsystemBase {
     public Command defaultCommand(BooleanSupplier in, BooleanSupplier out) {
     return run(() -> {
         if (in.getAsBoolean()) {
-            driveFeed();
+            driveFeedIn();
         } else if (out.getAsBoolean()) {
             driveFeedOut();
         }
@@ -112,10 +109,6 @@ public class IntakeController extends SubsystemBase {
         return p;
     }
     
-    public enum positions{
-        UPPER,
-        LOWER
-    }
 
     public void setBrakeState(int index){
     SparkMaxConfig tempConfig = new SparkMaxConfig();

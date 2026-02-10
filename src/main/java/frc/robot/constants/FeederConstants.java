@@ -12,22 +12,17 @@ import frc.robot.constants.DrivetrainConstants.PIDCoefficients;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
-public final class IntakeConstants {
-
-    //TODO double check upper and lower positions are correct
-    public static final int UPPER_POSITION = 65;
-    public static final int LOWER_POSITION = 12;
+public final class FeederConstants {
 
     //TODO test current limits
     public static final int feedSmartCurrentLimit = 40; 
     public static final int pivotSmartCurrentLimit = 20; 
 
-    public static final SparkMaxConfig feedConfig = new SparkMaxConfig();
-    public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+    public static final SparkMaxConfig feederConfig = new SparkMaxConfig();
 
 
     static {
-        feedConfig
+        feederConfig
             .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(feedSmartCurrentLimit)
@@ -36,21 +31,6 @@ public final class IntakeConstants {
     }
 
 
-    static {
-        pivotConfig
-            .inverted(true)
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(pivotSmartCurrentLimit)
-            .openLoopRampRate(0.0)
-            .closedLoopRampRate(0.0);
-
-            pivotConfig.softLimit
-            .forwardSoftLimit(0)
-            .reverseSoftLimit(IntakeConstants.UPPER_POSITION)
-            .forwardSoftLimitEnabled(true)
-            .reverseSoftLimitEnabled(true);
-
-    }
 
     public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0, 0.0);
     public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0);
