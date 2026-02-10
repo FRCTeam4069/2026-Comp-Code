@@ -1,6 +1,7 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.RunIntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -92,6 +93,15 @@ public class RobotContainer {
                 () -> controller0.getHID().getXButton());
     }
 
+    public Command defaultIntakeCommand() {
+       return new RunIntakeCommand(
+               intake,
+               () -> controller1.getHID().getLeftBumperButton(), // IN
+               () -> controller1.getHID().getRightBumperButton()  // OUT
+       );
+   }
+
+
     //oh so come back pleeeeeek//
     // public Command defaultIntakeCommand() {
     //     return new FeedIntakeCommand(
@@ -101,12 +111,5 @@ public class RobotContainer {
     // public Command defaultIntakeCommand() {
     //     return intake.driveFeed(() -> -controller1.getAButton());
     // }
-
-    public Command defaultIntakeCommand() {
-        var command = intake.defaultCommand(() -> controller1.getHID().getRightBumperButton(), () -> controller1.getHID().getLeftBumperButton());
-        command.addRequirements(intake);
-
-        return command;
-    }
 
 }
