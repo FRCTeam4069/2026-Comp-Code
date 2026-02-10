@@ -1,36 +1,27 @@
+package frc.robot.commands.PIDsAndThings;
 
-package frc.robot.commands;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
+import frc.robot.commands.DrivetrainPIDController;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.DrivetrainConstants.HumanPlayerStations;
+import frc.robot.constants.DrivetrainConstants.ShooterPoses;
 
 import static frc.robot.constants.DrivetrainConstants.getShooterPose;
 
-import java.util.function.BooleanSupplier;
 
-import frc.robot.constants.DrivetrainConstants.ShooterPoses;
-import frc.robot.constants.DrivetrainConstants.HumanPlayerStations;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class ThroughTrench extends Command {
-
     private final SwerveDrivetrain drive;
     private final double YBottomTrench =0.62;
     private final double YTopTrench =7.44;
     private Pose2d setPoint;
-    private Pose2d trenchAlign;
     private double trenchY=0.0;
-    private double deltaYTrench = 0.0;
-
-    private final BooleanSupplier throughTrench;
-
-
 
     private final DrivetrainPIDController controller;   
 
@@ -49,23 +40,18 @@ public class ThroughTrench extends Command {
     private Alliance alliance = Alliance.Blue;
     private double X = 0.0;
     private double Y = 0.0;
+    private double rotation = 0.0;
 
 
-  public ThroughTrench(
-    SwerveDrivetrain drive,
-    BooleanSupplier throughTrench
-    ){
-
+    public ThroughTrench(SwerveDrivetrain drive) {
         this.drive = drive;
-        this.throughTrench = throughTrench;
         this.controller = new DrivetrainPIDController(DrivetrainConstants.pidToPositionConstants);
-    addRequirements(drive);
     }
-    
-    @Override
+
     public void initialize() {
-        
         var result = DriverStation.getAlliance();
+        setPoint = null;
+
         if (result.isPresent()) {
             alliance = result.get();
         }
@@ -75,6 +61,7 @@ public class ThroughTrench extends Command {
          Y = currentPosition.getY();
 
         if(alliance==Alliance.Blue){ 
+            rotation =0.0;
 
             if (X > 2 && X < 4 && Y > 6.75 && Y < 8){ // Blue right shooter to pickup
                 trenchY= YTopTrench;
@@ -101,13 +88,11 @@ public class ThroughTrench extends Command {
                 trenchY= YBottomTrench;
                 setPoint = blueLeftShoot;
                 return;
-            }
-
+            }   
         }
 
-
-        //FIXME add points for red cause right now are for blue
-        else{
+            else{
+            rotation= 180.00;
 
             if (X > 12.54 && X < 14.54 && Y > 6.75 && Y < 8){ // red left shooter to pickup
                 trenchY= YTopTrench;
@@ -136,32 +121,31 @@ public class ThroughTrench extends Command {
 
             }
         }
-
-        currentPosition = drive.getPose();
-        trenchAlign = new Pose2d(currentPosition.getX(), trenchY, currentPosition.getRotation());
     }
-   
-    @Override
-    public void execute() {
 
-        if (!throughTrench.getAsBoolean()) {
-            return;
+    public ChassisSpeeds getSpeeds() {
+        if (setPoint == null) {
+            return new ChassisSpeeds();
         }
 
-        deltaYTrench = currentPosition.getY() - trenchY;
-        boolean yAlign = Math.abs(deltaYTrench) < 0.1;
+        Pose2d current = drive.getPose();
+        double deltaY = current.getY() - trenchY;
+        boolean aligned = Math.abs(deltaY) < 0.1;
 
-        controller.reset(
-            drive.getPose(),
-            ChassisSpeeds.fromRobotRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRotation2d())
-        );
+        Pose2d trenchAlign = new Pose2d(current.getX(), trenchY, Rotation2d.fromDegrees(rotation));
+        return aligned
+            ? controller.calculate(current, setPoint)
+            : controller.calculate(current, trenchAlign);
+            
+    }
+      @Override
+    public void end(boolean interrupted) {
+        drive.stop();
+    }
 
-        if (!yAlign) {
-
-            ChassisSpeeds speeds = controller.calculate(drive.getPose(), trenchAlign);
-            drive.drive(speeds);
-         } 
-
-        ChassisSpeeds speeds = controller.calculate(drive.getPose(), setPoint);
-        drive.drive(speeds);    }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return controller.atSetpoint();
+    }
 }

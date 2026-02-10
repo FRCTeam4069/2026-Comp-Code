@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
+import frc.robot.commands.PIDsAndThings.ThroughTrench;
+
 
 public class FieldCentricDrive extends Command {
     private final SwerveDrivetrain drive;
@@ -43,6 +45,9 @@ public class FieldCentricDrive extends Command {
     private double deltaY = 0.0;
     private double tolerance = 2.0;
     double rotationalSpeed = 0.0;
+    private final BooleanSupplier throughTrench;
+    private final ThroughTrench controller;
+    private boolean trenchActive = false;
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("desiredHeading").publish();
@@ -68,7 +73,8 @@ public class FieldCentricDrive extends Command {
         DoubleSupplier strafeSpeed, 
         DoubleSupplier turnSpeed, 
         BooleanSupplier autoAlign,
-        BooleanSupplier resetOdometry) {
+        BooleanSupplier resetOdometry,
+        BooleanSupplier throughTrench) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
@@ -76,6 +82,10 @@ public class FieldCentricDrive extends Command {
         this.strafeSpeed = strafeSpeed;
         this.autoAlign = autoAlign;
         this.resetOdometry = resetOdometry;
+        this.throughTrench = throughTrench;
+
+        this.controller = new ThroughTrench(drive);
+
 
         addRequirements(drive);
     }
@@ -88,18 +98,44 @@ public class FieldCentricDrive extends Command {
         if (result.isPresent()) {
             alliance = result.get();
         }
+
+        if (controller.isFinished()){
+
+            drive.stop();
+            
+        }
+
     }
 
     @Override
     public void execute() {
+
+        currentPosition= drive.getPose();
+       
+       if (throughTrench.getAsBoolean()){
+
+        if (!trenchActive) {
+             controller.initialize();
+             trenchActive = true;
+         }
+
+            ChassisSpeeds trenchSpeeds = controller.getSpeeds();
+            drive.drive(trenchSpeeds);
+            return;
+    }
+        else {
+            trenchActive = false;
+        }
+
+         if (resetOdometry.getAsBoolean()){
+            drive.resetDrivePose(currentPosition);
+       } 
 
         var outputSpeeds = new ChassisSpeeds(
             xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
             ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
             Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
         
-        currentPosition= drive.getPose();
-
         if (alliance == Alliance.Blue){
 
             deltaX = blueHubX - currentPosition.getX();
@@ -138,11 +174,6 @@ public class FieldCentricDrive extends Command {
 
 
         }
-
-       
-        if (resetOdometry.getAsBoolean()){
-            drive.resetDrivePose(currentPosition);
-       }     
 
     }
 
