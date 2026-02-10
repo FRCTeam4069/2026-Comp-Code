@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.security.AuthProvider;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -17,9 +18,9 @@ import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
 
 public class IntakeController extends SubsystemBase {
-    SparkMax feedMotor, artMotor1;
+    SparkMax feedMotor, pivotMotor;
 
-    private SlewRateLimiter limit;
+   //private SlewRateLimiter limit;
 
     private final double LOWER = IntakeConstants.LOWER_POSITION - 6;
     private final double UPPER = IntakeConstants.UPPER_POSITION - 3;
@@ -27,22 +28,15 @@ public class IntakeController extends SubsystemBase {
 
     public IntakeController(){
         feedMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
-        artMotor1 = new SparkMax(DeviceIDs.INTAKE_ARTICULATE, MotorType.kBrushless);
+        pivotMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
 
         feedMotor.configure(IntakeConstants.feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        artMotor1.configure(IntakeConstants.artConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        pivotMotor.configure(IntakeConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        //feedMotor.setIdleMode(IdleMode.kCoast);
-        //artMotor1.setIdleMode(IdleMode.kBrake);
-        // artMotor1.setSoftLimit(SoftLimitDirection.kForward, 0);
-        // artMotor1.setSoftLimit(SoftLimitDirection.kReverse, IntakeConstants.UPPER_POSITION);
-
-        artMotor1.getEncoder().setPosition(UPPER);
+        pivotMotor.getEncoder().setPosition(UPPER);
 
         limit = new SlewRateLimiter(.94);
 
-        //artMotor1.burnFlash();
-        // feedMotor.burnFlash();
     }
 
     public void driveFeedIn(){
@@ -53,22 +47,21 @@ public class IntakeController extends SubsystemBase {
         feedMotor.set((0.85));
     }
 
-    public void backIntake(){
-        feedMotor.set(limit.calculate(1));
-    }
     public void stopFeed(){
         feedMotor.stopMotor();
     }
-    public void driveArt(double speed){
-        artMotor1.set(speed);
-        //System.out.println("encoder" + getEncoder());
-    }
-    public void stopArt(){
-        artMotor1.stopMotor();
+
+    public void drivePivot(double speed){
+        pivotMotor.set(speed);
+        System.out.println("encoder" + getPivotEncoder());
     }
 
-    public double getEncoder(){
-        return artMotor1.getEncoder().getPosition();
+    public void stopPivot(){
+        pivotMotor.stopMotor();
+    }
+
+    public double getPivotEncoder(){
+        return pivotMotor.getEncoder().getPosition();
     }
 
     public double getFeedSpeed(){
@@ -81,6 +74,11 @@ public class IntakeController extends SubsystemBase {
 
     //hey! its leticia! good luck coding pleas emake it good 
     
+     public enum positions{
+        UPPER,
+        LOWER
+    }
+
     positions p = positions.UPPER;
 
     public double getPositionValue(){
@@ -111,16 +109,12 @@ public class IntakeController extends SubsystemBase {
         return p;
     }
     
-    public enum positions{
-        UPPER,
-        LOWER
-    }
 
     public void setBrakeState(int index){
     SparkMaxConfig tempConfig = new SparkMaxConfig();
     tempConfig.idleMode(index == 1 ? IdleMode.kCoast : IdleMode.kBrake);
 
-    artMotor1.configure(tempConfig,
+    pivotMotor.configure(tempConfig,
         ResetMode.kNoResetSafeParameters,
         PersistMode.kNoPersistParameters);
     }
@@ -128,19 +122,19 @@ public class IntakeController extends SubsystemBase {
     //TODO hi what is this
 
     public void ResetEncoder(){
-        artMotor1.getEncoder().setPosition(UPPER);
+        pivotMotor.getEncoder().setPosition(UPPER);
     }
 
     // public boolean getArtSensorError() {
-    //     return artMotor1.getFaults().sensor;
+    //     return pivotMotor.getFaults().sensor;
     // }
 
-    // public boolean getArtMotorError() {
-    //     return artMotor1.getFaults().motorType;
+    // public boolean getPivotMotorError() {
+    //     return pivotMotor.getFaults().motorType;
     // }
 
     // public Faults getArtErrors() {
-    //     return artMotor1.getFaults();
+    //     return pivotMotor.getFaults();
     // }
 
     // public boolean getFeedSensorError() {

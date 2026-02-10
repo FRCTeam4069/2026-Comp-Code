@@ -1,6 +1,9 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.RunIntakeCommand;
+import frc.robot.commands.ThroughTrench;
+
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -11,6 +14,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder; 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -91,22 +97,12 @@ public class RobotContainer {
                 () -> controller0.getHID().getYButton(),
                 () -> controller0.getHID().getXButton());
     }
-
-    //oh so come back pleeeeeek//
-    // public Command defaultIntakeCommand() {
-    //     return new FeedIntakeCommand(
-    //             intake,
-    //             () -> controller0.getHID().getYButton());
-    // }
-    // public Command defaultIntakeCommand() {
-    //     return intake.driveFeed(() -> -controller1.getAButton());
-    // }
-
+    
     public Command defaultIntakeCommand() {
-        var command = intake.defaultCommand(() -> controller1.getHID().getRightBumperButton(), () -> controller1.getHID().getLeftBumperButton());
-        command.addRequirements(intake);
-
-        return command;
-    }
-
+    return new RunIntakeCommand(
+        intake,
+        () -> controller0.getHID().getAButton() > 0.2,  // IN
+        () -> controller0.getLeftTriggerAxis() > 0.2    // OUT
+    );
+}
 }
