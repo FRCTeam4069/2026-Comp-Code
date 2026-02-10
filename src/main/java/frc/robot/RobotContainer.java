@@ -10,106 +10,107 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import com.pathplanner.lib.auto.AutoBuilder; 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
-      public static final SwerveDrivetrain drive = new SwerveDrivetrain();
-      public static final IntakeController intake = new IntakeController();
+     public static final SwerveDrivetrain drive = new SwerveDrivetrain();
+     public static final IntakeController intake = new IntakeController();
 
 
-      private final CommandXboxController controller0 = new CommandXboxController(0);
-      private final CommandXboxController controller1 = new CommandXboxController(1);
+     private final CommandXboxController controller0 = new CommandXboxController(0);
+     private final CommandXboxController controller1 = new CommandXboxController(1);
 
-      private final SendableChooser<Command> autoChooser;
+     private final SendableChooser<Command> autoChooser;
 
-        // addSysIdCommands()
+       // addSysIdCommands()
 
-  public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-
-
-
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-  public RobotContainer() {
-    // Configure the trigger bindings
+ public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
 
-      autoChooser = AutoBuilder.buildAutoChooser();
 
-        // addSysIdCommands()
+ private final CommandXboxController m_driverController =
+     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-        autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
-        autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+ public RobotContainer() {
+   // Configure the trigger bindings
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        configureBindings();
+     autoChooser = AutoBuilder.buildAutoChooser();
 
-      //SmartDashboard.putData("Auto Chooser", autoChooser);
+       // addSysIdCommands()
 
-    configureBindings();
-  }
+       autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
+       autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    // new Trigger(exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(exampleSubsystem));
+       SmartDashboard.putData("Auto Chooser", autoChooser);
 
-    // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
-  }
+       configureBindings();
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-      //An example command will be run in autonomous
-      return autoChooser.getSelected();
-    
-  }
+     //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+   configureBindings();
+ }
+
+ /**
+  * Use this method to define your trigger->command mappings. Triggers can be created via the
+  * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+  * predicate, or via the named factories in {@link
+  * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+  * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+  * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+  * joysticks}.
+  */
+ private void configureBindings() {
+   // new Trigger(exampleSubsystem::exampleCondition)
+   //     .onTrue(new ExampleCommand(exampleSubsystem));
+
+   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+ }
+
+ /**
+  * Use this to pass the autonomous command to the main {@link Robot} class.
+  *
+  * @return the command to run in autonomous
+  */
+ public Command getAutonomousCommand() {
+     //An example command will be run in autonomous
+     return autoChooser.getSelected();
   
+ }
     public Command defaultDriveCommand() {
-        return new FieldCentricDrive(
-                drive,
-                () -> -controller0.getLeftY(),
-                () -> -controller0.getLeftX(),
-                () -> -controller0.getRightX(),
-                () -> controller0.getHID().getAButton(),
-                () -> controller0.getHID().getYButton(),
-                () -> controller0.getHID().getXButton());
-    }
-
-    public Command defaultIntakeCommand() {
-       return new RunIntakeCommand(
-               intake,
-               () -> controller1.getHID().getLeftBumperButton(), // IN
-               () -> controller1.getHID().getRightBumperButton()  // OUT
-       );
+       return new FieldCentricDrive(
+               drive,
+               () -> -controller0.getLeftY(),
+               () -> -controller0.getLeftX(),
+               () -> -controller0.getRightX(),
+               () -> controller0.getHID().getAButton(),
+               () -> controller0.getHID().getYButton(),
+               () -> controller0.getHID().getXButton());
    }
 
+   public Command defaultIntakeCommand() {
+      return new RunIntakeCommand(
+              intake,
+              () -> controller1.getHID().getLeftBumperButton(), // IN
+              () -> controller1.getHID().getRightBumperButton()  // OUT
+      );
+  }
 
-    //oh so come back pleeeeeek//
-    // public Command defaultIntakeCommand() {
-    //     return new FeedIntakeCommand(
-    //             intake,
-    //             () -> controller0.getHID().getYButton());
-    // }
-    // public Command defaultIntakeCommand() {
-    //     return intake.driveFeed(() -> -controller1.getAButton());
-    // }
+
+   //oh so come back pleeeeeek//
+   // public Command defaultIntakeCommand() {
+   //     return new FeedIntakeCommand(
+   //             intake,
+   //             () -> controller0.getHID().getYButton());
+   // }
+   // public Command defaultIntakeCommand() {
+   //     return intake.driveFeed(() -> -controller1.getAButton());
+   // }
 
 }
+
+
