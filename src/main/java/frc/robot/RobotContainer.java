@@ -4,7 +4,6 @@ import frc.robot.commands.FieldCentricDrive;
 import frc.robot.commands.RunIntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,8 +26,6 @@ public class RobotContainer {
      private final SendableChooser<Command> autoChooser;
 
        // addSysIdCommands()
-
- public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
 
 

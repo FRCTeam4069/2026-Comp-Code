@@ -21,4 +21,11 @@ public class DeviceIDs {
     public static final byte INTAKE_FEED = 10; 
     public static final byte PIVOT = 12; //FIXME
 
+    public static final byte HOOD =11; //FIXME
+
+    public static final byte SHOOTER_ONE_LEFT =13;
+    public static final byte SHOOTER_ONE_RIGHT = 14;
+    public static final byte SHOOTER_TWO_LEFT = 15;
+    public static final byte SHOOTER_TWO_RIGHT = 16;
+
 }
