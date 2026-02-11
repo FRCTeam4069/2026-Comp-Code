@@ -1,9 +1,5 @@
 package frc.robot.constants;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import frc.robot.constants.DrivetrainConstants.FFCoefficients;

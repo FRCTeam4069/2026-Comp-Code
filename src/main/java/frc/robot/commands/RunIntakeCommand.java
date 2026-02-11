@@ -1,19 +1,8 @@
 package frc.robot.commands;
 
-
-
-
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-
-
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeController;
-
-
 
 
 public class RunIntakeCommand extends Command{
@@ -21,27 +10,16 @@ public class RunIntakeCommand extends Command{
   private final BooleanSupplier inSupplier;
   private final BooleanSupplier outSupplier;
 
-
-
-
    public RunIntakeCommand(
       IntakeController intake,
       BooleanSupplier in, BooleanSupplier out){
-
-
-
 
       this.intake = intake;
       this.inSupplier = in;
       this.outSupplier = out;
 
-
-
-
       addRequirements(intake);
   }
-
-
 
 
   @Override
@@ -55,21 +33,10 @@ public class RunIntakeCommand extends Command{
       }
   }
 
-
-
-
   @Override
-
-
-
-
-  public void end(boolean interupted){
+    public void end(boolean interupted){
       intake.stopFeed();
   }
-
-
-
-
 }
 
 

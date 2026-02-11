@@ -1,13 +1,11 @@
 package frc.robot.constants;
 
-
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import frc.robot.constants.DrivetrainConstants.FFCoefficients;
 import frc.robot.constants.DrivetrainConstants.PIDCoefficients;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 
 
 public final class IntakeConstants {
@@ -30,7 +28,6 @@ public final class IntakeConstants {
           .openLoopRampRate(0.0)
           .closedLoopRampRate(0.0);
     }
-
 
     static {
          pivotConfig
