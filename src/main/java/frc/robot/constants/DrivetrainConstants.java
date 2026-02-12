@@ -107,6 +107,7 @@ public class DrivetrainConstants {
         }
 
         Pose2d result = new Pose2d();
+
         switch (shooterpose) {
             case RedLeft:
                 result = array[0];
