@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -12,40 +13,46 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.PivotConstants;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 
-public class IntakeController extends SubsystemBase {
-    SparkMax feedMotor, pivotMotor;
+public class PivotSubsystem extends SubsystemBase {
+    SparkMax pivotMotor;
     private SlewRateLimiter limit;
+    private final SparkClosedLoopController pivotController;
 
-    private final double LOWER = IntakeConstants.LOWER_POSITION - 6;
-    private final double UPPER = IntakeConstants.UPPER_POSITION - 3;
+    public enum positions{
+      UPPER,
+      LOWER
+    }
 
-    public IntakeController(){
-      feedMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
+    positions p = positions.UPPER;
+
+    private final double LOWER = PivotConstants.LOWER_POSITION - 6;
+    private final double UPPER = PivotConstants.UPPER_POSITION - 3;
+
+    public PivotSubsystem(){
       pivotMotor = new SparkMax(DeviceIDs.PIVOT, MotorType.kBrushless);
 
-      feedMotor.configure(IntakeConstants.feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      pivotMotor.configure(IntakeConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      pivotMotor.configure(PivotConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-      pivotMotor.getEncoder().setPosition(UPPER);
+      pivotController = pivotMotor.getClosedLoopController();
+
+      pivotMotor.configure(
+            PivotConstants.pivotConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters
+        );
 
       limit = new SlewRateLimiter(.94);
 
+       pivotMotor.getEncoder().setPosition(UPPER);
+
+
   }
 
-  public void driveFeedIn(){
-      feedMotor.set((0.85));
-  }
-
-  public void driveFeedOut(){
-      feedMotor.set((-0.85));
-  }
-
-  public void stopFeed(){
-      feedMotor.stopMotor();
-  }
-
+  //this might not be needed if i have lower and upperpositions
   public void drivePivot(double speed){
       pivotMotor.set(speed);
       System.out.println("encoder" + getPivotEncoder());
@@ -59,24 +66,28 @@ public class IntakeController extends SubsystemBase {
       return pivotMotor.getEncoder().getPosition();
   }
 
-  public double getFeedSpeed(){
-      return feedMotor.getAppliedOutput();
+  public void goUpper() {
+    p = positions.UPPER;
   }
 
-  public void setIntakeSpeed(double speed) {
-      feedMotor.set(speed);
+  public void goLower() {
+    p = positions.LOWER;
   }
 
-    public enum positions{
-      UPPER,
-      LOWER
+  public positions getPosition(){
+      return p;
   }
-
-  positions p = positions.UPPER;
 
   public double getPositionValue(){
       return p == positions.LOWER ? LOWER : UPPER;
   }
+
+  public void periodic() {
+        pivotController.setSetpoint(
+            getPositionValue(),
+            ControlType.kPosition
+        );
+    }
 
   public Command setPosition(positions po){
       return this.runOnce(() -> p = po);
@@ -84,9 +95,7 @@ public class IntakeController extends SubsystemBase {
 
   //TODO
 
-  public positions getPosition(){
-      return p;
-  }
+
   
    public void setBrakeState(int index){
       SparkMaxConfig tempConfig = new SparkMaxConfig();
@@ -101,10 +110,3 @@ public class IntakeController extends SubsystemBase {
       pivotMotor.getEncoder().setPosition(UPPER);
   }
 }
-
-
-
-
-
-
-

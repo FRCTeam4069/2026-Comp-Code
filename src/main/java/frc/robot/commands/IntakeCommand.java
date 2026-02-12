@@ -4,11 +4,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.subsystems.IntakeController;
-import frc.robot.subsystems.IntakeController.positions;
+import frc.robot.constants.PivotConstants;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem.positions;
 
 public class IntakeCommand extends Command{
-    IntakeController intake;
+    IntakeSubsystem intake;
+    PivotSubsystem pivot;
 
     private final double kP = 0.0155, kI = 0, kD = 0;
     private PIDController controller = new PIDController(kP, kI, kD);
@@ -16,27 +20,27 @@ public class IntakeCommand extends Command{
     private double speed;
     private boolean setSpeed = false;
 
-    public IntakeCommand(IntakeController intake, positions position){
+    public IntakeCommand(IntakeSubsystem intake, positions position){
         this.intake = intake;
         if (position == positions.UPPER) {
-            setpoint = IntakeConstants.UPPER_POSITION - 3;
+            setpoint = PivotConstants.UPPER_POSITION - 3;
         } else {
-            setpoint = IntakeConstants.LOWER_POSITION - 6;
+            setpoint = PivotConstants.LOWER_POSITION - 6;
         }
-        intake.setPosition(position);
+        pivot.setPosition(position);
         // intake.ResetEncoder();
     }
 
-    public IntakeCommand(IntakeController intake, positions position, double speed){
+    public IntakeCommand(IntakeSubsystem intake, positions position, double speed){
         this.intake = intake;
         this.speed = speed;
         this.setSpeed = true;
         if (position == positions.UPPER) {
-            setpoint = IntakeConstants.UPPER_POSITION - 3;
+            setpoint = PivotConstants.UPPER_POSITION - 3;
         } else {
-            setpoint = IntakeConstants.LOWER_POSITION - 6;
+            setpoint = PivotConstants.LOWER_POSITION - 6;
         }
-        intake.setPosition(position);
+        pivot.setPosition(position);
         // intake.ResetEncoder();
     }
 
@@ -54,17 +58,17 @@ public class IntakeCommand extends Command{
 
     @Override
     public void execute(){
-        intake.drivePivot(controller.calculate(intake.getPivotEncoder(), setpoint));
+        pivot.drivePivot(controller.calculate(pivot.getPivotEncoder(), setpoint));
     }
 
     @Override
     public void end(boolean interrupted){
-        intake.stopPivot();
+        pivot.stopPivot();
     }
 
     @Override
     public boolean isFinished(){
-        return MathUtil.isNear(setpoint, intake.getPivotEncoder(), 5);
+        return MathUtil.isNear(setpoint, pivot.getPivotEncoder(), 5);
     }
     
 }

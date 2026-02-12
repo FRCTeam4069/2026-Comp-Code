@@ -2,16 +2,17 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeController;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 
 public class RunIntakeCommand extends Command{
-  private final IntakeController intake;
+  private final IntakeSubsystem intake;
   private final BooleanSupplier inSupplier;
   private final BooleanSupplier outSupplier;
 
    public RunIntakeCommand(
-      IntakeController intake,
+      IntakeSubsystem intake,
       BooleanSupplier in, BooleanSupplier out){
 
       this.intake = intake;

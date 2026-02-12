@@ -20,5 +20,6 @@ public class DeviceIDs {
     public static final byte INTAKE_ARTICULATE = 7; 
     public static final byte INTAKE_FEED = 10; 
     public static final byte PIVOT = 12; //FIXME
+    public static final byte HOPPER = 0; //FIXME unassigned
 
 }

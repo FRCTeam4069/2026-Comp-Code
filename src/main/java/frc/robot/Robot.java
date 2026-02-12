@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-        m_robotContainer.intake.setBrakeState(1);
+        //m_robotContainer.pivot.setBrakeState(1);
 
   }
 
@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-        m_robotContainer.intake.setBrakeState(0);
+       // m_robotContainer.pivot.setBrakeState(0);
         m_robotContainer.intake.stopFeed();
         
 
@@ -103,7 +103,9 @@ public class Robot extends TimedRobot {
     // }
 
     m_robotContainer.drive.setDefaultCommand(m_robotContainer.defaultDriveCommand());
-   m_robotContainer.intake.setDefaultCommand(m_robotContainer.defaultIntakeCommand());
+    m_robotContainer.intake.setDefaultCommand(m_robotContainer.defaultIntakeCommand());
+    m_robotContainer.pivot.setDefaultCommand(m_robotContainer.defaultPivotCommand());
+
 
   }
 

@@ -11,8 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class FeederConstants {
 
     //TODO test current limits
-    public static final int feedSmartCurrentLimit = 40; 
-    public static final int pivotSmartCurrentLimit = 20; 
+    public static final int feederSmartCurrentLimit = 40; 
 
     public static final SparkMaxConfig feederConfig = new SparkMaxConfig();
 
@@ -21,7 +20,7 @@ public final class FeederConstants {
         feederConfig
             .inverted(true)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(feedSmartCurrentLimit)
+            .smartCurrentLimit(feederSmartCurrentLimit)
             .openLoopRampRate(0.0)
             .closedLoopRampRate(0.0);
     }
