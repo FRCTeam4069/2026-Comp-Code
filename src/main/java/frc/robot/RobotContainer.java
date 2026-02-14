@@ -1,6 +1,8 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.subsystems.ShooterController;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.RunIntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -18,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
      public static final SwerveDrivetrain drive = new SwerveDrivetrain();
      public static final IntakeController intake = new IntakeController();
+     public static final ShooterController shooter = new ShooterController();
 
 
      private final CommandXboxController controller0 = new CommandXboxController(0);
@@ -96,6 +99,14 @@ public class RobotContainer {
               () -> controller1.getHID().getRightBumperButton()  // OUT
       );
   }
+
+  public Command defaultShooterCommand() { 
+      return new ShooterCommand(
+              shooter,
+              () -> controller1.getHID().getRightBumperButton() // IN
+      );
+  }
+
 
 
    //oh so come back pleeeeeek//
