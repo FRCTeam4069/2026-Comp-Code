@@ -65,7 +65,7 @@ public class ShooterController extends SubsystemBase {
         targetRPM = (a * Math.pow(b, distance)); //FIXME find a and b
         currentRPM = (shooterOneLeft.getEncoder().getVelocity());
 
-        pidOut =shooterPID.calculate(currentRPM, targetRPM);
+        pidOut = shooterPID.calculate(currentRPM, targetRPM);
         ffOut = shooterFF.calculate(targetRPM);
         volts = MathUtil.clamp (pidOut + ffOut, -12.0, 12.0);
 

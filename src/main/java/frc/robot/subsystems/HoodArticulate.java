@@ -2,44 +2,76 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode; //TODO figure out which is the right version of this import
+import com.revrobotics.spark.SparkBase.ResetMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HoodConstants;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-//TODO add slew rate limiter
 
 public class HoodArticulate extends SubsystemBase {
-     SparkMax hoodArticulate;
 
-     private final double SHOOT = HoodConstants.SHOOT;
-     private final double PASS = HoodConstants.PASS;
+   SparkMax hoodArticulate;
 
-     PIDController hoodPID = new PIDController(
-      HoodConstants.hoodCoefficients.kP(),
-      HoodConstants.hoodCoefficients.kI(),
-      HoodConstants.hoodCoefficients.kD());
+   private SlewRateLimiter slewRateLimiter;
+   private double limit = 0.0;
+   private double targetDeg = 0.0;
+
+   private final DutyCycleEncoder hoodEncoder = new DutyCycleEncoder(HoodConstants.LAMPREY_PORT);// FIXME FO‰ PORT
+
+
+   //private final double toDegrees = 360/4096; //TODO check the ticks val is right
+   private double hoodPos = 0.0;
+   private double pidOut = 0.0;
+
+   PIDController hoodController = new PIDController(
+   HoodConstants.hoodCoefficients.kP(),
+   HoodConstants.hoodCoefficients.kI(),
+   HoodConstants.hoodCoefficients.kD());
 
      public HoodArticulate(){
         hoodArticulate = new SparkMax(DeviceIDs.HOOD, MotorType.kBrushless);
 
         hoodArticulate.configure(HoodConstants.hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        slewRateLimiter = new SlewRateLimiter(0.0); //FIXME tune
      }
 
      public void stop(){
-      hoodArticulate.set(0);
+         hoodArticulate.set(0);
      }
 
-     public void setPosition(double position){
-
+     public double getHoodPos(){
+         hoodPos = (hoodEncoder.get() * 360.0) - HoodConstants.LAMPREY_OFFSET; // FIXME I question this
+         return hoodPos;
 
      }
 
+      public void setPosition(double targetDeg){
+         this.targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
 
+      }
+
+     @Override
+     public void periodic(){
+         hoodPos = getHoodPos();
+
+         pidOut = hoodController.calculate (hoodPos, targetDeg);
+         pidOut = MathUtil.clamp(pidOut, -12.0, 12.0);
+         limit = slewRateLimiter.calculate(pidOut);
+
+         if (hoodPos <= HoodConstants.lowerLimit && pidOut < 0) limit = 0;
+         if (hoodPos >= HoodConstants.upperLimit && pidOut > 0) limit = 0;
+
+         hoodArticulate.setVoltage(limit);
+
+        
+     }
 
 
     

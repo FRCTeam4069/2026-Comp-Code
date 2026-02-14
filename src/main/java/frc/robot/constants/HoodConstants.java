@@ -2,17 +2,27 @@ package frc.robot.constants;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import frc.robot.constants.DrivetrainConstants.PIDCoefficients;
-import frc.robot.constants.ShooterConstants.ShooterCoefficients;
-
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 20; //FIXME
 
-     public static final double SHOOT =0.0; //TODO
-     public static final double PASS = 0.0; //TODO
+    public static final double SHOOT =0.0; //TODO
+    public static final double PASS = 0.0; //TODO
+    public static final double START = 0.0; //TODO
+
+    public static final byte LAMPREY_PORT = 0; //FIXME
+    public static final double LAMPREY_OFFSET =0.0; //FIXME
+
+    public static final double lowerLimit = 0.0;
+    public static final double upperLimit = 0.0;
+
+    public enum hoodPositions{
+        SHOOT,
+        PASS,
+        START //FIXME, do we need a start or can we just default to shoot?????
+    }
 
     public static final SparkMaxConfig hoodConfig = new SparkMaxConfig();
 
@@ -25,7 +35,6 @@ public class HoodConstants {
             .closedLoopRampRate(0.0);
     }
 
-    public static PIDCoefficients hoodPIDConstants = new PIDCoefficients(0, 0.0, 0.0); //FIXME TUNE
 
     public record HoodCoefficients(
         double kP,
