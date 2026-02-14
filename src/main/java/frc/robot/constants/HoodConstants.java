@@ -8,9 +8,8 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 20; //FIXME
 
-    public static final double SHOOT =0.0; //TODO
+    public  final double SHOOT =0.0; //TODO
     public static final double PASS = 0.0; //TODO
-    public static final double START = 0.0; //TODO
 
     public static final byte LAMPREY_PORT = 0; //FIXME
     public static final double LAMPREY_OFFSET =0.0; //FIXME
@@ -20,8 +19,7 @@ public class HoodConstants {
 
     public enum hoodPositions{
         SHOOT,
-        PASS,
-        START //FIXME, do we need a start or can we just default to shoot?????
+        PASS
     }
 
     public static final SparkMaxConfig hoodConfig = new SparkMaxConfig();

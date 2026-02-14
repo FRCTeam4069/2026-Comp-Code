@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class ShooterCommand extends Command{
     private final ShooterController shooter;
