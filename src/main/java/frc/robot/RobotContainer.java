@@ -8,6 +8,14 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+
+import frc.robot.subsystems.ShooterController;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.RunIntakeCommand;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
+import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.subsystems.IntakeController;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,6 +31,8 @@ public class RobotContainer {
      public static final IntakeSubsystem intake = new IntakeSubsystem();
      public static final PivotSubsystem pivot = new PivotSubsystem();
 
+     public static final IntakeController intake = new IntakeController();
+     public static final ShooterController shooter = new ShooterController();
 
 
      private final CommandXboxController controller0 = new CommandXboxController(0);
@@ -31,8 +41,6 @@ public class RobotContainer {
      private final SendableChooser<Command> autoChooser;
 
        // addSysIdCommands()
-
- public final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
 
 
@@ -104,6 +112,7 @@ public class RobotContainer {
       );
   }
 
+  
   public Command defaultPivotCommand() {
       return new PivotCommand(
               pivot,
@@ -111,6 +120,27 @@ public class RobotContainer {
               () -> controller1.getHID().getPOV() == 180  // OUT
       );
   }
+  
+  public Command defaultShooterCommand() { 
+      return new ShooterCommand(
+              shooter,
+              () -> controller1.getHID().getRightBumperButton() // IN
+      );
+  }
+
+
+
+   //oh so come back pleeeeeek//
+   // public Command defaultIntakeCommand() {
+   //     return new FeedIntakeCommand(
+   //             intake,
+   //             () -> controller0.getHID().getYButton());
+   // }
+   // public Command defaultIntakeCommand() {
+   //     return intake.driveFeed(() -> -controller1.getAButton());
+   // }
+
+
 }
 
 
