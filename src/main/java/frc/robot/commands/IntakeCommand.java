@@ -1,70 +1,52 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.IntakeConstants;
-import frc.robot.subsystems.IntakeController;
-import frc.robot.subsystems.IntakeController.positions;
+import frc.robot.subsystems.IntakeSubsystem;
+
 
 public class IntakeCommand extends Command{
-    IntakeController intake;
+  private final IntakeSubsystem intake;
+  private final BooleanSupplier inSupplier;
+  private final BooleanSupplier outSupplier;
 
-    private final double kP = 0.0155, kI = 0, kD = 0;
-    private PIDController controller = new PIDController(kP, kI, kD);
-    private double setpoint;
-    private double speed;
-    private boolean setSpeed = false;
+   public IntakeCommand(
+      IntakeSubsystem intake,
+      BooleanSupplier in, BooleanSupplier out){
 
-    public IntakeCommand(IntakeController intake, positions position){
-        this.intake = intake;
-        if (position == positions.UPPER) {
-            setpoint = IntakeConstants.UPPER_POSITION - 3;
-        } else {
-            setpoint = IntakeConstants.LOWER_POSITION - 6;
-        }
-        intake.setPosition(position);
-        // intake.ResetEncoder();
-    }
+      this.intake = intake;
+      this.inSupplier = in;
+      this.outSupplier = out;
 
-    public IntakeCommand(IntakeController intake, positions position, double speed){
-        this.intake = intake;
-        this.speed = speed;
-        this.setSpeed = true;
-        if (position == positions.UPPER) {
-            setpoint = IntakeConstants.UPPER_POSITION - 3;
-        } else {
-            setpoint = IntakeConstants.LOWER_POSITION - 6;
-        }
-        intake.setPosition(position);
-        // intake.ResetEncoder();
-    }
+      addRequirements(intake);
+  }
 
-    @Override
-    public void initialize() {
-        if (setSpeed) {
-            if (speed == 0) {
-                intake.stopFeed();
-            } else {
-                intake.setIntakeSpeed(speed);
+  @Override
+  public void execute(){
+      if (inSupplier.getAsBoolean()){
+          intake.driveFeedIn();
+      } else if (outSupplier.getAsBoolean()) {
+          intake.driveFeedOut();
+      } else {
+          intake.stopFeed();
+      }
+  }
 
-            }
-        }
-    }
-
-    @Override
-    public void execute(){
-        intake.drivePivot(controller.calculate(intake.getPivotEncoder(), setpoint));
-    }
-
-    @Override
-    public void end(boolean interrupted){
-        intake.stopPivot();
-    }
-
-    @Override
-    public boolean isFinished(){
-        return MathUtil.isNear(setpoint, intake.getPivotEncoder(), 5);
-    }
-    
+  @Override
+    public void end(boolean interupted){
+      intake.stopFeed();
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
