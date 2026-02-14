@@ -12,6 +12,9 @@ public final class PivotConstants {
 
   public static final int UPPER_POSITION = 0;
   public static final int LOWER_POSITION = 0;
+  public static double kP = 0;
+  public static double kI = 0;
+  public static double kD = 0;
 
   public static final int pivotSmartCurrentLimit = 0;
 
@@ -30,18 +33,16 @@ public final class PivotConstants {
           .reverseSoftLimit(PivotConstants.UPPER_POSITION)
           .forwardSoftLimitEnabled(true)
           .reverseSoftLimitEnabled(true);
+
+          pivotConfig.closedLoop
+            .p(kP)
+            .i(kI)
+            .d(kD);
+      
     }
 
-
-  public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0, 0.0);
-  public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0);
-
-
-  // NOTE: not sure if these are needed quite yet
-  //public static Constraints constraints = new Constraints(100000.0, 100000.0);
-  //public static double positionTolerance = 0.02;
-  //public static double velocityTolerance = 1.00;
-
+  public static PIDCoefficients upCoefficients = new PIDCoefficients(0, 0.0, 0.0);
+  public static PIDCoefficients downCoefficients = new PIDCoefficients(0, 0.0, 0.0);
 
  }
 

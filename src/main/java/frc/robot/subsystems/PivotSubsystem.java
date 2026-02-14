@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,10 +19,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 public class PivotSubsystem extends SubsystemBase {
     SparkMax pivotMotor;
-    private SlewRateLimiter limit;
-    private final SparkClosedLoopController pivotController;
 
-    //TODO put these in cosntants?
     public enum positions{
       UPPER,
       LOWER
@@ -29,33 +27,26 @@ public class PivotSubsystem extends SubsystemBase {
 
     positions p = positions.UPPER;
 
-    private final double LOWER = PivotConstants.LOWER_POSITION - 6;
-    private final double UPPER = PivotConstants.UPPER_POSITION - 3;
+    private final double LOWER_POS = PivotConstants.LOWER_POSITION;
+    private final double UPPER_POS = PivotConstants.UPPER_POSITION;
+
+
+    PIDController upController;
+    PIDController downController;
+
+    double pidOutput;
 
     public PivotSubsystem(){
+
       pivotMotor = new SparkMax(DeviceIDs.PIVOT, MotorType.kBrushless);
-
       pivotMotor.configure(PivotConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      pivotMotor.getEncoder().setPosition(UPPER_POS);
 
-      pivotController = pivotMotor.getClosedLoopController();
+      upController = new PIDController(PivotConstants.upCoefficients.kP(), PivotConstants.upCoefficients.kI(), PivotConstants.upCoefficients.kD());
+      downController = new PIDController(PivotConstants.downCoefficients.kP(), PivotConstants.downCoefficients.kI(), PivotConstants.downCoefficients.kD());
 
-      pivotMotor.configure(
-            PivotConstants.pivotConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters
-        );
+      pidOutput = 0.0;
 
-      limit = new SlewRateLimiter(0);
-
-       pivotMotor.getEncoder().setPosition(UPPER);
-
-
-  }
-
-  //this might not be needed if i have lower and upperpositions
-  public void drivePivot(double speed){
-      pivotMotor.set(speed);
-      System.out.println("encoder" + getPivotEncoder());
   }
 
   public void stopPivot(){
@@ -65,8 +56,6 @@ public class PivotSubsystem extends SubsystemBase {
   public double getPivotEncoder(){
       return pivotMotor.getEncoder().getPosition();
   }
-
-  //TODO is this right or what
 
   public void goUpper() {
     p = positions.UPPER;
@@ -81,14 +70,19 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getPositionValue(){
-      return p == positions.LOWER ? LOWER : UPPER;
+      return p == positions.LOWER ? LOWER_POS : UPPER_POS;
   }
 
   public void periodic() {
-        pivotController.setSetpoint(
-            getPositionValue(),
-            ControlType.kPosition
-        );
+
+      if (getPosition() == positions.UPPER) {
+        pidOutput = upController.calculate(getPivotEncoder(), UPPER_POS);
+        pivotMotor.set(pidOutput);
+      } else {
+        pidOutput = downController.calculate(getPivotEncoder(), LOWER_POS);
+        pivotMotor.set(pidOutput);
+      }
+  
     }
 
   public Command setPosition(positions po){
@@ -106,6 +100,6 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void ResetEncoder(){
-      pivotMotor.getEncoder().setPosition(UPPER);
+      pivotMotor.getEncoder().setPosition(UPPER_POS);
   }
 }
