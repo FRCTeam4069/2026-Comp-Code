@@ -2,41 +2,38 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
 
-
-public class RunIntakeCommand extends Command{
-  private final IntakeSubsystem intake;
+public class HopperCommand extends Command{
+  private final HopperSubsystem hopper;
   private final BooleanSupplier inSupplier;
   private final BooleanSupplier outSupplier;
 
-   public RunIntakeCommand(
-      IntakeSubsystem intake,
+   public HopperCommand(
+      HopperSubsystem hopper,
       BooleanSupplier in, BooleanSupplier out){
 
-      this.intake = intake;
+      this.hopper = hopper;
       this.inSupplier = in;
       this.outSupplier = out;
 
-      addRequirements(intake);
+      addRequirements(hopper);
   }
-
 
   @Override
   public void execute(){
       if (inSupplier.getAsBoolean()){
-          intake.driveFeedIn();
+          hopper.driveHopperIn();
       } else if (outSupplier.getAsBoolean()) {
-          intake.driveFeedOut();
+          hopper.driveHopperOut();
       } else {
-          intake.stopFeed();
+          hopper.stopHopper();
       }
   }
 
   @Override
     public void end(boolean interupted){
-      intake.stopFeed();
+      hopper.stopHopper();
   }
 }
 

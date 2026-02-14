@@ -11,16 +11,16 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class IntakeConstants {
 
 
-  public static final int feedSmartCurrentLimit = 40;
+  public static final int intakeSmartCurrentLimit = 0;
 
-  public static final SparkMaxConfig feedConfig = new SparkMaxConfig();
+  public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
 
 
     static {
-      feedConfig
+      intakeConfig
           .inverted(true)
           .idleMode(IdleMode.kBrake)
-          .smartCurrentLimit(feedSmartCurrentLimit)
+          .smartCurrentLimit(intakeSmartCurrentLimit)
           .openLoopRampRate(0.0)
           .closedLoopRampRate(0.0);
     }

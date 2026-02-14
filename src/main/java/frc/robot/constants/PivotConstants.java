@@ -10,10 +10,10 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public final class PivotConstants {
 
-  public static final int UPPER_POSITION = 65;
-  public static final int LOWER_POSITION = 12;
+  public static final int UPPER_POSITION = 0;
+  public static final int LOWER_POSITION = 0;
 
-  public static final int pivotSmartCurrentLimit = 20;
+  public static final int pivotSmartCurrentLimit = 0;
 
   public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
 

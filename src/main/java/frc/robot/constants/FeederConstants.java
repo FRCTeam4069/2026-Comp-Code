@@ -11,10 +11,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class FeederConstants {
 
     //TODO test current limits
-    public static final int feederSmartCurrentLimit = 40; 
+    public static final int feederSmartCurrentLimit = 0; 
 
     public static final SparkMaxConfig feederConfig = new SparkMaxConfig();
-
 
     static {
         feederConfig

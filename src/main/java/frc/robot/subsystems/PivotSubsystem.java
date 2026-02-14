@@ -12,7 +12,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
-import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.PivotConstants;
 
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -22,6 +21,7 @@ public class PivotSubsystem extends SubsystemBase {
     private SlewRateLimiter limit;
     private final SparkClosedLoopController pivotController;
 
+    //TODO put these in cosntants?
     public enum positions{
       UPPER,
       LOWER
@@ -45,7 +45,7 @@ public class PivotSubsystem extends SubsystemBase {
             PersistMode.kPersistParameters
         );
 
-      limit = new SlewRateLimiter(.94);
+      limit = new SlewRateLimiter(0);
 
        pivotMotor.getEncoder().setPosition(UPPER);
 
@@ -65,6 +65,8 @@ public class PivotSubsystem extends SubsystemBase {
   public double getPivotEncoder(){
       return pivotMotor.getEncoder().getPosition();
   }
+
+  //TODO is this right or what
 
   public void goUpper() {
     p = positions.UPPER;
@@ -92,9 +94,6 @@ public class PivotSubsystem extends SubsystemBase {
   public Command setPosition(positions po){
       return this.runOnce(() -> p = po);
   }
-
-  //TODO
-
 
   
    public void setBrakeState(int index){

@@ -4,44 +4,39 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
 
 
 public class IntakeSubsystem extends SubsystemBase {
-    SparkMax feedMotor;
+    SparkMax intakeMotor;
 
     public IntakeSubsystem(){
-      feedMotor = new SparkMax(DeviceIDs.INTAKE_FEED, MotorType.kBrushless);
+      intakeMotor = new SparkMax(DeviceIDs.INTAKE, MotorType.kBrushless);
 
-      feedMotor.configure(IntakeConstants.feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      intakeMotor.configure(IntakeConstants.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
   public void driveFeedIn(){
-      feedMotor.set((0.85));
+      intakeMotor.set((0.85));
   }
 
   public void driveFeedOut(){
-      feedMotor.set((-0.85));
+      intakeMotor.set((-0.85));
   }
 
   public void stopFeed(){
-      feedMotor.stopMotor();
+      intakeMotor.stopMotor();
   }
 
   public double getFeedSpeed(){
-      return feedMotor.getAppliedOutput();
+      return intakeMotor.getAppliedOutput();
   }
 
   public void setIntakeSpeed(double speed) {
-      feedMotor.set(speed);
+      intakeMotor.set(speed);
   }
     
 }
