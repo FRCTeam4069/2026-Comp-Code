@@ -29,6 +29,8 @@ public class HoodArticulate extends SubsystemBase {
    private double hoodPos = 0.0;
    private double pidOut = 0.0;
 
+   
+
    PIDController hoodController = new PIDController(
    HoodConstants.hoodCoefficients.kP(),
    HoodConstants.hoodCoefficients.kI(),

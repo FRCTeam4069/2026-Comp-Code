@@ -10,8 +10,6 @@ public class HoodCommand extends Command{
     private final HoodArticulate hood;
     private final BooleanSupplier shootPos;
     private final BooleanSupplier passPos;
-    private final double setPoint= 0.0;
-
 
 
     public HoodCommand(
@@ -34,9 +32,13 @@ public class HoodCommand extends Command{
 
         if(shootPos.getAsBoolean()){
 
+           hood.setPosition(HoodConstants.SHOOT);
         }
 
         else if (passPos.getAsBoolean()){
+
+            hood.setPosition(HoodConstants.PASS);
+
 
         }
 

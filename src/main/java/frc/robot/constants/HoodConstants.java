@@ -8,7 +8,7 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 20; //FIXME
 
-    public  final double SHOOT =0.0; //TODO
+    public static final double SHOOT = 0.0; //TODO
     public static final double PASS = 0.0; //TODO
 
     public static final byte LAMPREY_PORT = 0; //FIXME
