@@ -2,24 +2,16 @@
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
 import frc.robot.commands.PivotCommand;
-import frc.robot.commands.RunIntakeCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
-
 import frc.robot.subsystems.ShooterController;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.RunIntakeCommand;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.subsystems.IntakeController;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +23,6 @@ public class RobotContainer {
      public static final IntakeSubsystem intake = new IntakeSubsystem();
      public static final PivotSubsystem pivot = new PivotSubsystem();
 
-     public static final IntakeController intake = new IntakeController();
      public static final ShooterController shooter = new ShooterController();
 
 
@@ -105,7 +96,7 @@ public class RobotContainer {
    }
 
    public Command defaultIntakeCommand() {
-      return new RunIntakeCommand(
+      return new IntakeCommand(
               intake,
               () -> controller1.getHID().getLeftBumperButton(), // IN
               () -> controller1.getHID().getRightBumperButton()  // OUT
@@ -127,19 +118,6 @@ public class RobotContainer {
               () -> controller1.getHID().getRightBumperButton() // IN
       );
   }
-
-
-
-   //oh so come back pleeeeeek//
-   // public Command defaultIntakeCommand() {
-   //     return new FeedIntakeCommand(
-   //             intake,
-   //             () -> controller0.getHID().getYButton());
-   // }
-   // public Command defaultIntakeCommand() {
-   //     return intake.driveFeed(() -> -controller1.getAButton());
-   // }
-
 
 }
 
