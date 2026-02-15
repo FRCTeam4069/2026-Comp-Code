@@ -8,14 +8,14 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class ShooterConstants {
 
-    public static final SparkFlexConfig shooterOneLeftConfig = new SparkFlexConfig();
-    public static final SparkFlexConfig shooterOneRightConfig = new SparkFlexConfig();
-    public static final SparkFlexConfig shooterTwoLeftConfig = new SparkFlexConfig();
-    public static final SparkFlexConfig shooterTwoRightConfig = new SparkFlexConfig();
+    public static final SparkFlexConfig shooterOneMotorOneConfig = new SparkFlexConfig();
+    public static final SparkFlexConfig shooterOneMotorTwoConfig = new SparkFlexConfig();
+    public static final SparkFlexConfig shooterTwoMotorOneConfig = new SparkFlexConfig();
+    public static final SparkFlexConfig shooterTwoMotorTwoConfig = new SparkFlexConfig();
 
 
     static{
-        shooterOneLeftConfig
+        shooterOneMotorOneConfig
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
@@ -25,47 +25,48 @@ public class ShooterConstants {
     }
 
      static{
-        shooterOneRightConfig
-            .inverted(true)
-            .idleMode(IdleMode.kCoast)
-            .voltageCompensation(12)
-            .smartCurrentLimit(40)
-            .closedLoopRampRate(0.0);
-
-    }
-
-    static{
-        shooterTwoLeftConfig
+        shooterOneMotorTwoConfig
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
             .smartCurrentLimit(40)
-            .closedLoopRampRate(0.0);
+            .closedLoopRampRate(0.0)
+            .follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
+
 
     }
 
-     static{
-        shooterTwoRightConfig
+    static{
+        shooterTwoMotorOneConfig
             .inverted(true)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
             .smartCurrentLimit(40)
             .closedLoopRampRate(0.0);
 
+
     }
 
-    public static final PIDConstants shooterPIDConstants = new PIDConstants(0.0, 0.0, 0.0);//FIXME TUNE
-    public static FFCoefficients shooterFFCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0); //FIXME TUNE
+     static{
+        shooterTwoMotorTwoConfig
+            .inverted(true)
+            .idleMode(IdleMode.kCoast)
+            .voltageCompensation(12)
+            .smartCurrentLimit(40)
+            .closedLoopRampRate(0.0)
+            .follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
+
+
+    }
   
     public record ShooterCoefficients(
         double kP,
         double kI,
         double kD,
 
-        double kS,
         double kV,
-        double kA,
-        double kG
+        double kA
+
         ) {}
 
         public static ShooterCoefficients shooterCoefficients = new ShooterCoefficients(
@@ -73,8 +74,6 @@ public class ShooterConstants {
             0.0,
             0.0,
 
-            0.0,
-            0.0,
             0.0,
             0.0
 

@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HoodConstants;
@@ -18,8 +17,6 @@ public class HoodArticulate extends SubsystemBase {
 
    SparkMax hoodArticulate;
 
-   private SlewRateLimiter slewRateLimiter;
-   private double limit = 0.0;
    private double targetDeg = 0.0;
 
    private final DutyCycleEncoder hoodEncoder = new DutyCycleEncoder(HoodConstants.LAMPREY_PORT);// FIXME FO‰ PORT
@@ -41,7 +38,6 @@ public class HoodArticulate extends SubsystemBase {
 
         hoodArticulate.configure(HoodConstants.hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        slewRateLimiter = new SlewRateLimiter(0.0); //FIXME tune
      }
 
      public void stop(){
@@ -65,12 +61,11 @@ public class HoodArticulate extends SubsystemBase {
 
          pidOut = hoodController.calculate (hoodPos, targetDeg);
          pidOut = MathUtil.clamp(pidOut, -12.0, 12.0);
-         limit = slewRateLimiter.calculate(pidOut);
 
-         if (hoodPos <= HoodConstants.lowerLimit && pidOut < 0) limit = 0;
-         if (hoodPos >= HoodConstants.upperLimit && pidOut > 0) limit = 0;
+         if (hoodPos <= HoodConstants.lowerLimit && pidOut < 0) pidOut = 0;
+         if (hoodPos >= HoodConstants.upperLimit && pidOut > 0) pidOut = 0;
 
-         hoodArticulate.setVoltage(limit);
+         hoodArticulate.setVoltage(pidOut);
 
         
      }

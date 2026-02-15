@@ -2,27 +2,30 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.subsystems.FeederSubsystem;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
 
+
 public class ShooterCommand extends Command{
     private final ShooterController shooter;
+    private final FeederSubsystem feeder;
 
     private final BooleanSupplier shoot;
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
 
-
-
     private double deltaX = 0.0;
     private double deltaY = 0.0;
 
     private Alliance alliance = Alliance.Blue;
+
+    private static final double RPMDiff = 50; //FIXME
 
 
     private final double redHubX = Units.inchesToMeters(469.1);
@@ -35,14 +38,16 @@ public class ShooterCommand extends Command{
     public ShooterCommand(
 
         ShooterController shooter,
+        FeederSubsystem feeder,
         BooleanSupplier shoot
 
         ){
 
         this.shooter = shooter;
+        this.feeder = feeder;
         this.shoot = shoot;
 
-        addRequirements(shooter);
+        addRequirements(shooter, feeder);
 
         }
 
@@ -50,9 +55,8 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-        currentPositionX= new Pose2d().getX();
-        currentPositionY= new Pose2d().getY();
-
+        currentPositionX = shooter.getCurrentRobotPose().getX();
+        currentPositionY = shooter.getCurrentRobotPose().getY();
 
 
         if (result.isPresent()) {
@@ -77,24 +81,29 @@ public class ShooterCommand extends Command{
             }
 
             distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-
             shooter.shoot(distance);
 
+            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)) { 
+
+                feeder.driveFeederIn();
+            }
+
+            else{
+                feeder.stopFeeder();
+            }
 
         }
 
         else{
             shooter.stop();
+            feeder.stopFeeder();
         }
-
     }
 
     @Override
     public void end(boolean interrupted) {
         shooter.stop();
+        feeder.stopFeeder();
+
     }
-
-
 }
-
-    

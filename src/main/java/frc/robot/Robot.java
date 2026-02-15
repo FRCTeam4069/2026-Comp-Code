@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -24,6 +25,8 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
+
+  private Pose2d currentPosition;
   //private final PowerDistribution pdh = new PowerDistribution(DeviceIDs.POWER_DISTRIBUTION_HUB, ModuleType.kRev);
 
 
@@ -106,7 +109,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    currentPosition= m_robotContainer.drive.getPose();
+    m_robotContainer.shooter.setCurrentRobotPose(currentPosition);
+
+  }
 
   @Override
   public void testInit() {

@@ -5,6 +5,7 @@ import frc.robot.commands.PivotCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
@@ -22,6 +23,7 @@ public class RobotContainer {
      public static final SwerveDrivetrain drive = new SwerveDrivetrain();
      public static final IntakeSubsystem intake = new IntakeSubsystem();
      public static final PivotSubsystem pivot = new PivotSubsystem();
+     public static final FeederSubsystem feeder = new FeederSubsystem();
 
      public static final ShooterController shooter = new ShooterController();
 
@@ -115,6 +117,7 @@ public class RobotContainer {
   public Command defaultShooterCommand() { 
       return new ShooterCommand(
               shooter,
+              feeder,
               () -> controller1.getHID().getRightBumperButton() // IN
       );
   }
