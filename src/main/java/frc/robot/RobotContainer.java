@@ -89,8 +89,6 @@ public class RobotContainer {
 
    private void registerAutoCommands(){
       NamedCommands.registerCommand("shooterArticulate", testSubsystem.angleCommand());
-
-
    }
 
 
