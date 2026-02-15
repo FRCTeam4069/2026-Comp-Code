@@ -15,7 +15,9 @@ public class ShooterCommand extends Command{
     private final ShooterController shooter;
     private final FeederSubsystem feeder;
 
+
     private final BooleanSupplier shoot;
+    private final BooleanSupplier pass;
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
@@ -39,13 +41,15 @@ public class ShooterCommand extends Command{
 
         ShooterController shooter,
         FeederSubsystem feeder,
-        BooleanSupplier shoot
+        BooleanSupplier shoot,
+        BooleanSupplier pass
 
         ){
 
         this.shooter = shooter;
         this.feeder = feeder;
         this.shoot = shoot;
+        this.pass = pass;
 
         addRequirements(shooter, feeder);
 
@@ -81,10 +85,10 @@ public class ShooterCommand extends Command{
             }
 
             distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
             shooter.shoot(distance);
 
-            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)) { 
-
+            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
                 feeder.driveFeederIn();
             }
 
@@ -92,6 +96,17 @@ public class ShooterCommand extends Command{
                 feeder.stopFeeder();
             }
 
+        }
+
+        else if (pass.getAsBoolean()){
+            shooter.pass();
+             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+                feeder.driveFeederIn();
+            }
+
+            else{
+                feeder.stopFeeder();
+            }
         }
 
         else{

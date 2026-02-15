@@ -2,8 +2,6 @@ package frc.robot.constants;
 
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-import frc.robot.constants.DrivetrainConstants.FFCoefficients;
-import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class ShooterConstants {
@@ -74,10 +72,10 @@ public class ShooterConstants {
             0.0,
             0.0,
 
-            0.0,
-            0.0
+            0.33,
+            0.64
 
-            //FIXME tune
+            //FIXME tune PID and check FF
         );
     }
 

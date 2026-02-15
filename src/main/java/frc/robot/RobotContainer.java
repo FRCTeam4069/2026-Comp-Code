@@ -118,7 +118,9 @@ public class RobotContainer {
       return new ShooterCommand(
               shooter,
               feeder,
-              () -> controller1.getHID().getRightBumperButton() // IN
+              () -> controller1.getHID().getRightBumperButton(), // shoot
+              () -> controller1.getHID().getYButton() //pass
+
       );
   }
 
