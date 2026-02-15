@@ -10,6 +10,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
@@ -22,10 +24,12 @@ public class ShooterController extends SubsystemBase {
     SparkMax hoodArticulate;
 
     private double targetDeg = 0.0;
-    private final DutyCycleEncoder hoodEncoder = new DutyCycleEncoder(HoodConstants.LAMPREY_PORT);// FIXME FOR PORT
     private double hoodPos = 0.0;
     private double pidOutHood = 0.0;
     private static final double farShootPos = 0.0;
+
+    private final AnalogEncoder hoodEncoder = new AnalogEncoder(HoodConstants.LAMPREY_PORT);// FIXME FOR PORT
+
 
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),

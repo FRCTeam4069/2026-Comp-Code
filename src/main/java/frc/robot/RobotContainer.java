@@ -9,21 +9,29 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
+import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.TestCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
+
+     
+
      public static final SwerveDrivetrain drive = new SwerveDrivetrain();
      public static final IntakeSubsystem intake = new IntakeSubsystem();
      public static final PivotSubsystem pivot = new PivotSubsystem();
      public static final FeederSubsystem feeder = new FeederSubsystem();
+
+     public static final TestSubsystem testSubsystem = new TestSubsystem();
 
      public static final ShooterController shooter = new ShooterController();
 
@@ -35,12 +43,15 @@ public class RobotContainer {
 
        // addSysIdCommands()
 
-
+     private final TestCommand test;
 
  private final CommandXboxController m_driverController =
      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
  public RobotContainer() {
+
+      test = new TestCommand (testSubsystem);
+      registerAutoCommands();
    // Configure the trigger bindings
 
 
@@ -75,6 +86,13 @@ public class RobotContainer {
 
    // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
  }
+
+   private void registerAutoCommands(){
+      NamedCommands.registerCommand("shooterArticulate", testSubsystem.angleCommand());
+
+
+   }
+
 
  /**
   * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -123,6 +141,7 @@ public class RobotContainer {
 
       );
   }
+
 
 }
 
