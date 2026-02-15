@@ -8,19 +8,22 @@ import frc.robot.subsystems.HoodArticulate;
 
 public class HoodCommand extends Command{
     private final HoodArticulate hood;
-    private final BooleanSupplier shootPos;
+    private final BooleanSupplier closeShootPos;
+    private final BooleanSupplier farShootPos;
     private final BooleanSupplier passPos;
 
 
     public HoodCommand(
         HoodArticulate hood,
-        BooleanSupplier shootPos,
+        BooleanSupplier farShootPos,
+        BooleanSupplier closeShootPos,
         BooleanSupplier passPos
 
     ){
       
         this.hood = hood;
-        this.shootPos = shootPos;
+        this.farShootPos = farShootPos;
+        this.closeShootPos = closeShootPos;
         this.passPos = passPos;
 
         addRequirements(hood);
@@ -30,16 +33,17 @@ public class HoodCommand extends Command{
     @Override
     public void execute(){
 
-        if(shootPos.getAsBoolean()){
 
-           hood.setPosition(HoodConstants.SHOOT);
+        if(farShootPos.getAsBoolean()){
+           hood.setPosition(HoodConstants.FAR_SHOOT);
         }
 
+        else if (closeShootPos.getAsBoolean()){
+            hood.setPosition(HoodConstants.CLOSE_SHOOT);  
+        }
+        
         else if (passPos.getAsBoolean()){
-
             hood.setPosition(HoodConstants.PASS);
-
-
         }
 
 

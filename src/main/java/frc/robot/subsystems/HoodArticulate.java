@@ -66,10 +66,6 @@ public class HoodArticulate extends SubsystemBase {
          if (hoodPos >= HoodConstants.upperLimit && pidOut > 0) pidOut = 0;
 
          hoodArticulate.setVoltage(pidOut);
-
-        
-     }
-
-
-    
+ 
+     }  
 }
