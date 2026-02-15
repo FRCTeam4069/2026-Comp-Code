@@ -8,6 +8,7 @@ public class TestCommand extends Command {
     private TestSubsystem shooter;
 
     public TestCommand(TestSubsystem c){
+
         shooter = c;
         
         addRequirements(c);
@@ -36,6 +37,6 @@ public class TestCommand extends Command {
     }
 
     public boolean isFinished(){
-        return false;
+        return shooter.controller.atSetpoint();
     }
 }

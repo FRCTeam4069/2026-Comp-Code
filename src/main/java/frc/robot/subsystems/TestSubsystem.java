@@ -19,7 +19,7 @@ public class TestSubsystem extends SubsystemBase {
     private final double kP = 4.5, kI = 0, kD = 0.01;
 
     private boolean isClimbing = false;
-    private PIDController controller = new PIDController(kP, kI, kD);
+    public PIDController controller = new PIDController(kP, kI, kD);
 
 
     public TestSubsystem(){

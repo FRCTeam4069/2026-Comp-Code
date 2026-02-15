@@ -26,33 +26,33 @@ public class RobotContainer {
 
      
 
-     public static final SwerveDrivetrain drive = new SwerveDrivetrain();
-     public static final IntakeSubsystem intake = new IntakeSubsystem();
-     public static final PivotSubsystem pivot = new PivotSubsystem();
-     public static final FeederSubsystem feeder = new FeederSubsystem();
+    public static final SwerveDrivetrain drive = new SwerveDrivetrain();
+    public static final IntakeSubsystem intake = new IntakeSubsystem();
+    public static final PivotSubsystem pivot = new PivotSubsystem();
+    public static final FeederSubsystem feeder = new FeederSubsystem();
 
-     public static final TestSubsystem testSubsystem = new TestSubsystem();
+    public static final TestSubsystem testSubsystem = new TestSubsystem();
 
-     public static final ShooterController shooter = new ShooterController();
+    public static final ShooterController shooter = new ShooterController();
 
 
-     private final CommandXboxController controller0 = new CommandXboxController(0);
-     private final CommandXboxController controller1 = new CommandXboxController(1);
+    private final CommandXboxController controller0 = new CommandXboxController(0);
+    private final CommandXboxController controller1 = new CommandXboxController(1);
 
-     private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
 
        // addSysIdCommands()
 
-     private final TestCommand test;
+    private final TestCommand test;
 
- private final CommandXboxController m_driverController =
-     new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_driverController =
+    new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
  public RobotContainer() {
 
       test = new TestCommand (testSubsystem);
       registerAutoCommands();
-   // Configure the trigger bindings
+      // Configure the trigger bindings
 
 
      autoChooser = AutoBuilder.buildAutoChooser();
