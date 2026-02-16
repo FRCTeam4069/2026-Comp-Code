@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
+
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
@@ -104,6 +105,9 @@ public class Robot extends TimedRobot {
     m_robotContainer.pivot.setDefaultCommand(m_robotContainer.defaultPivotCommand());
 
     m_robotContainer.shooter.setDefaultCommand(m_robotContainer.defaultShooterCommand());
+
+    m_robotContainer.testSubsystem.setDefaultCommand(m_robotContainer.defaultTestCommand());
+
 
   }
 

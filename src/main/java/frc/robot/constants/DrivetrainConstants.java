@@ -57,7 +57,7 @@ public class DrivetrainConstants {
     };
 
     public static final Pose2d[] blueShooterPoses = new Pose2d[]{
-        new Pose2d(2.304, 7.402, Rotation2d.fromDegrees(-52.5)), //blue left
+        new Pose2d(6.2, 7.402, Rotation2d.fromDegrees(-52.5)), //blue left
         new Pose2d(2.304, 0.668, Rotation2d.fromDegrees(52.5)), //blue right
     };
 
@@ -92,38 +92,28 @@ public class DrivetrainConstants {
 
 
 
-    public static Pose2d getShooterPose(HumanPlayerStations station, ShooterPoses shooterpose) {
+    public static Pose2d getShooterPose( ShooterPoses shooterpose) {
         Pose2d[] array;
         
-        switch (station) {
-            case Red:
-                array = humanPlayerPoses;
-                break;
-            case Blue:
-                array = humanPlayerPoses;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid HumanPlayerStation: " + station);
-        }
-
         Pose2d result = new Pose2d();
 
         switch (shooterpose) {
-            case RedLeft:
-                result = array[0];
-                break;
-            case RedRight:
-                result = array[1];
-                break;
             case BlueLeft:
-                result = array[0];
+                result = redShooterPoses[0];
                 break;
             case BlueRight:
-                result = array[1];
+               result = redShooterPoses[1];
+                break;
+            case RedLeft:
+                result = redShooterPoses[0];
+                break;
+            case RedRight:
+                result = redShooterPoses[1];
                 break;
             default:
-                throw new IllegalArgumentException("InvalidShooterPose: " + shooterpose);
+                throw new IllegalArgumentException("Invalid ShooterPose: ");
         }
+        
 
         return result;
     }
@@ -144,6 +134,8 @@ public class DrivetrainConstants {
 
     public static RobotConfig config;
 
+
+    // used in swerve drivetrain
     public static final PIDConstants translationPIDConstants = new PIDConstants(0.5, 0.0, 0.0);
     public static final PIDConstants rotationPIDConstants = new PIDConstants(0.1, 0.0, 0.0);
 
@@ -190,8 +182,8 @@ public class DrivetrainConstants {
     ) {}
 
     public static volatile DrivetrainPIDConstants pidToPositionConstants = new DrivetrainPIDConstants(
-        new PIDCoefficients(8.0, 0.0, 0.0), 
-        new PIDCoefficients(10.0, 0.0, 0.4), 
+        new PIDCoefficients(2.0, 0.0, 0.0), 
+        new PIDCoefficients(3.5, 0.0, 0.4), 
         new Constraints(5.0, 3.0), 
         new Constraints(10.0, 10.0), 
         new Tolerances(0.01, 0.20), 

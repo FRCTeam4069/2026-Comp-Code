@@ -43,14 +43,12 @@ public class RobotContainer {
 
        // addSysIdCommands()
 
-    private final TestCommand test;
 
     private final CommandXboxController m_driverController =
     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
  public RobotContainer() {
 
-      test = new TestCommand (testSubsystem);
       registerAutoCommands();
       // Configure the trigger bindings
 
@@ -61,6 +59,8 @@ public class RobotContainer {
 
        autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
        autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+       autoChooser.addOption("Test", new PathPlannerAuto("Test"));
+       autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
 
        SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -88,7 +88,8 @@ public class RobotContainer {
  }
 
    private void registerAutoCommands(){
-      NamedCommands.registerCommand("shooterArticulate", testSubsystem.angleCommand());
+      NamedCommands.registerCommand("shooterArticulate", testSubsystem.driveWithEighteyCommand());
+      NamedCommands.registerCommand("driveStop", testSubsystem.driveStop());
    }
 
 
@@ -140,7 +141,13 @@ public class RobotContainer {
       );
   }
 
-
+  public Command defaultTestCommand(){
+    return new TestCommand(
+      testSubsystem,
+      () -> controller1.getHID().getAButton(),
+      () -> controller1.getHID().getXButton()
+      );
+  }
 }
 
 

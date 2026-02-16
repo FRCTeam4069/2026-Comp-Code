@@ -5,15 +5,53 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Test"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Test"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shooterArticulate"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "driveStop"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Test 2"
+                }
+              }
+            ]
           }
         }
       ]

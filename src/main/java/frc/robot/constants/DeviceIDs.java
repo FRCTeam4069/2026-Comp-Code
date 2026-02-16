@@ -23,7 +23,7 @@ public class DeviceIDs {
     public static final byte HOPPER = 76; //FIXME 
     public static final byte FEEDER = 100; //FIXME
 
-    public static final byte HOOD =11; //FIXME
+    public static final byte HOOD = 11; //FIXME
 
     public static final byte SHOOTER_ONE_MOTOR_ONE = 13;
     public static final byte SHOOTER_ONE_MOTOR_TWO = 14;

@@ -1,168 +1,213 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
-import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import frc.robot.constants.TestConstants;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-public class TestSubsystem extends SubsystemBase {
-    private SparkMax left, right;
-    private DutyCycleEncoder encoder;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
-    private final double kP = 4.5, kI = 0, kD = 0.01;
-
-    private boolean isClimbing = false;
-    public PIDController controller = new PIDController(kP, kI, kD);
-
-
-    public TestSubsystem(){
-        left = new SparkMax(5, MotorType.kBrushless );
-        right = new SparkMax(6, MotorType.kBrushless);
-
-
-        left.configure(TestConstants.leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        right.configure(TestConstants.rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        encoder = new DutyCycleEncoder(0);
+public class TestSubsystem extends SubsystemBase { 
+    TalonFX talon1; 
+    TalonFX talon2; 
+    SimpleMotorFeedforward feedforward; 
+    final VelocityVoltage v = new VelocityVoltage(0); 
+    Slot0Configs config = new Slot0Configs(); 
+    //Slot1Configs slowConfig = new Slot1Configs(); 
+    private   TalonFXConfiguration talonOneConfig;
+    private   TalonFXConfiguration talonZeroConfig;
 
 
-    }
 
-    @Override
-    public void periodic() {
-        
-        System.out.println(getTargetAngle());
-        System.out.println("right: " + right.get());
-        System.out.println("left: " + left.get());
-        System.out.println("encoder" + encoder.get());
-        
-
-    }
-
-    public void drive(double speed) {
-        left.set(-speed);
-        right.set(speed);
-    }
-
-    // public void runWithSpeed(double speed){
-    //     right.set(speed);
-    // }
-    public Command angleCommand(){
-        return run(() -> stop());
-    }
-
-    public void goToAngle(){
-
-        right.set(controller.calculate(getAngle(), Math.toRadians(70)));
-        left.set(-controller.calculate(getAngle(), Math.toRadians(70)));
-
+ 
+    double targetSpeed = 0; 
     
-    }
-
-    public double getEncoder(){
-        return encoder.get();
-    }
-
-    public double getAngle(){
-        return (encoder.get() - TestConstants.ShooterOffset) * (2*Math.PI);
-    }
-
-    shooterAngles angle;
-
-    public Command setAngle(shooterAngles a){
-        return this.runOnce(() -> angle = a);
-    }
-
-    public Command setSpeed(DoubleSupplier speed) {
-        return this.run(() -> drive(speed.getAsDouble()));
-    }
-
-    public double getTargetAngle(){
-        if(angle == shooterAngles.NINTEY) return (Math.PI/2);
-        else if(angle == shooterAngles.NEG_NINTEY) return -Math.PI/2;
-        return 0;
-    }
-    public enum shooterAngles{
-        NINTEY,
-        ZERO,
-        NEG_NINTEY
-    }
-
-    double deg = 0;
-
-    public void setCustomAngle(double angdeg){
-        deg = angdeg;
-
-        var speed = 0.0;
-        if (angdeg < 90 && angdeg > 0) {
-            speed = controller.calculate(getAngle(), Math.toRadians(angdeg));
-        }
-        else {
-            right.set(0);
-            left.set(0);
-        }
-
-        right.set(speed);
-        left.set(-speed);   
+    SysIdRoutine routine; 
+ 
+    Slot0Configs slot0Configs = new Slot0Configs(); 
+    Slot1Configs slot1Configs = new Slot1Configs(); 
+    //private DutyCycleEncoder encoder; 
         
+ 
+    public TestSubsystem(){ 
+        talon1 = new TalonFX(9); 
+        talon2 = new TalonFX(8); 
+
+        slot0Configs = new Slot0Configs(); 
+
+        slot0Configs.kV = 0.12273; 
+        slot0Configs.kP = 0.1; 
+        slot0Configs.kI = 0; 
+        slot0Configs.kD = 0.02; 
+
+        talonOneConfig = new TalonFXConfiguration() 
+        .withMotorOutput( 
+            new MotorOutputConfigs() 
+                .withNeutralMode(NeutralModeValue.Coast) 
+                .withInverted(InvertedValue.CounterClockwise_Positive))
+                .withSlot0( slot0Configs);    
+; 
+                
+ 
+        talonZeroConfig = new TalonFXConfiguration() 
+        .withMotorOutput( 
+            new MotorOutputConfigs() 
+                .withNeutralMode(NeutralModeValue.Coast) 
+                .withInverted(InvertedValue.Clockwise_Positive))
+                .withSlot0( slot0Configs);    
+ 
+ 
+        // var slot1Configs = new Slot0Configs(); 
+        // slot0Configs.kV = 0.12273; 
+        // slot0Configs.kP = 0.11; 
+        // slot0Configs.kI = 0.48; 
+        // slot0Configs.kD = 0.01; 
+        
+ 
+        
+        talon1.getConfigurator().apply(talonOneConfig, 0.050); 
+        talon2.getConfigurator().apply(talonZeroConfig, 0.050); 
+ 
+ 
+        //feedforward = new SimpleMotorFeedforward(0.79972, ); 
+  
+    } 
+ 
+    public void drive(){ 
+        v.Slot = 0; 
+        talon1.setControl(v.withVelocity(60)); 
+        talon2.setControl(v.withVelocity(-30)); 
+    } 
+ 
+    public void switchSlotConfig(SlotConfigs c){ 
+        if (c == SlotConfigs.SLOW){ 
+            v.Slot = 1; 
+            configRunning = 1; 
+        } 
+        else if (c == SlotConfigs.FAST){ 
+            v.Slot = 0; 
+            configRunning = 0; 
+        } 
+       
+    } 
+ 
+    public enum SlotConfigs{ 
+        SLOW, 
+        FAST 
+    } 
+ 
+    public void stop(){ 
+        talon1.set(0); 
+        talon2.set(0); 
+    } 
+ 
+    public void ShootWithPos(double x, double theta){ 
+        double leftSpeed = x; 
+        double rightSpeed = x/2; 
+        
+        v.Slot = 0; 
+        talon1.setControl(v.withVelocity(leftSpeed)); 
+        talon2.setControl(v.withVelocity(rightSpeed)); 
+    } 
+ 
+ 
+    public boolean atSpeed(){ 
+        if(talon1.getVelocity().getValueAsDouble() < 5) return false; 
+        else if(MathUtil.isNear(talon1.getVelocity().getValueAsDouble(), targetSpeed, 0.8)) return true; 
+        return false; 
+    } 
+ 
+    public boolean atSpeed(double tolerance){ 
+        if(talon1.getVelocity().getValueAsDouble() < 5) return false; 
+        else if(MathUtil.isNear(talon1.getVelocity().getValueAsDouble(), targetSpeed, tolerance)) return true; 
+        return false; 
+    } 
+ 
+    public boolean isShooting(){ 
+        return talon1.getVelocity().getValueAsDouble() > 3; 
+    } 
+ 
+    public double getLeftVelocity(){ 
+        return talon1.getVelocity().getValueAsDouble(); 
+    } 
+    public double getRightVelocity(){ 
+        return talon2.getVelocity().getValueAsDouble(); 
+    } 
+ 
+    public Command driveWithEighteyCommand(){
+        return runOnce(() -> driveWithCustomSpeed(0.8,0.8));
     }
 
-    public boolean isClimbing(){
-        return isClimbing;
+    public Command driveStop(){
+        return runOnce(() -> driveWithCustomSpeed(0.0,0.0));
     }
 
-    public boolean atPosition(){
-        if (Math.abs(getAngle() - Math.toRadians(deg)) < 5) return true;
-        return false;
-    }
-
-    public Command changeClimbStatus(){
-        return this.runOnce(() -> isClimbing = true);
-    }
-
-    public void stop(){
-        left.stopMotor();
-        right.stopMotor();
-    }
-
-    boolean down = false;
-
-    public Command setDown(){
-        return this.runOnce(() -> down = true);
-    }
-
-    public boolean NotDown(){
-        return down;
-    }
-
-    //  public boolean getLeftSensorError(){
-    //     return left.getFault(FaultID.kSensorFault);
-    // }
-    // public boolean getLeftMotorError(){
-    //     return left.getFault(FaultID.kMotorFault);
-    // }
-
-    // public double getLeftErrors(){
-    //     return left.getFaults();
-    // }   
+    public void driveWithCustomSpeed(double leftVel, double rightVel){ 
+        switchSlotConfig(SlotConfigs.FAST); 
+        v.Slot = 0; 
+  
+       talon1.set(rightVel);
+       talon2.set(leftVel);
+ 
+        SmartDashboard.putNumber("Right Shooter Speed", talon2.getVelocity().getValueAsDouble()); 
+        SmartDashboard.putNumber("Left  Shooter Speed", talon1.getVelocity().getValueAsDouble()); 
+    } 
+ 
+    double configRunning = 0; 
+ 
+    public void driveWithSlowSpeed(double leftVel, double rightVel){ 
+ 
+        //switchSlotConfig(SlotConfigs.SLOW); 
+        v.Slot = 1; 
+        targetSpeed = leftVel; 
+ 
+        if(leftVel <= 30){ 
+            talon1.setControl(v.withVelocity(leftVel)); 
+            talon2.setControl(v.withVelocity(-leftVel)); 
+        } 
+        else{ 
+            talon1.setControl(v.withVelocity(leftVel)); 
+            talon2.setControl(v.withVelocity(-leftVel)); 
+        } 
+    } 
+ 
+    public void angleShoot(double leftVelocity, double rightVelocity) { 
+        driveWithCustomSpeed(leftVelocity, rightVelocity); 
+ 
+        // if (leftVelocity > rightVelocity && Math.min(leftVelocity, rightVelocity) < 30.0) { 
+        //     v.Slot = 0; 
+        //     talon1.setControl(v.withVelocity(leftVelocity)); 
+        //     v.Slot = 1; 
+        //     talon2.setControl(v.withVelocity(rightVelocity)); 
+        // } else if (leftVelocity < rightVelocity && Math.min(leftVelocity, rightVelocity) < 30.0){ 
+        //     v.Slot = 1; 
+        //     talon1.setControl(v.withVelocity(leftVelocity)); 
+        //     v.Slot = 0; 
+        //     talon2.setControl(v.withVelocity(rightVelocity)); 
+        // } else if (Math.max(leftVelocity, rightVelocity) < 30.0) { 
+        //     v.Slot = 1; 
+        //     talon1.setControl(v.withVelocity(leftVelocity)); 
+        //     talon2.setControl(v.withVelocity(rightVelocity)); 
+        // } else { 
+        //     v.Slot = 0; 
+        //     talon1.setControl(v.withVelocity(leftVelocity)); 
+        //     talon2.setControl(v.withVelocity(rightVelocity)); 
+        // } 
+ 
+    } 
     
-    // public boolean getRightSensorError(){
-    //     return right.getFault(FaultID.kSensorFault);
-    // }
-    // public boolean getRightMotorError(){
-    //     return right.getFault(FaultID.kMotorFault);
-    // }
-
-    // public double getRightErrors(){
-    //     return right.getFaults();
-    // }   
-
+    public double getConfig(){ 
+        
+        return talon1.getClosedLoopSlot().getValueAsDouble(); 
+        
+    } 
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,6 +49,8 @@ public class FieldCentricDrive extends Command {
     private final BooleanSupplier throughTrench;
     private final ThroughTrench controller;
     private boolean trenchActive = false;
+    private ChassisSpeeds trenchSpeeds;
+    private ChassisSpeeds driveSpeeds;
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("desiredHeading").publish();
@@ -55,6 +58,9 @@ public class FieldCentricDrive extends Command {
         .getDoubleTopic("deltaX").publish();
     private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("deltaY").publish();
+    private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("setPoint", Pose2d.struct).publish();
+
 
 
 
@@ -99,11 +105,11 @@ public class FieldCentricDrive extends Command {
             alliance = result.get();
         }
 
-        if (controller.isFinished()){
+        // if (controller.isFinished()){
 
-            drive.stop();
+        //     drive.stop();
             
-        }
+        // }
 
     }
 
@@ -118,10 +124,7 @@ public class FieldCentricDrive extends Command {
              controller.initialize();
              trenchActive = true;
          }
-
-            ChassisSpeeds trenchSpeeds = controller.getSpeeds();
-            drive.drive(trenchSpeeds);
-            return;
+             trenchSpeeds = controller.getSpeeds();
     }
         else {
             trenchActive = false;
@@ -165,15 +168,25 @@ public class FieldCentricDrive extends Command {
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
 
+        if(throughTrench.getAsBoolean()){
+            driveSpeeds = trenchSpeeds;     
+        }
+
+        else{
+            driveSpeeds = outputSpeeds;
+        }
 
         if (alliance == Alliance.Blue) {
-          drive.fieldOrientedDrive(outputSpeeds);
+            
+          drive.fieldOrientedDrive(driveSpeeds);
 
-        } else {
-            drive.fieldOrientedDrive(outputSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
-
+        } 
+        else {
+            drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
 
         }
+
+    setPointPublisher.set(controller.setPoint);
 
     }
 

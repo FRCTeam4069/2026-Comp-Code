@@ -1,42 +1,48 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.TestSubsystem;
 
 public class TestCommand extends Command {
-    private TestSubsystem shooter;
 
-    public TestCommand(TestSubsystem c){
+    private final TestSubsystem testSubsystem;
 
-        shooter = c;
-        
-        addRequirements(c);
+    private final BooleanSupplier go;
+    private final BooleanSupplier stop;
+
+    public TestCommand(
+        TestSubsystem testSubsystem,
+        BooleanSupplier go,
+        BooleanSupplier stop
+
+    ){
+
+        this.go = go;
+        this.stop = stop;
+        this.testSubsystem = testSubsystem;
+
+        addRequirements(testSubsystem);
+
     }
 
+    @Override
     public void execute(){
-        //     shooter.goToAngle();
-        // // }
-        // // else if(shooter.isClimbing() && !shooter.NotDown()){
-        // //     shooter.setCustomAngle(1);
-        // // }
-        // else{
-        //     shooter.setCustomAngle(15);
-        // }
-        
-    }
+        if (go.getAsBoolean()){
+            testSubsystem.driveWithCustomSpeed( 0.8, 0.8);
 
-    public void goTo70(){
+        }
 
-        shooter.goToAngle();
+        else if(stop.getAsBoolean()){
+
+        testSubsystem.driveWithCustomSpeed( 0.0, 0.0);
+
+        }
 
     }
 
-    public void end(boolean interrupted){
+  
 
-    }
-
-    public boolean isFinished(){
-        return shooter.controller.atSetpoint();
-    }
+    
 }
