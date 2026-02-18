@@ -3,19 +3,16 @@ package frc.robot.subsystems;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.PivotConstants;
 
-import com.revrobotics.spark.SparkBase.ControlType;
 
 public class PivotSubsystem extends SubsystemBase {
     SparkMax pivotMotor;
@@ -67,6 +64,17 @@ public class PivotSubsystem extends SubsystemBase {
 
   public positions getPosition(){
       return p;
+  }
+
+  public Command intakeDown(){ //ANNIE LOOK AT THIS AND TELL ME IF IT WORKS
+    goLower();
+    return run(()-> getPositionValue());
+  }
+
+  public Command intakeUp(){
+    goUpper();
+    return run(()->getPositionValue());
+
   }
 
   public double getPositionValue(){

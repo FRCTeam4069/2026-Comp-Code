@@ -6,6 +6,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
@@ -20,6 +21,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.HopperSubsystem;
 
 
 public class RobotContainer {
@@ -30,6 +32,7 @@ public class RobotContainer {
     public static final IntakeSubsystem intake = new IntakeSubsystem();
     public static final PivotSubsystem pivot = new PivotSubsystem();
     public static final FeederSubsystem feeder = new FeederSubsystem();
+    public static final HopperSubsystem hopper = new HopperSubsystem();
 
     public static final TestSubsystem testSubsystem = new TestSubsystem();
 
@@ -88,8 +91,25 @@ public class RobotContainer {
  }
 
    private void registerAutoCommands(){
-      NamedCommands.registerCommand("shooterArticulate", testSubsystem.driveWithEighteyCommand());
-      NamedCommands.registerCommand("driveStop", testSubsystem.driveStop());
+      // NamedCommands.registerCommand("shooterArticulate", testSubsystem.driveWithEighteyCommand());
+      // NamedCommands.registerCommand("driveStop", testSubsystem.driveStop());
+
+      NamedCommands.registerCommand("intakeOn", intake.intakeOn());
+      NamedCommands.registerCommand("intakeOff", intake.intakeOff());
+
+      NamedCommands.registerCommand("intakeDown", pivot.intakeDown());
+      NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
+
+      NamedCommands.registerCommand("hopperIn", hopper.hopperOn());
+      NamedCommands.registerCommand("stopHopper", hopper.hopperOff());
+
+      NamedCommands.registerCommand("shoot", shooter.autoShootCommand());
+      NamedCommands.registerCommand("stopShooter", shooter.stopCommand());
+
+      NamedCommands.registerCommand("feederIn", feeder.feederOn());
+      NamedCommands.registerCommand("feederOff", feeder.feederOff());
+
+      
    }
 
 

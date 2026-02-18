@@ -4,6 +4,8 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HopperConstants;
@@ -27,6 +29,14 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopHopper(){
       hopperMotor.stopMotor();
+  }
+
+  public Command hopperOff(){
+    return run(()-> stopHopper());
+  }
+
+  public Command hopperOn(){
+    return run(()-> driveHopperIn());
   }
 
 }

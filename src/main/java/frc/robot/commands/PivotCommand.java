@@ -9,6 +9,7 @@ public class PivotCommand extends Command{
   private final PivotSubsystem pivot;
   private final BooleanSupplier upSupplier;
   private final BooleanSupplier downSupplier;
+  
 
    public PivotCommand(
       PivotSubsystem pivot,
@@ -31,13 +32,15 @@ public class PivotCommand extends Command{
       } else {
           pivot.stopPivot();
       }
-  }
+    }
 
   @Override
     public void end(boolean interupted){
       pivot.stopPivot();
+  }  
+
   }
-}
+
 
 
 

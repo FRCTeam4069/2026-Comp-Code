@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HoodConstants;
@@ -36,6 +37,7 @@ public class ShooterController extends SubsystemBase {
 
     public double targetRPMOne = 0.0;
     public double currentRPMOne = 0.0;
+    public double autoRPM = 0.0; //FIXME
 
     public  double targetRPMTwo = 0.0;
     public double currentRPMTwo = 0.0;
@@ -209,4 +211,45 @@ public class ShooterController extends SubsystemBase {
          hoodArticulate.setVoltage(pidOutHood);
  
      }  
+
+      public void autoShoot(){
+
+        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
+
+        pidOutOne = shooterPID.calculate(currentRPMOne, autoRPM);
+        ffOutOne = shooterFF.calculate(autoRPM);
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+
+        currentRPMTwo = (shooterTwoMotorOne.getEncoder().getVelocity());
+
+        pidOutTwo = shooterPID.calculate(currentRPMTwo, autoRPM);
+        ffOutTwo = shooterFF.calculate(autoRPM);
+        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
+
+
+        shooterOneMotorOne.setVoltage(voltsOne);
+        shooterTwoMotorOne.setVoltage(voltsTwo);
+
+        hoodPos = getHoodPos();
+
+        targetDeg = HoodConstants.FAR_SHOOT; //FIXME test this
+        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
+
+         pidOutHood = hoodController.calculate (hoodPos, targetDeg);
+         pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
+
+         if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
+         if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
+
+         hoodArticulate.setVoltage(pidOutHood);
+    }
+
+    public Command autoShootCommand(){
+        return run(()-> autoShoot());
+
+    }
+
+    public Command stopCommand(){
+        return run (()->stop());
+    }
 }
