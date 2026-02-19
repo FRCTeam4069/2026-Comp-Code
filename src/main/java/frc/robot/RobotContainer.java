@@ -21,7 +21,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.commands.ShootWithTimeout;
 
 
 public class RobotContainer {
@@ -36,11 +36,14 @@ public class RobotContainer {
 
     public static final TestSubsystem testSubsystem = new TestSubsystem();
 
-    public static final ShooterController shooter = new ShooterController();
-
-
     private final CommandXboxController controller0 = new CommandXboxController(0);
     private final CommandXboxController controller1 = new CommandXboxController(1);
+
+    public static final ShooterController shooter = new ShooterController();
+
+    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper);
+
+
 
     private final SendableChooser<Command> autoChooser;
 
@@ -100,11 +103,11 @@ public class RobotContainer {
       NamedCommands.registerCommand("intakeDown", pivot.intakeDown());
       NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
 
-      NamedCommands.registerCommand("shoot", shooter.autoShootCommand());
-      NamedCommands.registerCommand("stopShooter", shooter.stopCommand());
+      NamedCommands.registerCommand("shoot", shootWithTimeout);
+      //NamedCommands.registerCommand("stopShooter", shooter.stopCommand());
 
-      NamedCommands.registerCommand("feederIn", feeder.feederOn());
-      NamedCommands.registerCommand("feederOff", feeder.feederOff());
+      // NamedCommands.registerCommand("feederIn", feeder.feederOn());
+      // NamedCommands.registerCommand("feederOff", feeder.feederOff());
 
       
    }

@@ -48,12 +48,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "intakeUp"
                 }
               }
@@ -61,40 +55,15 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "feederIn"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              }
-            ]
+            "name": "shootWithTimeout"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "feederOff"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopShooter"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -129,12 +98,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "intakeUp"
                 }
               },
@@ -148,53 +111,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "feederIn"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "hopperIn"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopShooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "feederOff"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopHopper"
-                }
-              }
-            ]
+            "name": "shootWithTimeout"
           }
         }
       ]

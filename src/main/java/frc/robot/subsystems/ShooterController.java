@@ -147,19 +147,6 @@ public class ShooterController extends SubsystemBase {
 
      }
 
-      public void autoShoot(){
-
-        targetRPMOne = autoRPM;
-        targetRPMTwo = autoRPM;
-
-        targetDeg = HoodConstants.FAR_SHOOT; //FIXME test this
-    }
-
-    public Command autoShootCommand(){
-        return run(()-> autoShoot());
-
-    }
-
     public Command stopCommand(){
         return run (()->stop());
     }
