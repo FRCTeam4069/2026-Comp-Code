@@ -131,7 +131,8 @@ public class RobotContainer {
                () -> -controller0.getRightX(), //rotation
                () -> controller0.getHID().getAButton(), //autoalign
                () -> controller0.getHID().getYButton(), //reset odometry
-               () -> controller0.getHID().getXButton()); // through trench
+               () -> controller0.getHID().getXButton(), // through trench
+               () -> controller0.getHID().getRightBumperButton()); //lock heading
    }
 
    public Command defaultIntakeCommand() {
@@ -156,13 +157,17 @@ public class RobotContainer {
               shooter,
               feeder,
               hopper,
-              () -> controller1.getHID().getRightBumperButton(), // shoot
+              () -> controller1.getHID().getRightBumperButton(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
               () -> controller1.getHID().getYButton(), //test for dane
               () -> controller1.getHID().getXButton(), //test for dane
               () -> controller1.getHID().getAButton(), // test for dane
               () -> controller1.getHID().getBButton() //reverse in case gets stuck
       );
+
+      // intake A
+      //TODO reverse feed X
+      //outtake B
   }
 
   // public Command defaultTestCommand(){

@@ -59,7 +59,6 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public void execute(){
-        timer.reset();
         var result = DriverStation.getAlliance();
 
         currentPositionX = shooter.getCurrentRobotPose().getX();
@@ -90,8 +89,10 @@ public class ShootWithTimeout extends Command{
         if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
             feeder.driveFeederIn();
             hopper.driveHopperIn();
-            timer.restart();
-            timer.reset();
+
+            if (!timer.isRunning()){
+                timer.restart();
+            }
         }
         
 
@@ -99,6 +100,7 @@ public class ShootWithTimeout extends Command{
             feeder.stopFeeder();
             hopper.stopHopper();
             timer.stop();
+            timer.reset();
         }
     }
 
@@ -113,15 +115,8 @@ public class ShootWithTimeout extends Command{
     @Override
     public boolean isFinished(){
         // for second comp do this with the limelite detects no balls thing
-        if(timer.hasElapsed(shootTime)){
-            finished = true;
-        }
 
-        else{
-            finished = false;
-        }
-
-        return finished;
+        return timer.hasElapsed(shootTime);
 
     }
 }
