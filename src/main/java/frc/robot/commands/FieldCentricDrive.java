@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.subsystems.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.commands.PIDsAndThings.ThroughTrench;
 
 
 public class FieldCentricDrive extends Command {
@@ -29,6 +29,17 @@ public class FieldCentricDrive extends Command {
     private final DoubleSupplier turnSpeed;
     private final BooleanSupplier autoAlign;
     private final BooleanSupplier resetOdometry;
+
+    private Pose2d withVision;
+    private Pose2d encoderOnly;
+    private Pose2d odometryError;
+
+    private double x;
+    private double y;
+    private double rotation;
+
+
+
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(100.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(100.0);
     private PIDController headingController = new PIDController(
@@ -60,6 +71,11 @@ public class FieldCentricDrive extends Command {
         .getDoubleTopic("deltaY").publish();
     private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
         .getStructTopic("setPoint", Pose2d.struct).publish();
+
+    private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("odometryError", Pose2d.struct).publish();
+
+
 
 
 
@@ -186,7 +202,15 @@ public class FieldCentricDrive extends Command {
 
         }
 
+        //test for odometry fix
     setPointPublisher.set(controller.setPoint);
+
+    withVision = drive.poseEstimator.getEstimatedPosition();
+    encoderOnly = drive.swerveOdometry.getPoseMeters();
+
+
+    odometryError = encoderOnly.relativeTo(withVision);
+    odometryErrorPublisher.set(odometryError);
 
     }
 

@@ -100,9 +100,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("intakeDown", pivot.intakeDown());
       NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
 
-      NamedCommands.registerCommand("hopperIn", hopper.hopperOn());
-      NamedCommands.registerCommand("stopHopper", hopper.hopperOff());
-
       NamedCommands.registerCommand("shoot", shooter.autoShootCommand());
       NamedCommands.registerCommand("stopShooter", shooter.stopCommand());
 
@@ -126,12 +123,12 @@ public class RobotContainer {
     public Command defaultDriveCommand() {
        return new FieldCentricDrive(
                drive,
-               () -> -controller0.getLeftY(),
-               () -> -controller0.getLeftX(),
-               () -> -controller0.getRightX(),
-               () -> controller0.getHID().getAButton(),
-               () -> controller0.getHID().getYButton(),
-               () -> controller0.getHID().getXButton());
+               () -> -controller0.getLeftY(), //drive
+               () -> -controller0.getLeftX(), //strafe
+               () -> -controller0.getRightX(), //rotation
+               () -> controller0.getHID().getAButton(), //autoalign
+               () -> controller0.getHID().getYButton(), //reset odometry
+               () -> controller0.getHID().getXButton()); // through trench
    }
 
    public Command defaultIntakeCommand() {
@@ -155,19 +152,23 @@ public class RobotContainer {
       return new ShooterCommand(
               shooter,
               feeder,
+              hopper,
               () -> controller1.getHID().getRightBumperButton(), // shoot
-              () -> controller1.getHID().getYButton() //pass
-
+              () -> controller1.getHID().getLeftBumperButton(), //pass
+              () -> controller1.getHID().getYButton(), //test for dane
+              () -> controller1.getHID().getXButton(), //test for dane
+              () -> controller1.getHID().getAButton(), // test for dane
+              () -> controller1.getHID().getBButton() //reverse in case gets stuck
       );
   }
 
-  public Command defaultTestCommand(){
-    return new TestCommand(
-      testSubsystem,
-      () -> controller1.getHID().getAButton(),
-      () -> controller1.getHID().getXButton()
-      );
-  }
+  // public Command defaultTestCommand(){
+  //   return new TestCommand(
+  //     testSubsystem,
+  //     () -> controller1.getHID().getAButton(),
+  //     () -> controller1.getHID().getXButton()
+  //     );
+  // }
 }
 
 

@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.shooter.setDefaultCommand(m_robotContainer.defaultShooterCommand());
 
-    m_robotContainer.testSubsystem.setDefaultCommand(m_robotContainer.defaultTestCommand());
+    //m_robotContainer.testSubsystem.setDefaultCommand(m_robotContainer.defaultTestCommand());
 
 
   }

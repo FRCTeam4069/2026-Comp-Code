@@ -31,14 +31,6 @@ public class HopperSubsystem extends SubsystemBase {
       hopperMotor.stopMotor();
   }
 
-  public Command hopperOff(){
-    return run(()-> stopHopper());
-  }
-
-  public Command hopperOn(){
-    return run(()-> driveHopperIn());
-  }
-
 }
 
 

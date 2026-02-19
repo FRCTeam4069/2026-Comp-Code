@@ -41,11 +41,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.DrivetrainConstants;
 
 public class SwerveDrivetrain extends SubsystemBase {
+
     private SwerveModule fl, fr, bl, br;
     private Pigeon2 gyro;
     private SwerveDriveKinematics kinematics = DrivetrainConstants.kinematics;
-    private SwerveDriveOdometry swerveOdometry;
-    private SwerveDrivePoseEstimator poseEstimator;
+    public SwerveDriveOdometry swerveOdometry;
+    public SwerveDrivePoseEstimator poseEstimator;
     private StructArrayPublisher<SwerveModuleState> swervePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("SwerveModuleStates", SwerveModuleState.struct).publish();
     private StructArrayPublisher<SwerveModuleState> desiredSwervePublisher = NetworkTableInstance.getDefault()
@@ -376,6 +377,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         posePublisher.set(swerveOdometry.getPoseMeters());
         var speeds = getRobotRelativeSpeeds();
         speedsPublisher.set(speeds);
+
+        // for the purpose of odometry fixing
+       
+        
 
     }
 

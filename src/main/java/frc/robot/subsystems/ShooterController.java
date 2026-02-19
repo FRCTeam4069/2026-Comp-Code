@@ -42,7 +42,7 @@ public class ShooterController extends SubsystemBase {
     public  double targetRPMTwo = 0.0;
     public double currentRPMTwo = 0.0;
 
-    public double passRPM = 0.0;
+    public double passRPM = 0.0; //FIXME
 
     private final double a = 0.0; //FIXME
     private final double b = 0.0; //FIXME
@@ -107,33 +107,7 @@ public class ShooterController extends SubsystemBase {
 
         // probably need two equations, one for close hood up to that point and then another one for far hood position
         targetRPMOne = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
-        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
-
-        pidOutOne = shooterPID.calculate(currentRPMOne, targetRPMOne);
-        ffOutOne = shooterFF.calculate(targetRPMOne);
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-
         targetRPMTwo = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
-        currentRPMTwo = (shooterTwoMotorOne.getEncoder().getVelocity());
-
-        pidOutTwo = shooterPID.calculate(currentRPMTwo, targetRPMTwo);
-        ffOutTwo = shooterFF.calculate(targetRPMTwo);
-        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
-
-         hoodPos = getHoodPos();
-
-        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
-
-        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-        pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-        if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-        if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
-
-
-        shooterOneMotorOne.setVoltage(voltsOne);
-        shooterTwoMotorOne.setVoltage(voltsTwo);
-        hoodArticulate.setVoltage(pidOutHood);
 
     }
 
@@ -147,34 +121,9 @@ public class ShooterController extends SubsystemBase {
 
     public void pass(){
 
-        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
-
-        pidOutOne = shooterPID.calculate(currentRPMOne, passRPM);
-        ffOutOne = shooterFF.calculate(passRPM);
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-        currentRPMTwo = (shooterTwoMotorOne.getEncoder().getVelocity());
-
-        pidOutTwo = shooterPID.calculate(currentRPMTwo, passRPM);
-        ffOutTwo = shooterFF.calculate(passRPM);
-        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
-
-
-        shooterOneMotorOne.setVoltage(voltsOne);
-        shooterTwoMotorOne.setVoltage(voltsTwo);
-
-        hoodPos = getHoodPos();
-
+        targetRPMOne = passRPM;
+        targetRPMTwo = passRPM;
         targetDeg = HoodConstants.PASS;
-        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
-
-         pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-         pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-
-         if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-         if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
-
-         hoodArticulate.setVoltage(pidOutHood);
     }
 
      public double getHoodPos(){
@@ -198,50 +147,12 @@ public class ShooterController extends SubsystemBase {
 
      }
 
-     @Override
-     public void periodic(){
-         hoodPos = getHoodPos();
-
-         pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-         pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-
-         if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-         if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
-
-         hoodArticulate.setVoltage(pidOutHood);
- 
-     }  
-
       public void autoShoot(){
 
-        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
-
-        pidOutOne = shooterPID.calculate(currentRPMOne, autoRPM);
-        ffOutOne = shooterFF.calculate(autoRPM);
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-        currentRPMTwo = (shooterTwoMotorOne.getEncoder().getVelocity());
-
-        pidOutTwo = shooterPID.calculate(currentRPMTwo, autoRPM);
-        ffOutTwo = shooterFF.calculate(autoRPM);
-        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
-
-
-        shooterOneMotorOne.setVoltage(voltsOne);
-        shooterTwoMotorOne.setVoltage(voltsTwo);
-
-        hoodPos = getHoodPos();
+        targetRPMOne = autoRPM;
+        targetRPMTwo = autoRPM;
 
         targetDeg = HoodConstants.FAR_SHOOT; //FIXME test this
-        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
-
-         pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-         pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-
-         if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-         if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
-
-         hoodArticulate.setVoltage(pidOutHood);
     }
 
     public Command autoShootCommand(){
@@ -251,5 +162,58 @@ public class ShooterController extends SubsystemBase {
 
     public Command stopCommand(){
         return run (()->stop());
+    }
+
+    public void fullPowerTest(){
+        voltsOne = 0.9;
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+
+        shooterOneMotorOne.set(voltsOne);
+        shooterTwoMotorOne.set(voltsOne);
+    }
+
+     public void eightyPowerTest(){
+      voltsOne = 0.8;
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+
+        shooterOneMotorOne.set(voltsOne);
+        shooterTwoMotorOne.set(voltsOne);
+    }
+
+     public void fiftyPowerTest(){
+       voltsOne = 0.5;
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+
+        shooterOneMotorOne.set(voltsOne);
+        shooterTwoMotorOne.set(voltsOne);
+    }
+
+    public void periodic(){
+
+        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
+
+        pidOutOne = shooterPID.calculate(currentRPMOne, targetRPMOne);
+        ffOutOne = shooterFF.calculate(targetRPMOne);
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+
+        currentRPMTwo = (shooterTwoMotorOne.getEncoder().getVelocity());
+
+        pidOutTwo = shooterPID.calculate(currentRPMTwo, targetRPMTwo);
+        ffOutTwo = shooterFF.calculate(targetRPMTwo);
+        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
+
+        hoodPos = getHoodPos();
+
+        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
+
+        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
+        pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
+        if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
+        if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
+
+
+        shooterOneMotorOne.setVoltage(voltsOne);
+        shooterTwoMotorOne.setVoltage(voltsTwo);
+        hoodArticulate.setVoltage(pidOutHood);
     }
 }
