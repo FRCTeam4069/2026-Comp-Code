@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,6 +19,7 @@ public class ShootWithTimeout extends Command{
     private final ShooterController shooter;
     private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
+    private final PivotSubsystem pivot;
 
 
     private double distance = 0.0;
@@ -42,19 +44,17 @@ public class ShootWithTimeout extends Command{
     private final double blueHubY = Units.inchesToMeters(158.85);
 
 
-    private BooleanSupplier fullTest;
-    private BooleanSupplier eightyTest;
-    private BooleanSupplier fiftyTest;
-
     public ShootWithTimeout(
         ShooterController shooter,
         FeederSubsystem feeder,
-        HopperSubsystem hopper
+        HopperSubsystem hopper,
+        PivotSubsystem pivot
 
     ){
         this.shooter = shooter;
         this.feeder = feeder;
         this.hopper = hopper;
+        this.pivot = pivot;
     }
 
     @Override
@@ -92,6 +92,10 @@ public class ShootWithTimeout extends Command{
 
             if (!timer.isRunning()){
                 timer.restart();
+            }
+
+            if(timer.hasElapsed(2.5)){
+                pivot.goUpper();
             }
         }
         

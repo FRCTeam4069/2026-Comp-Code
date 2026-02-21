@@ -112,6 +112,7 @@ public class FieldCentricDrive extends Command {
     
             addRequirements(drive);
         }
+
         @Override
         public void initialize() {
             headingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -137,24 +138,27 @@ public class FieldCentricDrive extends Command {
            
            if (throughTrench.getAsBoolean()){
     
-            if (!trenchActive) {
-                 controller.initialize();
-                 trenchActive = true;
-             }
-                 trenchSpeeds = controller.getSpeeds();
-        }
+                if (!trenchActive) {
+                    controller.initialize();
+                    trenchActive = true;
+                }
+
+            trenchSpeeds = controller.getSpeeds();
+
+            }
+
             else {
                 trenchActive = false;
             }
     
-             if (resetOdometry.getAsBoolean()){
+            if (resetOdometry.getAsBoolean()){
                 drive.resetDrivePose(currentPosition);
-           } 
+            } 
     
             var outputSpeeds = new ChassisSpeeds(
-                xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
-                ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-                Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
+            xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
+            ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
+            Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
             
             if (alliance == Alliance.Blue){
     
@@ -189,9 +193,9 @@ public class FieldCentricDrive extends Command {
                     lockHeadingTarget = drive.getRotation2d().getRadians();
                     lockHeadingActive = true;
                 }
+
                 rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-
             }  
             
             else{
@@ -200,33 +204,34 @@ public class FieldCentricDrive extends Command {
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
 
-        if(throughTrench.getAsBoolean()){
+            if(throughTrench.getAsBoolean()){
             driveSpeeds = trenchSpeeds;     
-        }
+            }
 
-        else{
-            driveSpeeds = outputSpeeds;
-        }
+            else{
+                driveSpeeds = outputSpeeds;
+            }
 
-        if (alliance == Alliance.Blue) {
+            if (alliance == Alliance.Blue) {
             
-          drive.fieldOrientedDrive(driveSpeeds);
+            drive.fieldOrientedDrive(driveSpeeds);
 
-        } 
-        else {
-            drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
+            } 
 
-        }
+            else {
+                drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
+
+            }
 
         //test for odometry fix
-    setPointPublisher.set(controller.setPoint);
+        setPointPublisher.set(controller.setPoint);
 
-    withVision = drive.poseEstimator.getEstimatedPosition();
-    encoderOnly = drive.swerveOdometry.getPoseMeters();
+        withVision = drive.poseEstimator.getEstimatedPosition();
+        encoderOnly = drive.swerveOdometry.getPoseMeters();
 
 
-    odometryError = encoderOnly.relativeTo(withVision);
-    odometryErrorPublisher.set(odometryError);
+        odometryError = encoderOnly.relativeTo(withVision);
+        odometryErrorPublisher.set(odometryError);
 
     }
 

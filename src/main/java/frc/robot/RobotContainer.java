@@ -41,7 +41,7 @@ public class RobotContainer {
 
     public static final ShooterController shooter = new ShooterController();
 
-    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper);
+    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
 
 
@@ -104,10 +104,6 @@ public class RobotContainer {
       NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
-      //NamedCommands.registerCommand("stopShooter", shooter.stopCommand());
-
-      // NamedCommands.registerCommand("feederIn", feeder.feederOn());
-      // NamedCommands.registerCommand("feederOff", feeder.feederOff());
 
       
    }

@@ -24,9 +24,9 @@ public class DeviceIDs {
     public static final byte FEEDER = 100; //FIXME
 
     public static final byte HOOD = 11; //FIXME
-
-    public static final byte SHOOTER_ONE_MOTOR_ONE = 13;
-    public static final byte SHOOTER_ONE_MOTOR_TWO = 14;
+ 
+    public static final byte SHOOTER_ONE_MOTOR_ONE = 13; //number for test
+    public static final byte SHOOTER_ONE_MOTOR_TWO = 14;// number for test
     public static final byte SHOOTER_TWO_MOTOR_ONE = 15;
     public static final byte SHOOTER_TWO_MOTOR_TWO = 16;
 

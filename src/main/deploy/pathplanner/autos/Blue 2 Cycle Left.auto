@@ -44,12 +44,6 @@
                 "data": {
                   "name": "intakeOff"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeUp"
-                }
               }
             ]
           }
@@ -93,12 +87,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Blue 2 Cycle Left 4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeUp"
                 }
               },
               {

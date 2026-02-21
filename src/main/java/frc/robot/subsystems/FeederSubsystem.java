@@ -30,15 +30,6 @@ public class FeederSubsystem extends SubsystemBase {
   public void stopFeeder(){
       feederMotor.stopMotor();
   }
-
-  public Command feederOn(){
-    return run(()-> driveFeederIn());
-  }
-
-  public Command feederOff(){
-    return run(()-> stopFeeder());
-  }
-
 }
 
 
