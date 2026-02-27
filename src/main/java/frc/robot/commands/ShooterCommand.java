@@ -38,10 +38,7 @@ public class ShooterCommand extends Command{
     private final double blueHubY = Units.inchesToMeters(158.85);
 
 
-    private BooleanSupplier fullTest;
-    private BooleanSupplier eightyTest;
-    private BooleanSupplier fiftyTest;
-
+   
     public ShooterCommand(
 
         ShooterController shooter,
@@ -49,9 +46,6 @@ public class ShooterCommand extends Command{
         HopperSubsystem hopper,
         BooleanSupplier shoot,
         BooleanSupplier pass,
-        BooleanSupplier fullTest,
-        BooleanSupplier eightyTest,
-        BooleanSupplier fiftyTest,
         BooleanSupplier reverse
 
 
@@ -62,9 +56,6 @@ public class ShooterCommand extends Command{
         this.shoot = shoot;
         this.hopper = hopper;
         this.pass = pass;
-        this.fullTest = fullTest;
-        this.eightyTest = eightyTest;
-        this.eightyTest = fiftyTest;
         this.reverse = reverse;
 
 
@@ -77,15 +68,7 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-        if(fullTest.getAsBoolean()){
-            shooter.fullPowerTest();
-        }
-        else if(eightyTest.getAsBoolean()){
-            shooter.eightyPowerTest();
-        }
-        else if(fiftyTest.getAsBoolean()){
-            shooter.fiftyPowerTest();
-        }
+       
 
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
@@ -145,6 +128,7 @@ public class ShooterCommand extends Command{
             shooter.stop();
             feeder.stopFeeder();
             hopper.stopHopper();
+            shooter.hoodAway();
         }
 
         if(reverse.getAsBoolean()){

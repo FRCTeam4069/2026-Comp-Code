@@ -44,6 +44,12 @@
                 "data": {
                   "name": "intakeOff"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoRamp"
+                }
               }
             ]
           }
@@ -93,6 +99,12 @@
                 "type": "named",
                 "data": {
                   "name": "intakeOff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoRamp"
                 }
               }
             ]

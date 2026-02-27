@@ -111,6 +111,10 @@ public class ShooterController extends SubsystemBase {
 
     }
 
+    public void hoodAway(){
+        targetDeg = HoodConstants.AWAY;
+    }
+
     public void setCurrentRobotPose(Pose2d updatedRobotPose){
         currentRobotPose = updatedRobotPose;
     }
@@ -151,28 +155,13 @@ public class ShooterController extends SubsystemBase {
         return run (()->stop());
     }
 
-    public void fullPowerTest(){
-        voltsOne = 0.9;
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-        shooterOneMotorOne.set(voltsOne);
-        shooterTwoMotorOne.set(voltsOne);
+    public void autoRamp(){
+        targetRPMOne = autoRPM;
+        targetRPMTwo = autoRPM;
     }
 
-     public void eightyPowerTest(){
-      voltsOne = 0.8;
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-        shooterOneMotorOne.set(voltsOne);
-        shooterTwoMotorOne.set(voltsOne);
-    }
-
-     public void fiftyPowerTest(){
-       voltsOne = 0.5;
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
-
-        shooterOneMotorOne.set(voltsOne);
-        shooterTwoMotorOne.set(voltsOne);
+    public Command autoRampCommand(){
+        return run(()->autoRamp());
     }
 
     public void periodic(){

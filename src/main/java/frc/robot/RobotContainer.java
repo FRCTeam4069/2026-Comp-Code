@@ -104,6 +104,7 @@ public class RobotContainer {
       NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
+      NamedCommands.registerCommand("autoRamp", shooter.autoRampCommand());
 
       
    }
@@ -155,9 +156,6 @@ public class RobotContainer {
               hopper,
               () -> controller1.getHID().getRightBumperButton(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
-              () -> controller1.getHID().getYButton(), //test for dane
-              () -> controller1.getHID().getXButton(), //test for dane
-              () -> controller1.getHID().getAButton(), // test for dane
               () -> controller1.getHID().getBButton() //reverse in case gets stuck
       );
 

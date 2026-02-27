@@ -11,6 +11,8 @@ public class HoodConstants {
     public static final double PASS = 0.0; //TODO
     public static final double CLOSE_SHOOT = 0.0; //TODO
     public static final double FAR_SHOOT = 0.0; //TODO
+    public static final double AWAY = 0.0;
+
 
     public static final byte LAMPREY_PORT = 0; //FIXME
     public static final double LAMPREY_OFFSET =0.0; //FIXME
