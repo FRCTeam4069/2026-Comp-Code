@@ -20,7 +20,7 @@ public class DrivetrainConstants {
 
     public static final int driveCurrentLimit = 50;
     public static final int steerCurrentLimit = 25;
-    public volatile static double wheelDiameter = 4.0;
+    public volatile static double wheelDiameter = 3.9; //3.87
     //bl 3.955 -> 3.912
     //fl 3.9545
     //fr 3.950
@@ -28,7 +28,7 @@ public class DrivetrainConstants {
     public static final double driveConversionFactor = ((wheelDiameter * Math.PI) * 0.0254) / 6.12;
     public static final double steerConversionFactor = 16.8;
 
-    public static final boolean driveInverted = true;
+    public static final boolean driveInverted = false;
     public static final boolean steerInverted = true;
     public static final boolean encoderInverted = true;
 
