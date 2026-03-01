@@ -20,11 +20,11 @@ public class HopperSubsystem extends SubsystemBase {
   }
 
   public void driveHopperIn(){
-      hopperMotor.set((0.85));
+      hopperMotor.set((0.8));
   }
 
   public void driveHopperOut(){
-      hopperMotor.set((-0.85));
+      hopperMotor.set((-0.4));
   }
 
   public void stopHopper(){

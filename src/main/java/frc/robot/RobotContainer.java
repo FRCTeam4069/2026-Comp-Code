@@ -135,8 +135,8 @@ public class RobotContainer {
    public Command defaultIntakeCommand() {
       return new IntakeCommand(
               intake,
-              () -> controller1.getHID().getLeftBumperButton(), // IN
-              () -> controller1.getHID().getRightBumperButton()  // OUT
+              () -> controller1.getHID().getBButton(), // OUT
+              () -> controller1.getHID().getAButton()  // IN
       );
   }
 
@@ -156,12 +156,10 @@ public class RobotContainer {
               hopper,
               () -> controller1.getHID().getRightBumperButton(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
-              () -> controller1.getHID().getBButton() //reverse in case gets stuck
+              () -> controller1.getHID().getYButton() //reverse in case gets stuck //FIXME
       );
 
-      // intake A
       //TODO reverse feed X
-      //outtake B
   }
 
   // public Command defaultTestCommand(){

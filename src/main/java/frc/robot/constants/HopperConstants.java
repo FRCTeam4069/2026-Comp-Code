@@ -17,7 +17,7 @@ public final class HopperConstants {
 
     static {
         hopperConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(hopperSmartCurrentLimit)
             .openLoopRampRate(0.0)

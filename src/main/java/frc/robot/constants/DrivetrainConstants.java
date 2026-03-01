@@ -20,7 +20,7 @@ public class DrivetrainConstants {
 
     public static final int driveCurrentLimit = 50;
     public static final int steerCurrentLimit = 25;
-    public volatile static double wheelDiameter = 3.9; //FIXME //4.0
+    public volatile static double wheelDiameter = 4.0;
     //bl 3.955 -> 3.912
     //fl 3.9545
     //fr 3.950
@@ -28,27 +28,27 @@ public class DrivetrainConstants {
     public static final double driveConversionFactor = ((wheelDiameter * Math.PI) * 0.0254) / 6.12;
     public static final double steerConversionFactor = 16.8;
 
-    public static final boolean driveInverted = false;
+    public static final boolean driveInverted = true;
     public static final boolean steerInverted = true;
     public static final boolean encoderInverted = true;
 
-    public static final double flEncoderOffset = -0.02929722222;  //FIXME for 2025 base //-0.02929722222;
-    public static final double frEncoderOffset = -0.91626111111; //-0.91626111111;
-    public static final double blEncoderOffset = -0.0708; //-0.0708;
-    public static final double brEncoderOffset = -0.1739; //-0.1739;
+    public static final double flEncoderOffset = -0.179932;
+    public static final double frEncoderOffset = 0.48364295; 
+    public static final double blEncoderOffset = 0.425049; 
+    public static final double brEncoderOffset = -0.4025; 
 
     public static final Pigeon2Configuration gyroConfig = new Pigeon2Configuration().withMountPose(new MountPoseConfigs().withMountPoseYaw(0.0));
 
-    public static final double moduleOffset = Units.inchesToMeters(10.375); //FIXMe for 2025 base
+    public static final double moduleOffset = Units.inchesToMeters(10.375); 
     
-    public static final double maxVelocity = Units.feetToMeters(19.3); //19.35
+    public static final double maxVelocity = Units.feetToMeters(19.35); 
     public static final double maxAngularVelocity = maxVelocity / new Rotation2d(moduleOffset, moduleOffset).getRadians();
 
     public static final double angularVelocityCoefficient = 0.04;
     public static final double angularVelocityDeadband = 0.01;
     public static final double headingCorrectionDeadband = 0.05;
 
-    public static final double mass = Pounds.of(110.0).in(Kilograms); //FIXME I think this is the va but check with monti
+    public static final double mass = Pounds.of(121.0).in(Kilograms); //FIXME 141 prob with shooter
 
 
      public static final Pose2d[] redShooterPoses = new Pose2d[]{

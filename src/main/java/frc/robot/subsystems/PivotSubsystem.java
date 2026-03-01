@@ -8,6 +8,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
@@ -15,6 +18,12 @@ import frc.robot.constants.PivotConstants;
 
 
 public class PivotSubsystem extends SubsystemBase {
+
+   private DoublePublisher PivotPositionPublisher = NetworkTableInstance.getDefault()
+            .getDoubleTopic("PivotPosition").publish();
+
+
+
     SparkMax pivotMotor;
 
     public enum positions{
@@ -82,6 +91,10 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
+      SmartDashboard.putNumber("PivotPosition", getPivotEncoder());
+
+
+    PivotPositionPublisher.set(getPivotEncoder());
 
       if (getPosition() == positions.UPPER) {
         pidOutput = upController.calculate(getPivotEncoder(), UPPER_POS);
@@ -110,4 +123,5 @@ public class PivotSubsystem extends SubsystemBase {
   public void ResetEncoder(){
       pivotMotor.getEncoder().setPosition(UPPER_POS);
   }
+
 }

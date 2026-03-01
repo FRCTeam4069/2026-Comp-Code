@@ -73,33 +73,33 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
     private final Transform3d leftFrontTransform = new Transform3d(
-                new Translation3d(Units.inchesToMeters(7.75),
-                                Units.inchesToMeters(10.25),
-                                Units.inchesToMeters(7.0)),
-                new Rotation3d(Math.toRadians(0.0), Math.toRadians(-22.5), Math.toRadians(-35)));
+                new Translation3d(Units.inchesToMeters(-10.5),
+                                Units.inchesToMeters(10.5),
+                                Units.inchesToMeters(18.65)),
+                new Rotation3d(Math.toRadians(0.0), Math.toRadians(-20), Math.toRadians(-23))); //TODO for yaw
 
     private final Transform3d rightFrontTransform = new Transform3d(
-                new Translation3d(Units.inchesToMeters(7.75),
-                                Units.inchesToMeters(-10.25),
-                                Units.inchesToMeters(7.0)),
-                new Rotation3d(Math.toRadians(0.0), Math.toRadians(-63.0), Math.toRadians(34)));
+                new Translation3d(Units.inchesToMeters(-10.5),
+                                Units.inchesToMeters(-10.5),
+                                Units.inchesToMeters(18.65)),       
+                new Rotation3d(Math.toRadians(0.0), Math.toRadians(-20), Math.toRadians(23))); //TODO for yaw
 
-    private final Transform3d leftBackTransform = new Transform3d(
-                new Translation3d(Units.inchesToMeters(-9.3),
-                                Units.inchesToMeters(9.224),
-                                Units.inchesToMeters(19.112)),
-                new Rotation3d(Math.toRadians(-1.45), Math.toRadians(-20), Math.toRadians(-23.0))); // yaw was -1.45
+    private final Transform3d leftSideTransform = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-12),
+                                Units.inchesToMeters(12.0),
+                                Units.inchesToMeters(18.65)),
+                new Rotation3d(Math.toRadians(0), Math.toRadians(-5), Math.toRadians(-90.0))); //TODO for yaw
 
-    private final Transform3d rightBackTransform = new Transform3d(
-                new Translation3d(Units.inchesToMeters(-9.3),
-                                Units.inchesToMeters(-9.224),
-                                Units.inchesToMeters(19.112)),
-                new Rotation3d(Math.toRadians(1), Math.toRadians(-20), Math.toRadians(18.0)));  // yaw was -1.45
+    private final Transform3d rightSideTransform = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-12),
+                                Units.inchesToMeters(-12.0),
+                                Units.inchesToMeters(18.65)),
+                new Rotation3d(Math.toRadians(0), Math.toRadians(-5), Math.toRadians(90.0))); //TODO for yaw
 
-  //  private Vision visionLF;
-   // private Vision visionRF;
-    private Vision visionLB;
-    private Vision visionRB;
+    private Vision visionLF;    
+    private Vision visionRF;
+    private Vision visionLS;
+    private Vision visionRS;
 
     public SwerveDrivetrain() {
         fl = new SwerveModule(DrivetrainConstants.flConfig, DrivetrainConstants.flCoefficients);
@@ -115,10 +115,10 @@ public class SwerveDrivetrain extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(kinematics, getRawRotation2d(), getModulePositions(), startingPose);
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, getRawRotation2d(), getModulePositions(), startingPose, VecBuilder.fill(0.8, 0.8, 0.05), VecBuilder.fill(0.5, 0.5, 2.0));
-       // visionLF = new Vision("Left_Front", leftFrontTransform, startingPose);
-       // visionRF = new Vision("Right_Front", rightFrontTransform, startingPose);
-        visionLB = new Vision("Back_Left", leftBackTransform, startingPose);
-        visionRB = new Vision("Back_Right", rightBackTransform, startingPose);
+        visionLF = new Vision("Left_Front", leftFrontTransform, startingPose);
+        visionRF = new Vision("Right_Front", rightFrontTransform, startingPose);
+        visionLS = new Vision("Left_Side", leftSideTransform, startingPose);
+        visionRS = new Vision("Right_Side", rightSideTransform, startingPose);
 
         try{
             DrivetrainConstants.config = RobotConfig.fromGUISettings();
@@ -347,28 +347,28 @@ public class SwerveDrivetrain extends SubsystemBase {
         swerveOdometry.update(getRawRotation2d(), getModulePositions());
         poseEstimator.update(getRawRotation2d(), getModulePositions());
 
-        // var estimatedLF = visionLF.getEstimatedGlobalPose();
-        // if (estimatedLF.isPresent()) {
-        //     leftVision3dPosePublisher.set(estimatedLF.get().estimatedPose);
-        //     addVisionMeasurement(estimatedLF.get().estimatedPose.toPose2d(), estimatedLF.get().timestampSeconds, visionLF.getStdDeviations());
-        // }
-
-        // var estimatedRF = visionRF.getEstimatedGlobalPose();
-        // if (estimatedRF.isPresent()) {
-        //     rightVision3dPosePublisher.set(estimatedRF.get().estimatedPose);
-        //     addVisionMeasurement(estimatedRF.get().estimatedPose.toPose2d(), estimatedRF.get().timestampSeconds, visionRF.getStdDeviations());
-        // }
-
-        var estimatedLB = visionLB.getEstimatedGlobalPose();
-        if (estimatedLB.isPresent()) {
-            leftBackVision3dPosePublisher.set(estimatedLB.get().estimatedPose);
-            addVisionMeasurement(estimatedLB.get().estimatedPose.toPose2d(), estimatedLB.get().timestampSeconds, visionLB.getStdDeviations());
+        var estimatedLF = visionLF.getEstimatedGlobalPose();
+        if (estimatedLF.isPresent()) {
+            leftVision3dPosePublisher.set(estimatedLF.get().estimatedPose);
+            addVisionMeasurement(estimatedLF.get().estimatedPose.toPose2d(), estimatedLF.get().timestampSeconds, visionLF.getStdDeviations());
         }
 
-        var estimatedRB = visionRB.getEstimatedGlobalPose();
-        if (estimatedRB.isPresent()) {
-            rightBackVision3dPosePublisher.set(estimatedRB.get().estimatedPose);
-            addVisionMeasurement(estimatedRB.get().estimatedPose.toPose2d(), estimatedRB.get().timestampSeconds, visionRB.getStdDeviations());
+        var estimatedRF = visionRF.getEstimatedGlobalPose();
+        if (estimatedRF.isPresent()) {
+            rightVision3dPosePublisher.set(estimatedRF.get().estimatedPose);
+            addVisionMeasurement(estimatedRF.get().estimatedPose.toPose2d(), estimatedRF.get().timestampSeconds, visionRF.getStdDeviations());
+        }
+
+        var estimatedLS = visionLS.getEstimatedGlobalPose();
+        if (estimatedLS.isPresent()) {
+            leftBackVision3dPosePublisher.set(estimatedLS.get().estimatedPose);
+            addVisionMeasurement(estimatedLS.get().estimatedPose.toPose2d(), estimatedLS.get().timestampSeconds, visionLS.getStdDeviations());
+        }
+
+        var estimatedRS = visionRS.getEstimatedGlobalPose();
+        if (estimatedRS.isPresent()) {
+            rightBackVision3dPosePublisher.set(estimatedRS.get().estimatedPose);
+            addVisionMeasurement(estimatedRS.get().estimatedPose.toPose2d(), estimatedRS.get().timestampSeconds, visionRS.getStdDeviations());
         }
 
         visionPosePublisher.set(poseEstimator.getEstimatedPosition());
@@ -376,10 +376,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         desiredSwervePublisher.set(desiredState);
         posePublisher.set(swerveOdometry.getPoseMeters());
         var speeds = getRobotRelativeSpeeds();
-        speedsPublisher.set(speeds);
-
-        // for the purpose of odometry fixing
-       
+        speedsPublisher.set(speeds);       
         
 
     }
