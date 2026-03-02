@@ -20,7 +20,7 @@ public class DrivetrainConstants {
 
     public static final int driveCurrentLimit = 50;
     public static final int steerCurrentLimit = 25;
-    public volatile static double wheelDiameter = 3.9; //3.87
+    public volatile static double wheelDiameter = 3.87; //3.87
     //bl 3.955 -> 3.912
     //fl 3.9545
     //fr 3.950
