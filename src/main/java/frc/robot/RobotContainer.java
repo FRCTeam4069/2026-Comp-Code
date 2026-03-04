@@ -146,6 +146,7 @@ public class RobotContainer {
               pivot,
               () -> controller1.getHID().getPOV() == 0,    // D-pad up
               () -> controller1.getHID().getPOV() == 180  // OUT
+              //() -> controller1.getLeftY()
       );
   }
   
@@ -156,7 +157,8 @@ public class RobotContainer {
               hopper,
               () -> controller1.getHID().getRightBumperButton(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
-              () -> controller1.getHID().getYButton() //reverse in case gets stuck //FIXME
+              () -> controller1.getHID().getYButton(), //reverse in case gets stuck
+              () -> controller1.getLeftY()
       );
 
       //TODO reverse feed X

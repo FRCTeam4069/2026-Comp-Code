@@ -68,12 +68,12 @@ public class ShooterConstants {
         ) {}
 
         public static ShooterCoefficients shooterCoefficients = new ShooterCoefficients(
-            0.0,
+            0.78,
             0.0,
             0.0,
 
             0.33,
-            0.64
+            0.53
 
             //FIXME tune PID and check FF
         );

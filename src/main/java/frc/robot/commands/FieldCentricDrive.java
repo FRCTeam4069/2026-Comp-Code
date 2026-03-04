@@ -36,8 +36,8 @@ public class FieldCentricDrive extends Command {
 
 
 
-    private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(100.0);
-    private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(100.0);
+    private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
+    private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
     private PIDController headingController = new PIDController(
         DrivetrainConstants.teleOpHeadingCoefficients.kP(), 
         DrivetrainConstants.teleOpHeadingCoefficients.kI(), 
@@ -144,6 +144,7 @@ public class FieldCentricDrive extends Command {
                 }
 
             trenchSpeeds = controller.getSpeeds();
+            trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
 
             }
 

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -37,6 +38,9 @@ public class ShooterCommand extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
+      private final DoubleSupplier hopperPowerSupplier;
+
+
 
    
     public ShooterCommand(
@@ -46,7 +50,8 @@ public class ShooterCommand extends Command{
         HopperSubsystem hopper,
         BooleanSupplier shoot,
         BooleanSupplier pass,
-        BooleanSupplier reverse
+        BooleanSupplier reverse,
+        DoubleSupplier hopperPowerSupplier
 
 
         ){
@@ -57,6 +62,7 @@ public class ShooterCommand extends Command{
         this.hopper = hopper;
         this.pass = pass;
         this.reverse = reverse;
+        this.hopperPowerSupplier = hopperPowerSupplier;
 
 
 
@@ -107,6 +113,7 @@ public class ShooterCommand extends Command{
             else{
                 feeder.stopFeeder();
                 hopper.stopHopper();
+
             }
 
         }
@@ -129,6 +136,8 @@ public class ShooterCommand extends Command{
             feeder.stopFeeder();
             hopper.stopHopper();
             shooter.hoodAway();
+           // hopper.driveHopper(hopperPowerSupplier.getAsDouble());
+
         }
 
         if(reverse.getAsBoolean()){

@@ -11,14 +11,14 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class HopperConstants {
 
     //TODO test current limits
-    public static final int hopperSmartCurrentLimit = 0; 
+    public static final int hopperSmartCurrentLimit = 30; 
     public static final SparkMaxConfig hopperConfig = new SparkMaxConfig();
 
 
     static {
         hopperConfig
             .inverted(false)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(hopperSmartCurrentLimit)
             .openLoopRampRate(0.0)
             .closedLoopRampRate(0.0);

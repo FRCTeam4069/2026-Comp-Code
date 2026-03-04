@@ -5,7 +5,6 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.FeederConstants;
@@ -20,11 +19,11 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public void driveFeederIn(){
-      feederMotor.set((0.85));
+      feederMotor.setVoltage((10.2));
   }
 
   public void driveFeederOut(){
-      feederMotor.set((-0.85));
+      feederMotor.setVoltage((-10.2));
   }
 
   public void stopFeeder(){

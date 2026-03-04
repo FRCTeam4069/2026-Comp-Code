@@ -4,12 +4,9 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,11 +15,6 @@ import frc.robot.constants.PivotConstants;
 
 
 public class PivotSubsystem extends SubsystemBase {
-
-   private DoublePublisher PivotPositionPublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("PivotPosition").publish();
-
-
 
     SparkMax pivotMotor;
 
@@ -40,6 +32,11 @@ public class PivotSubsystem extends SubsystemBase {
     PIDController upController;
     PIDController downController;
 
+    private static final double pivotTolerance = 0.5;
+
+    private boolean inPosition;
+    private double error;
+
     double pidOutput;
 
     public PivotSubsystem(){
@@ -52,7 +49,10 @@ public class PivotSubsystem extends SubsystemBase {
       downController = new PIDController(PivotConstants.downCoefficients.kP(), PivotConstants.downCoefficients.kI(), PivotConstants.downCoefficients.kD());
 
       pidOutput = 0.0;
+  }
 
+  public void pivotPower(double pivotPower){
+    pivotMotor.set(pivotPower);
   }
 
   public void stopPivot(){
@@ -60,7 +60,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getPivotEncoder(){
-      return pivotMotor.getEncoder().getPosition();
+      return pivotMotor.getEncoder().getPosition(); //TODO figure out how to convert to degrees
   }
 
   public void goUpper() {
@@ -94,16 +94,27 @@ public class PivotSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("PivotPosition", getPivotEncoder());
 
 
-    PivotPositionPublisher.set(getPivotEncoder());
-
       if (getPosition() == positions.UPPER) {
+
         pidOutput = upController.calculate(getPivotEncoder(), UPPER_POS);
-        pivotMotor.set(pidOutput);
-      } else {
+
+      } 
+      
+      else if (getPosition()== positions.LOWER) {
+
         pidOutput = downController.calculate(getPivotEncoder(), LOWER_POS);
+      }  
+
+      error = getPivotEncoder() - getPositionValue();
+
+      if( Math.abs(error) < pivotTolerance){
+        stopPivot();
+      }
+
+      else{
+        pidOutput = MathUtil.clamp(pidOutput, -0.7, 0.7);
         pivotMotor.set(pidOutput);
       }
-  
     }
 
   public Command setPosition(positions po){
@@ -111,14 +122,14 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   
-   public void setBrakeState(int index){
-      SparkMaxConfig tempConfig = new SparkMaxConfig();
-      tempConfig.idleMode(index == 1 ? IdleMode.kCoast : IdleMode.kBrake);
+  //  public void setBrakeState(int index){
+  //     SparkMaxConfig tempConfig = new SparkMaxConfig();
+  //     tempConfig.idleMode(index == 1 ? IdleMode.kCoast : IdleMode.kBrake);
 
-      pivotMotor.configure(tempConfig,
-      ResetMode.kNoResetSafeParameters,
-      PersistMode.kNoPersistParameters);
-  }
+  //     pivotMotor.configure(tempConfig,
+  //     ResetMode.kNoResetSafeParameters,
+  //     PersistMode.kNoPersistParameters);
+  // }
 
   public void ResetEncoder(){
       pivotMotor.getEncoder().setPosition(UPPER_POS);

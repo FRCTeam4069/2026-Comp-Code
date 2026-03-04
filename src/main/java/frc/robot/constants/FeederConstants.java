@@ -2,23 +2,20 @@ package frc.robot.constants;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import frc.robot.constants.DrivetrainConstants.FFCoefficients;
-import frc.robot.constants.DrivetrainConstants.PIDCoefficients;
-
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 public final class FeederConstants {
 
     //TODO test current limits
-    public static final int feederSmartCurrentLimit = 0; 
+    public static final int feederSmartCurrentLimit = 30; 
 
     public static final SparkMaxConfig feederConfig = new SparkMaxConfig();
 
     static {
         feederConfig
             .inverted(true)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(feederSmartCurrentLimit)
             .openLoopRampRate(0.0)
             .closedLoopRampRate(0.0);
@@ -26,8 +23,8 @@ public final class FeederConstants {
 
 
 
-    public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0, 0.0);
-    public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0);
+    // public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0, 0.0);
+    // public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0);
 
     // NOTE: not sure if these are needed quite yet
     //public static Constraints constraints = new Constraints(100000.0, 100000.0);

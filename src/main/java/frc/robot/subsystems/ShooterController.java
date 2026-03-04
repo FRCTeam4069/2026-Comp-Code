@@ -38,12 +38,12 @@ public class ShooterController extends SubsystemBase {
 
     public double targetRPMOne = 0.0;
     public double currentRPMOne = 0.0;
-    public double autoRPM = 0.0; //FIXME
+    public double autoRPM = 4000.0; 
 
     public  double targetRPMTwo = 0.0;
     public double currentRPMTwo = 0.0;
 
-    public double passRPM = 0.0; //FIXME
+    public double passRPM = 3000.0; //FIXME
 
     private final double a = 0.0; //FIXME
     private final double b = 0.0; //FIXME
