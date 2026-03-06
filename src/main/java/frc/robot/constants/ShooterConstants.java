@@ -14,7 +14,7 @@ public class ShooterConstants {
 
     static{
         shooterOneMotorOneConfig
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
             .smartCurrentLimit(40)
@@ -36,7 +36,7 @@ public class ShooterConstants {
 
     static{
         shooterTwoMotorOneConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
             .smartCurrentLimit(40)
@@ -47,7 +47,7 @@ public class ShooterConstants {
 
      static{
         shooterTwoMotorTwoConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
             .smartCurrentLimit(40)
@@ -68,12 +68,12 @@ public class ShooterConstants {
         ) {}
 
         public static ShooterCoefficients shooterCoefficients = new ShooterCoefficients(
-            0.78,
+            0.75,
             0.0,
             0.0,
 
             0.33,
-            0.53
+            0.4
 
             //FIXME tune PID and check FF
         );

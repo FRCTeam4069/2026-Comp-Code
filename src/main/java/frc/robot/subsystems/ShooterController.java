@@ -96,6 +96,17 @@ public class ShooterController extends SubsystemBase {
 
     }
 
+    public void runShooter(double shooterPower){
+        shooterOneMotorOne.set(shooterPower);
+        shooterTwoMotorOne.set(shooterPower);
+        
+        shooterOneMotorTwo.set(shooterPower);
+        shooterTwoMotorTwo.set(shooterPower);
+
+
+
+    }
+
     public void shoot(double distance){
 
         if (distance > farShootPos){

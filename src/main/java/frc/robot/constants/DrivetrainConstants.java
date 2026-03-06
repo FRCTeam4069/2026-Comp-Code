@@ -63,7 +63,7 @@ public class DrivetrainConstants {
 
 
     public static final Pose2d[] humanPlayerPoses = new Pose2d[]{
-        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(0)), // red.  //TODO
+        new Pose2d(1.25, 0.700, Rotation2d.fromDegrees(0)), // red.  //g
         new Pose2d(0.489, 0.659, Rotation2d.fromDegrees(180)), // blue.  //TODO
     };
 

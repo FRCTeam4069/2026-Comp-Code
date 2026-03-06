@@ -19,14 +19,14 @@ public class DeviceIDs {
     //TODO test these IDS, from 2024 code but might be wrong
     public static final byte INTAKE = 16; 
     public static final byte PIVOT = 15; 
-    public static final byte HOPPER = 14;  
-    public static final byte FEEDER = 62; //FIXME
+    public static final byte HOPPER = 14; 
+    public static final byte FEEDER = 13;
 
-    public static final byte HOOD = 11; //FIXME
+    public static final byte HOOD = 57; //FIXME
  
-    public static final byte SHOOTER_ONE_MOTOR_ONE = 53; //FIXME
-    public static final byte SHOOTER_ONE_MOTOR_TWO = 55;//FIXME
-    public static final byte SHOOTER_TWO_MOTOR_ONE = 54;//FIXME
-    public static final byte SHOOTER_TWO_MOTOR_TWO = 57;//FIXME
+    public static final byte SHOOTER_ONE_MOTOR_ONE = 8;
+    public static final byte SHOOTER_ONE_MOTOR_TWO = 9;
+    public static final byte SHOOTER_TWO_MOTOR_ONE = 10;
+    public static final byte SHOOTER_TWO_MOTOR_TWO = 11;
 
 }

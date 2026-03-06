@@ -18,7 +18,7 @@ public class ShooterCommand extends Command{
     private final HopperSubsystem hopper;
 
 
-    private final BooleanSupplier shoot;
+    private final DoubleSupplier shoot;
     private final BooleanSupplier pass;
     private final BooleanSupplier reverse;
     private double distance = 0.0;
@@ -38,7 +38,9 @@ public class ShooterCommand extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
-      private final DoubleSupplier hopperPowerSupplier;
+    //private final DoubleSupplier hopperPowerSupplier;
+    // private final DoubleSupplier shooterPower;
+
 
 
 
@@ -48,10 +50,11 @@ public class ShooterCommand extends Command{
         ShooterController shooter,
         FeederSubsystem feeder,
         HopperSubsystem hopper,
-        BooleanSupplier shoot,
+        DoubleSupplier shoot,
         BooleanSupplier pass,
-        BooleanSupplier reverse,
-        DoubleSupplier hopperPowerSupplier
+        BooleanSupplier reverse
+        //DoubleSupplier shooterPower
+        //DoubleSupplier hopperPowerSupplier
 
 
         ){
@@ -62,7 +65,8 @@ public class ShooterCommand extends Command{
         this.hopper = hopper;
         this.pass = pass;
         this.reverse = reverse;
-        this.hopperPowerSupplier = hopperPowerSupplier;
+        //this.shooterPower = shooterPower;
+       // this.hopperPowerSupplier = hopperPowerSupplier;
 
 
 
@@ -74,8 +78,6 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-       
-
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
 
@@ -85,7 +87,7 @@ public class ShooterCommand extends Command{
         }
 
 
-        if (shoot.getAsBoolean()){
+        if (shoot.getAsDouble() > 0.2){
 
             if(alliance == Alliance.Blue){
 
@@ -104,6 +106,8 @@ public class ShooterCommand extends Command{
             distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
             shooter.shoot(distance);
+
+            
 
             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
                 feeder.driveFeederIn();
@@ -133,6 +137,7 @@ public class ShooterCommand extends Command{
 
         else{
             shooter.stop();
+            //shooter.runShooter(shooterPower.getAsDouble());
             feeder.stopFeeder();
             hopper.stopHopper();
             shooter.hoodAway();

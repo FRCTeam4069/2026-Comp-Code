@@ -12,7 +12,6 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.TestCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -41,7 +40,7 @@ public class RobotContainer {
 
     public static final ShooterController shooter = new ShooterController();
 
-    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot, drive);
 
 
 
@@ -155,10 +154,10 @@ public class RobotContainer {
               shooter,
               feeder,
               hopper,
-              () -> controller1.getHID().getRightBumperButton(), // shoot //TODO switch to triggers
+              () -> controller1.getHID().getRightTriggerAxis(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
-              () -> controller1.getHID().getYButton(), //reverse in case gets stuck
-              () -> controller1.getLeftY()
+              () -> controller1.getHID().getYButton() //reverse in case gets stuck
+              //() -> controller1.getLeftY()
       );
 
       //TODO reverse feed X

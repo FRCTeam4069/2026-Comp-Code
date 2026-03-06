@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -11,8 +9,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-import frc.robot.subsystems.ShooterController;
 
 
 public class ShootWithTimeout extends Command{
@@ -20,12 +18,14 @@ public class ShootWithTimeout extends Command{
     private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
     private final PivotSubsystem pivot;
+    private final SwerveDrivetrain swerve;
 
 
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
     private final double shootTime = 5.0; //FIXME
+    private double desiredHeading = 0.0;
 
     private final Timer timer = new Timer();
     private boolean finished = false;
@@ -48,13 +48,15 @@ public class ShootWithTimeout extends Command{
         ShooterController shooter,
         FeederSubsystem feeder,
         HopperSubsystem hopper,
-        PivotSubsystem pivot
+        PivotSubsystem pivot,
+        SwerveDrivetrain swerve
 
     ){
         this.shooter = shooter;
         this.feeder = feeder;
         this.hopper = hopper;
         this.pivot = pivot;
+        this.swerve = swerve;
     }
 
     @Override
@@ -82,11 +84,13 @@ public class ShootWithTimeout extends Command{
 
         }
 
+
+
         distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
         shooter.shoot(distance);
 
-        if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+        if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)) { //&& shooter.hoodInPosition() 
             feeder.driveFeederIn();
             hopper.driveHopperIn();
 

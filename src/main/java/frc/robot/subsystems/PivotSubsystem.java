@@ -32,7 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
     PIDController upController;
     PIDController downController;
 
-    private static final double pivotTolerance = 0.5;
+    private static final double pivotTolerance = 1.;
 
     private boolean inPosition;
     private double error;
@@ -60,7 +60,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getPivotEncoder(){
-      return pivotMotor.getEncoder().getPosition(); //TODO figure out how to convert to degrees
+      return pivotMotor.getEncoder().getPosition();
   }
 
   public void goUpper() {
@@ -132,7 +132,7 @@ public class PivotSubsystem extends SubsystemBase {
   // }
 
   public void ResetEncoder(){
-      pivotMotor.getEncoder().setPosition(UPPER_POS);
+      pivotMotor.getEncoder().setPosition(0);
   }
 
 }
