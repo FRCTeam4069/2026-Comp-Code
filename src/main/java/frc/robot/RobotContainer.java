@@ -156,20 +156,16 @@ public class RobotContainer {
               hopper,
               () -> controller1.getHID().getRightTriggerAxis(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
-              () -> controller1.getHID().getYButton() //reverse in case gets stuck
-              //() -> controller1.getLeftY()
+              () -> controller1.getHID().getYButton(), //reverse in case gets stuck
+              () -> controller1.getHID().getXButton(), //feeder test
+              () -> controller1.getHID().getRightBumperButton()
       );
+
+ 
 
       //TODO reverse feed X
   }
 
-  // public Command defaultTestCommand(){
-  //   return new TestCommand(
-  //     testSubsystem,
-  //     () -> controller1.getHID().getAButton(),
-  //     () -> controller1.getHID().getXButton()
-  //     );
-  // }
 }
 
 

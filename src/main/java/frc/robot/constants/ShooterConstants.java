@@ -14,10 +14,10 @@ public class ShooterConstants {
 
     static{
         shooterOneMotorOneConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(40)
+            .smartCurrentLimit(50)
             .closedLoopRampRate(0.0);
 
     }
@@ -27,7 +27,7 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(40)
+            .smartCurrentLimit(50)
             .closedLoopRampRate(0.0)
             .follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
 
@@ -39,7 +39,7 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(40)
+            .smartCurrentLimit(50)
             .closedLoopRampRate(0.0);
 
 
@@ -47,10 +47,10 @@ public class ShooterConstants {
 
      static{
         shooterTwoMotorTwoConfig
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(40)
+            .smartCurrentLimit(50)
             .closedLoopRampRate(0.0)
             .follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
 
@@ -68,7 +68,7 @@ public class ShooterConstants {
         ) {}
 
         public static ShooterCoefficients shooterCoefficients = new ShooterCoefficients(
-            0.75,
+            0.5, //0.75 suggested
             0.0,
             0.0,
 

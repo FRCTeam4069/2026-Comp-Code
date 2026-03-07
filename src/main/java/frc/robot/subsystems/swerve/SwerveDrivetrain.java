@@ -130,7 +130,10 @@ public class SwerveDrivetrain extends SubsystemBase {
             this::getPose, 
             this::resetPose, 
             this::getRobotRelativeSpeeds, 
-            (speeds, feedforwards) -> drive(speeds), 
+            (speeds, feedforwards) -> {
+                speeds.omegaRadiansPerSecond = -speeds.omegaRadiansPerSecond;
+                drive(speeds);
+            }, 
             new PPHolonomicDriveController(DrivetrainConstants.translationPIDConstants, DrivetrainConstants.rotationPIDConstants), 
             DrivetrainConstants.config, 
             () -> {
@@ -326,7 +329,10 @@ public class SwerveDrivetrain extends SubsystemBase {
                 path,
                 this::getPose, 
                 this::getRobotRelativeSpeeds, 
-                (speeds, feedforwards) -> drive(speeds), 
+                (speeds, feedforwards) -> {
+                    speeds.omegaRadiansPerSecond = -speeds.omegaRadiansPerSecond;
+                    drive(speeds);
+                }, 
                 new PPHolonomicDriveController(DrivetrainConstants.translationPIDConstants, DrivetrainConstants.rotationPIDConstants), 
                 DrivetrainConstants.config, 
                 () -> {

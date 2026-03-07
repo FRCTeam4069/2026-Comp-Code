@@ -77,12 +77,12 @@ public class PivotSubsystem extends SubsystemBase {
 
   public Command intakeDown(){ //ANNIE LOOK AT THIS AND TELL ME IF IT WORKS
     goLower();
-    return run(()-> getPositionValue());
+    return run(()-> goLower());
   }
 
   public Command intakeUp(){
     goUpper();
-    return run(()->getPositionValue());
+    return run(()->goUpper());
 
   }
 

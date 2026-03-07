@@ -38,8 +38,9 @@ public class ShooterCommand extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
-    //private final DoubleSupplier hopperPowerSupplier;
-    // private final DoubleSupplier shooterPower;
+   // private final DoubleSupplier hopperPowerSupplier;
+   private final BooleanSupplier testShoot;
+    private final BooleanSupplier feederTest;
 
 
 
@@ -52,9 +53,10 @@ public class ShooterCommand extends Command{
         HopperSubsystem hopper,
         DoubleSupplier shoot,
         BooleanSupplier pass,
-        BooleanSupplier reverse
-        //DoubleSupplier shooterPower
-        //DoubleSupplier hopperPowerSupplier
+        BooleanSupplier reverse,
+        BooleanSupplier feederTest,
+        BooleanSupplier testShoot 
+         //DoubleSupplier hopperPowerSupplier
 
 
         ){
@@ -65,8 +67,9 @@ public class ShooterCommand extends Command{
         this.hopper = hopper;
         this.pass = pass;
         this.reverse = reverse;
-        //this.shooterPower = shooterPower;
-       // this.hopperPowerSupplier = hopperPowerSupplier;
+        this.feederTest = feederTest;
+        this.testShoot = testShoot;
+        //this.hopperPowerSupplier = hopperPowerSupplier;
 
 
 
@@ -77,6 +80,22 @@ public class ShooterCommand extends Command{
     @Override
     public void execute(){
         var result = DriverStation.getAlliance();
+
+        if (feederTest.getAsBoolean()){
+
+            feeder.driveFeederIn();
+        }
+
+        else{
+            feeder.stopFeeder();
+        }
+
+        // if (testShoot.getAsBoolean()){
+        //     shooter.runShooter();
+        // }
+        // else{
+        //     shooter.stop();
+        // }
 
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
@@ -109,7 +128,7 @@ public class ShooterCommand extends Command{
 
             
 
-            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
@@ -124,7 +143,7 @@ public class ShooterCommand extends Command{
 
         else if (pass.getAsBoolean()){
             shooter.pass();
-             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
@@ -137,12 +156,10 @@ public class ShooterCommand extends Command{
 
         else{
             shooter.stop();
-            //shooter.runShooter(shooterPower.getAsDouble());
-            feeder.stopFeeder();
+            // feeder.stopFeeder();
             hopper.stopHopper();
-            shooter.hoodAway();
-           // hopper.driveHopper(hopperPowerSupplier.getAsDouble());
-
+            //shooter.hoodAway();
+           //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
         }
 
         if(reverse.getAsBoolean()){
