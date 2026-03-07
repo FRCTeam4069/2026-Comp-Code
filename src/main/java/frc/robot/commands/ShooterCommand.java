@@ -39,7 +39,7 @@ public class ShooterCommand extends Command{
     private final double blueHubY = Units.inchesToMeters(158.85);
 
    // private final DoubleSupplier hopperPowerSupplier;
-   private final BooleanSupplier testShoot;
+//    private final BooleanSupplier testShoot;
     private final BooleanSupplier feederTest;
 
 
@@ -54,8 +54,8 @@ public class ShooterCommand extends Command{
         DoubleSupplier shoot,
         BooleanSupplier pass,
         BooleanSupplier reverse,
-        BooleanSupplier feederTest,
-        BooleanSupplier testShoot 
+        BooleanSupplier feederTest
+        // BooleanSupplier testShoot 
          //DoubleSupplier hopperPowerSupplier
 
 
@@ -68,7 +68,7 @@ public class ShooterCommand extends Command{
         this.pass = pass;
         this.reverse = reverse;
         this.feederTest = feederTest;
-        this.testShoot = testShoot;
+        // this.testShoot = testShoot;
         //this.hopperPowerSupplier = hopperPowerSupplier;
 
 
@@ -81,14 +81,14 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-        if (feederTest.getAsBoolean()){
+        // if (feederTest.getAsBoolean()){
 
-            feeder.driveFeederIn();
-        }
+        //     feeder.driveFeederIn();
+        // }
 
-        else{
-            feeder.stopFeeder();
-        }
+        // else{
+        //     feeder.stopFeeder();
+        // }
 
         // if (testShoot.getAsBoolean()){
         //     shooter.runShooter();
@@ -101,9 +101,9 @@ public class ShooterCommand extends Command{
         currentPositionY = shooter.getCurrentRobotPose().getY();
 
 
-        if (result.isPresent()) {
-            alliance = result.get();
-        }
+        // if (result.isPresent()) {
+        //     alliance = result.get();
+        // }
 
 
         if (shoot.getAsDouble() > 0.2){
@@ -159,7 +159,7 @@ public class ShooterCommand extends Command{
             // feeder.stopFeeder();
             hopper.stopHopper();
             //shooter.hoodAway();
-           //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
+            //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
         }
 
         if(reverse.getAsBoolean()){
@@ -172,6 +172,5 @@ public class ShooterCommand extends Command{
     public void end(boolean interrupted) {
         shooter.stop();
         feeder.stopFeeder();
-
     }
 }

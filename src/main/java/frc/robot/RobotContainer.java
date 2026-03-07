@@ -157,8 +157,8 @@ public class RobotContainer {
               () -> controller1.getHID().getRightTriggerAxis(), // shoot //TODO switch to triggers
               () -> controller1.getHID().getLeftBumperButton(), //pass
               () -> controller1.getHID().getYButton(), //reverse in case gets stuck
-              () -> controller1.getHID().getXButton(), //feeder test
-              () -> controller1.getHID().getRightBumperButton()
+              () -> controller1.getHID().getXButton() //feeder test
+              // () -> controller1.getHID().getRightBumperButton()
       );
 
  

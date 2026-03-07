@@ -43,6 +43,9 @@ public class ShooterController extends SubsystemBase {
     public  double targetRPMTwo = 0.0;
     public double currentRPMTwo = 0.0;
 
+    public double MetersPerSecondOne = 0.0;
+    public double MetersPerSecondTwo = 0.0;
+
     public double passRPM = 3000.0; //FIXME
 
     private final double a = 0.0; //FIXME
@@ -60,12 +63,20 @@ public class ShooterController extends SubsystemBase {
 
     private Pose2d currentRobotPose;
 
-    PIDController shooterPID = new PIDController( 
-        ShooterConstants.shooterCoefficients.kP(),
-        ShooterConstants.shooterCoefficients.kI(), 
-        ShooterConstants.shooterCoefficients.kD());
+    PIDController shooterPIDOne = new PIDController( 
+        ShooterConstants.shooterCoefficientsOne.kP(),
+        ShooterConstants.shooterCoefficientsOne.kI(), 
+        ShooterConstants.shooterCoefficientsOne.kD());
 
-    SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(ShooterConstants.shooterCoefficients.kV(),ShooterConstants.shooterCoefficients.kA()); 
+     PIDController shooterPIDTwo = new PIDController( 
+        ShooterConstants.shooterCoefficientsTwo.kP(),
+        ShooterConstants.shooterCoefficientsTwo.kI(), 
+        ShooterConstants.shooterCoefficientsTwo.kD());
+
+    SimpleMotorFeedforward shooterFFOne = new SimpleMotorFeedforward(ShooterConstants.shooterCoefficientsOne.kV(),ShooterConstants.shooterCoefficientsOne.kA()); 
+
+    SimpleMotorFeedforward shooterFFTwo = new SimpleMotorFeedforward(ShooterConstants.shooterCoefficientsTwo.kV(),ShooterConstants.shooterCoefficientsTwo.kA()); 
+
 
 
     public ShooterController(){
@@ -90,25 +101,27 @@ public class ShooterController extends SubsystemBase {
 
 
     public void stop(){
-        shooterOneMotorOne.stopMotor();
-        shooterTwoMotorOne.stopMotor();
-        shooterOneMotorTwo.stopMotor();
-        shooterTwoMotorTwo.stopMotor();
+        // shooterOneMotorOne.stopMotor();
+        // shooterTwoMotorOne.stopMotor();
+
+        targetRPMOne = 0;
+        targetRPMTwo = 0;
+        //shooterOneMotorTwo.stopMotor();
+        //shooterTwoMotorTwo.stopMotor();
 
         // hoodArticulate.stopMotor();
 
     }
 
-    public void runShooter(){
-        shooterOneMotorOne.set(0.85);        
-        // shooterOneMotorTwo.set(0.85);
+    // public void runShooter(){
+    //     // shooterOneMotorOne.setVoltage(7);        
+    //     shooterOneMotorTwo.setVoltage(7);
 
-        shooterTwoMotorOne.set(0.85);
-        //shooterTwoMotorTwo.set(0.85);
+    //     // shooterTwoMotorOne.setVoltage(7);
+    //     shooterTwoMotorTwo.setVoltage(7);
 
-        //tested two
 
-    }
+    // }
 
     public void shoot(double distance){
 
@@ -184,18 +197,22 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void periodic(){
+
+        MetersPerSecondOne = (targetRPMOne / 60) * 0.31918581;
+        MetersPerSecondTwo = (targetRPMTwo / 60) * 0.31918581;
+
         
         currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
 
-        pidOutOne = shooterPID.calculate(currentRPMOne, targetRPMOne);//targetRPMOne
-        ffOutOne = shooterFF.calculate(targetRPMOne);
-        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, -12.0, 12.0); 
+        pidOutOne = shooterPIDOne.calculate(currentRPMOne, targetRPMOne);//targetRPMOne
+        ffOutOne = shooterFFOne.calculate(MetersPerSecondOne);
+        voltsOne = MathUtil.clamp (pidOutOne + ffOutOne, 0.0, 12.0); 
 
         currentRPMTwo = -(shooterTwoMotorOne.getEncoder().getVelocity());
 
-        pidOutTwo = shooterPID.calculate(currentRPMTwo, targetRPMTwo );
-        ffOutTwo = shooterFF.calculate(targetRPMTwo);
-        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, -12.0, 12.0); 
+        pidOutTwo = shooterPIDTwo.calculate(currentRPMTwo, targetRPMTwo );
+        ffOutTwo = shooterFFTwo.calculate(MetersPerSecondTwo);
+        voltsTwo = MathUtil.clamp (pidOutTwo + ffOutTwo, 0.0, 12.0); 
 
         // hoodPos = getHoodPos();
 
@@ -207,18 +224,40 @@ public class ShooterController extends SubsystemBase {
         // if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
 
 
-        shooterOneMotorOne.setVoltage(voltsOne);
-        // shooterOneMotorTwo.setVoltage(voltsOne);
-        shooterTwoMotorOne.setVoltage(voltsTwo);
-        // shooterTwoMotorTwo.setVoltage(voltsTwo);
+        if(targetRPMOne <= 200){
+            stop();
+            shooterOneMotorOne.setVoltage(0);
+            shooterTwoMotorOne.setVoltage(0);
+            shooterOneMotorTwo.setVoltage(0);
+            shooterTwoMotorTwo.setVoltage(0);
+
+
+        }
+
+        else{
+            shooterOneMotorOne.setVoltage(voltsOne);
+            shooterOneMotorTwo.setVoltage(voltsOne);
+            shooterTwoMotorOne.setVoltage(voltsTwo);
+            shooterTwoMotorTwo.setVoltage(voltsTwo);
+        }
 
         // hoodArticulate.setVoltage(pidOutHood);
 
         SmartDashboard.putNumber("target RPM 1",targetRPMOne);
         SmartDashboard.putNumber("target RPM 2",targetRPMTwo);
+
         SmartDashboard.putNumber("RPM One", currentRPMOne);
         SmartDashboard.putNumber("RPM Two", currentRPMTwo);
 
+        SmartDashboard.putNumber("volts One", voltsOne);
+        SmartDashboard.putNumber("volts two", voltsTwo);
+
+        SmartDashboard.putNumber("current one one",shooterOneMotorOne.getOutputCurrent());
+        SmartDashboard.putNumber("current two one", shooterTwoMotorOne.getOutputCurrent());
+        SmartDashboard.putNumber("current one two",shooterOneMotorTwo.getOutputCurrent());
+         SmartDashboard.putNumber("current two two",shooterTwoMotorTwo.getOutputCurrent());
+
+        
 
 
     }

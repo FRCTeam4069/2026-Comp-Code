@@ -17,7 +17,7 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(50)
+            .smartCurrentLimit(60)
             .closedLoopRampRate(0.0);
 
     }
@@ -27,9 +27,9 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(50)
-            .closedLoopRampRate(0.0)
-            .follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
+            .smartCurrentLimit(60)
+            .closedLoopRampRate(0.0);
+           //.follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
 
 
     }
@@ -39,7 +39,7 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(50)
+            .smartCurrentLimit(60)
             .closedLoopRampRate(0.0);
 
 
@@ -50,9 +50,9 @@ public class ShooterConstants {
             .inverted(true)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(50)
-            .closedLoopRampRate(0.0)
-            .follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
+            .smartCurrentLimit(60)
+            .closedLoopRampRate(0.0);
+            //.follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
 
 
     }
@@ -67,12 +67,24 @@ public class ShooterConstants {
 
         ) {}
 
-        public static ShooterCoefficients shooterCoefficients = new ShooterCoefficients(
-            0.5, //0.75 suggested
+        public static ShooterCoefficients shooterCoefficientsOne = new ShooterCoefficients(
+            0.0, //0.5 suggested
             0.0,
             0.0,
 
             0.33,
+            0.4
+
+            //FIXME tune PID and check FF
+        );
+
+
+        public static ShooterCoefficients shooterCoefficientsTwo = new ShooterCoefficients(
+            0.0, //0.5 suggested
+            0.0,
+            0.0,
+
+            0.22,
             0.4
 
             //FIXME tune PID and check FF
