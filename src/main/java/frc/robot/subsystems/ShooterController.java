@@ -28,9 +28,6 @@ public class ShooterController extends SubsystemBase {
     private double pidOutHood = 0.0;
     private static final double farShootPos = 0.0;
 
-    private final AnalogEncoder hoodEncoder = new AnalogEncoder(HoodConstants.LAMPREY_PORT);// FIXME FOR PORT
-
-
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),
     HoodConstants.hoodCoefficients.kI(),
@@ -97,19 +94,17 @@ public class ShooterController extends SubsystemBase {
         hoodArticulate = new SparkMax(DeviceIDs.HOOD, MotorType.kBrushless);
 
         hoodArticulate.configure(HoodConstants.hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        hoodArticulate.getEncoder().setPosition(HoodConstants.AWAY);
     }
 
 
     public void stop(){
-        // shooterOneMotorOne.stopMotor();
-        // shooterTwoMotorOne.stopMotor();
 
         targetRPMOne = 0;
         targetRPMTwo = 0;
-        //shooterOneMotorTwo.stopMotor();
-        //shooterTwoMotorTwo.stopMotor();
 
-        // hoodArticulate.stopMotor();
+        hoodArticulate.stopMotor();
 
     }
 
@@ -143,9 +138,21 @@ public class ShooterController extends SubsystemBase {
 
     }
 
-    // public void hoodAway(){
-    //     targetDeg = HoodConstants.AWAY;
-    // }
+    public void hoodAway(){
+        targetDeg = HoodConstants.AWAY;
+    }
+
+     public void closeShoot(){
+        targetDeg = HoodConstants.CLOSE_SHOOT;
+    }
+
+     public void farShoot(){
+        targetDeg = HoodConstants.FAR_SHOOT;
+    }
+
+     public void passPosition(){
+        targetDeg = HoodConstants.PASS;
+    }
 
     public void setCurrentRobotPose(Pose2d updatedRobotPose){
         currentRobotPose = updatedRobotPose;
@@ -159,29 +166,29 @@ public class ShooterController extends SubsystemBase {
 
         targetRPMOne = passRPM;
         targetRPMTwo = passRPM;
-        //targetDeg = HoodConstants.PASS;
+        targetDeg = HoodConstants.PASS;
     }
 
-    //  public double getHoodPos(){
-    //      hoodPos = (hoodEncoder.get() * 360.0) - HoodConstants.LAMPREY_OFFSET; // FIXME I question this
-    //      return hoodPos;
+     public double getHoodPos(){
+        hoodPos = hoodArticulate.getEncoder().getPosition();
+         return hoodPos;
 
-    //  }
+     }
 
-    //  public boolean hoodInPosition(){
-    //     hoodPos = getHoodPos();
+     public boolean hoodInPosition(){
+        hoodPos = getHoodPos();
 
-    //     if (Math.abs(targetDeg - hoodPos) < 2){
-    //         inPosition = true;
-    //     }
+        if (Math.abs(targetDeg - hoodPos) < 2){
+            inPosition = true;
+        }
 
-    //     else{
-    //         inPosition = false;
-    //     }
+        else{
+            inPosition = false;
+        }
 
-    //     return inPosition;
+        return inPosition;
 
-    //  }
+     }
 
     public Command stopCommand(){
         return run (()->stop());
@@ -218,10 +225,10 @@ public class ShooterController extends SubsystemBase {
 
         // // targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
 
-        // // pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-        // // pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-        // // if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-        // // if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
+        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
+        pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
+        if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
+        if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
 
         if(currentRPMOne < targetRPMOne){
             voltsOne = 10.5;
@@ -258,7 +265,7 @@ public class ShooterController extends SubsystemBase {
             // shooterTwoMotorTwo.setVoltage(12);
         }
 
-        // hoodArticulate.setVoltage(pidOutHood);
+        hoodArticulate.setVoltage(pidOutHood);
 
         SmartDashboard.putNumber("target RPM 1",targetRPMOne);
         SmartDashboard.putNumber("target RPM 2",targetRPMTwo);
@@ -273,6 +280,9 @@ public class ShooterController extends SubsystemBase {
         SmartDashboard.putNumber("current two one", shooterTwoMotorOne.getOutputCurrent());
         SmartDashboard.putNumber("current one two",shooterOneMotorTwo.getOutputCurrent());
          SmartDashboard.putNumber("current two two",shooterTwoMotorTwo.getOutputCurrent());
+
+        SmartDashboard.putNumber("Hood Position", hoodPos);
+        SmartDashboard.putNumber("Hood Target", targetDeg);
 
         //drive better and shoot better and in the net, do what driver says 
 

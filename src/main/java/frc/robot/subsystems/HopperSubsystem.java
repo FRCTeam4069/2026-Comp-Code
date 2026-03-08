@@ -26,7 +26,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void driveHopperIn(){
       //volts = slewRateLimiter.calculate(7.2);
-      hopperMotor.setVoltage((7.2));
+      hopperMotor.setVoltage((10));
   }
 
   public void driveHopperOut(){

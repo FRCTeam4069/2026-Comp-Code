@@ -19,8 +19,9 @@ public class ShooterCommand extends Command{
 
 
     private final DoubleSupplier shoot;
-    private final BooleanSupplier pass;
-    private final BooleanSupplier reverse;
+   // private final BooleanSupplier pass;
+    // private final BooleanSupplier reverse;
+
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
@@ -40,7 +41,13 @@ public class ShooterCommand extends Command{
 
    // private final DoubleSupplier hopperPowerSupplier;
 //    private final BooleanSupplier testShoot;
-    private final BooleanSupplier feederTest;
+    // private final BooleanSupplier feederTest;
+
+    private final BooleanSupplier passTest;
+    private final BooleanSupplier closeShootTest;
+    private final BooleanSupplier farShootTest;
+    private final BooleanSupplier away; 
+
 
 
 
@@ -52,9 +59,14 @@ public class ShooterCommand extends Command{
         FeederSubsystem feeder,
         HopperSubsystem hopper,
         DoubleSupplier shoot,
-        BooleanSupplier pass,
-        BooleanSupplier reverse,
-        BooleanSupplier feederTest
+        //BooleanSupplier pass,
+        // BooleanSupplier reverse,
+        // BooleanSupplier feederTest,
+
+        BooleanSupplier passTest,
+        BooleanSupplier closeShootTest,
+        BooleanSupplier farShootTest,
+        BooleanSupplier away
         // BooleanSupplier testShoot 
          //DoubleSupplier hopperPowerSupplier
 
@@ -65,9 +77,14 @@ public class ShooterCommand extends Command{
         this.feeder = feeder;        
         this.hopper = hopper;
         this.shoot = shoot;
-        this.pass = pass;
-        this.reverse = reverse;
-        this.feederTest = feederTest;
+       // this.pass = pass;
+        // this.reverse = reverse;
+        // this.feederTest = feederTest;
+
+        this.passTest = passTest;
+        this.closeShootTest = closeShootTest;
+        this.farShootTest= farShootTest;
+        this.away = away;
         // this.testShoot = testShoot;
         //this.hopperPowerSupplier = hopperPowerSupplier;
 
@@ -81,16 +98,39 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-        if (feederTest.getAsBoolean()){
-
-            feeder.driveFeederIn();
-            hopper.driveHopperIn();
+        if(passTest.getAsBoolean()){
+            shooter.pass();
         }
 
-        else{
-            feeder.stopFeeder();
-            hopper.stopHopper();
+        else if (closeShootTest.getAsBoolean()){
+            shooter.closeShoot();
         }
+
+          else if (farShootTest.getAsBoolean()){
+            shooter.farShoot();
+        }
+
+          else if (away.getAsBoolean()){
+            shooter.hoodAway();
+        }
+
+
+
+
+
+
+
+
+        // if (feederTest.getAsBoolean()){
+
+        //     feeder.driveFeederIn();
+        //     hopper.driveHopperIn();
+        // }
+
+        // else{
+        //     feeder.stopFeeder();
+        //     hopper.stopHopper();
+        // }
 
         // if (testShoot.getAsBoolean()){
         //     shooter.runShooter();
@@ -164,10 +204,10 @@ public class ShooterCommand extends Command{
             //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
         }
 
-        if(reverse.getAsBoolean()){
-            hopper.driveHopperOut();
-            feeder.driveFeederOut();
-        }
+        // if(reverse.getAsBoolean()){
+        //     hopper.driveHopperOut();
+        //     feeder.driveFeederOut();
+        // }
     }
 
     @Override

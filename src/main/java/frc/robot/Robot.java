@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     // }
 
     m_robotContainer.drive.setDefaultCommand(m_robotContainer.defaultDriveCommand());
-    m_robotContainer.intake.setDefaultCommand(m_robotContainer.defaultIntakeCommand());
+    //m_robotContainer.intake.setDefaultCommand(m_robotContainer.defaultIntakeCommand());
     m_robotContainer.pivot.setDefaultCommand(m_robotContainer.defaultPivotCommand());
 
     m_robotContainer.shooter.setDefaultCommand(m_robotContainer.defaultShooterCommand());

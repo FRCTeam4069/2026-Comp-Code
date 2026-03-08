@@ -6,16 +6,12 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class HoodConstants {
 
-    public static final int hoodSmartCurrentLimit = 20; //FIXME
+    public static final int hoodSmartCurrentLimit = 40; 
 
     public static final double PASS = 0.0; //TODO
     public static final double CLOSE_SHOOT = 0.0; //TODO
     public static final double FAR_SHOOT = 0.0; //TODO
     public static final double AWAY = 0.0;
-
-
-    public static final byte LAMPREY_PORT = 0; //FIXME
-    public static final double LAMPREY_OFFSET =0.0; //FIXME
 
     public static final double lowerLimit = 0.0;
     public static final double upperLimit = 0.0;

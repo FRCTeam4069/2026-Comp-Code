@@ -112,7 +112,19 @@ public class PivotSubsystem extends SubsystemBase {
       }
 
       else{
-        pidOutput = MathUtil.clamp(pidOutput, -0.7, 0.7);
+
+        if(p == positions.LOWER){
+
+          pidOutput = MathUtil.clamp(pidOutput, -0.7, 0);
+
+        }
+
+        else if(p == positions.UPPER){
+
+          pidOutput = MathUtil.clamp(pidOutput, 0, 0.4);
+          
+        }
+        
         pivotMotor.set(pidOutput);
       }
     }
