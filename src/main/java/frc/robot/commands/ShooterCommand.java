@@ -62,9 +62,9 @@ public class ShooterCommand extends Command{
         ){
 
         this.shooter = shooter;
-        this.feeder = feeder;
-        this.shoot = shoot;
+        this.feeder = feeder;        
         this.hopper = hopper;
+        this.shoot = shoot;
         this.pass = pass;
         this.reverse = reverse;
         this.feederTest = feederTest;
@@ -81,14 +81,16 @@ public class ShooterCommand extends Command{
     public void execute(){
         var result = DriverStation.getAlliance();
 
-        // if (feederTest.getAsBoolean()){
+        if (feederTest.getAsBoolean()){
 
-        //     feeder.driveFeederIn();
-        // }
+            feeder.driveFeederIn();
+            hopper.driveHopperIn();
+        }
 
-        // else{
-        //     feeder.stopFeeder();
-        // }
+        else{
+            feeder.stopFeeder();
+            hopper.stopHopper();
+        }
 
         // if (testShoot.getAsBoolean()){
         //     shooter.runShooter();
@@ -101,9 +103,9 @@ public class ShooterCommand extends Command{
         currentPositionY = shooter.getCurrentRobotPose().getY();
 
 
-        // if (result.isPresent()) {
-        //     alliance = result.get();
-        // }
+        if (result.isPresent()) {
+            alliance = result.get();
+        }
 
 
         if (shoot.getAsDouble() > 0.2){
@@ -128,36 +130,36 @@ public class ShooterCommand extends Command{
 
             
 
-            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
-            }
+            // if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
+            // }
 
-            else{
-                feeder.stopFeeder();
-                hopper.stopHopper();
+            // else{
+            //     feeder.stopFeeder();
+            //     hopper.stopHopper();
 
-            }
+            // }
 
         }
 
-        else if (pass.getAsBoolean()){
-            shooter.pass();
-             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
-            }
+        // else if (pass.getAsBoolean()){
+        //     shooter.pass();
+        //      if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
+        //         feeder.driveFeederIn();
+        //         hopper.driveHopperIn();
+        //     }
 
-            else{
-                feeder.stopFeeder();
-                hopper.stopHopper();
-            }
-        }
+        //     else{
+        //         feeder.stopFeeder();
+        //         hopper.stopHopper();
+        //     }
+        // }
 
         else{
             shooter.stop();
             // feeder.stopFeeder();
-            hopper.stopHopper();
+            //hopper.stopHopper();
             //shooter.hoodAway();
             //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
         }

@@ -19,15 +19,19 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public void driveFeederIn(){
-      feederMotor.setVoltage((10.2));
+      feederMotor.setVoltage((8));
   }
 
   public void driveFeederOut(){
-      feederMotor.setVoltage((-10.2));
+      feederMotor.setVoltage((-8));
   }
 
   public void stopFeeder(){
       feederMotor.stopMotor();
+  }
+
+  public void autoFeederIn(){
+    feederMotor.setVoltage(10.5);
   }
 }
 

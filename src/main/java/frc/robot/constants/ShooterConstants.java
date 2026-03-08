@@ -17,7 +17,8 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(60)
+            .smartCurrentLimit(40)
+            .secondaryCurrentLimit(124)
             .closedLoopRampRate(0.0);
 
     }
@@ -27,7 +28,8 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(60)
+            .smartCurrentLimit(40)
+            .secondaryCurrentLimit(124)
             .closedLoopRampRate(0.0);
            //.follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
 
@@ -39,7 +41,8 @@ public class ShooterConstants {
             .inverted(false)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(60)
+            .smartCurrentLimit(40)
+            .secondaryCurrentLimit(124)
             .closedLoopRampRate(0.0);
 
 
@@ -50,7 +53,8 @@ public class ShooterConstants {
             .inverted(true)
             .idleMode(IdleMode.kCoast)
             .voltageCompensation(12)
-            .smartCurrentLimit(60)
+            .smartCurrentLimit(40)
+            .secondaryCurrentLimit(124)
             .closedLoopRampRate(0.0);
             //.follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
 
@@ -68,24 +72,24 @@ public class ShooterConstants {
         ) {}
 
         public static ShooterCoefficients shooterCoefficientsOne = new ShooterCoefficients(
-            0.0, //0.5 suggested
+            0.025, //0.5 suggested
             0.0,
             0.0,
 
             0.33,
-            0.4
+            0.0
 
             //FIXME tune PID and check FF
         );
 
 
         public static ShooterCoefficients shooterCoefficientsTwo = new ShooterCoefficients(
-            0.0, //0.5 suggested
+            0.025, 
             0.0,
             0.0,
 
-            0.22,
-            0.4
+            0.33,//2857
+            0.0
 
             //FIXME tune PID and check FF
         );

@@ -91,8 +91,8 @@ public class ShootWithTimeout extends Command{
         shooter.shoot(distance);
 
         if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)) { //&& shooter.hoodInPosition() 
-            feeder.driveFeederIn();
-            hopper.driveHopperIn();
+            feeder.autoFeederIn();
+            hopper.autoHopperIn();
 
             if (!timer.isRunning()){
                 timer.restart();

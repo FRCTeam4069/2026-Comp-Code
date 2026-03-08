@@ -15,8 +15,9 @@ public class IntakeCommand extends Command{
       BooleanSupplier in, BooleanSupplier out){
 
       this.intake = intake;
-      this.inSupplier = in;
       this.outSupplier = out;
+      this.inSupplier = in;
+
 
       addRequirements(intake);
   }

@@ -5,21 +5,78 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Blue Middle 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue Middle 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoRamp"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Blue Middle 2"
+            "name": "shootWithTimeout"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Blue Middle 3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue Middle 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeDown"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue Middle 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoRamp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootWithTimeout"
           }
         }
       ]

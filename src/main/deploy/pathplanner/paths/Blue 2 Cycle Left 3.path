@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.254,
-        "y": 7.195
+        "x": 3.054,
+        "y": 7.393
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.083260706018518,
-        "y": 7.847365596064815
+        "x": 4.007952616869919,
+        "y": 7.788184895833332
       },
       "isLocked": false,
       "linkedName": null
@@ -30,8 +30,12 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 0.0
+    },
+    {
       "waypointRelativePos": 0.4,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 0.7,

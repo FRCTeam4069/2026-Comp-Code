@@ -134,8 +134,8 @@ public class RobotContainer {
    public Command defaultIntakeCommand() {
       return new IntakeCommand(
               intake,
-              () -> controller1.getHID().getBButton(), // OUT
-              () -> controller1.getHID().getAButton()  // IN
+              () -> controller1.getHID().getAButton(), // In
+              () -> controller1.getHID().getBButton()  // out
       );
   }
 
@@ -158,7 +158,6 @@ public class RobotContainer {
               () -> controller1.getHID().getLeftBumperButton(), //pass
               () -> controller1.getHID().getYButton(), //reverse in case gets stuck
               () -> controller1.getHID().getXButton() //feeder test
-              // () -> controller1.getHID().getRightBumperButton()
       );
 
  
