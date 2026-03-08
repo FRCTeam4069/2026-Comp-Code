@@ -8,13 +8,13 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 40; 
 
-    public static final double PASS = 0.0; //TODO
-    public static final double CLOSE_SHOOT = 0.0; //TODO
-    public static final double FAR_SHOOT = 0.0; //TODO
+    public static final double PASS = 10.0; // 17 but 10 for testing 
+    public static final double CLOSE_SHOOT = 5.0; //TODO
+    public static final double FAR_SHOOT = 10.0; //TODO
     public static final double AWAY = 0.0;
 
-    public static final double lowerLimit = 0.0;
-    public static final double upperLimit = 0.0;
+    public static final double lowerLimit = 0;
+    public static final double upperLimit = 18;
 
     // public enum hoodPositions{
     //     CLOSE_SHOOT,
@@ -27,10 +27,17 @@ public class HoodConstants {
     static{
         hoodConfig
             .inverted(false)
-            . idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(hoodSmartCurrentLimit)
             .openLoopRampRate(0.0)
             .closedLoopRampRate(0.0);
+
+        hoodConfig.softLimit
+          .forwardSoftLimit(18)
+          .reverseSoftLimit(0)
+          .forwardSoftLimitEnabled(true)
+          .reverseSoftLimitEnabled(true);
+
     }
 
 
@@ -42,7 +49,7 @@ public class HoodConstants {
         ) {}
 
     public static HoodCoefficients hoodCoefficients = new HoodCoefficients(
-        0.0,
+        1.2,
         0.0,
         0.0
 

@@ -8,6 +8,7 @@ import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
 
@@ -41,13 +42,12 @@ public class ShooterCommand extends Command{
 
    // private final DoubleSupplier hopperPowerSupplier;
 //    private final BooleanSupplier testShoot;
-    // private final BooleanSupplier feederTest;
+    private final BooleanSupplier feederTest;
 
     private final BooleanSupplier passTest;
-    private final BooleanSupplier closeShootTest;
-    private final BooleanSupplier farShootTest;
+    // private final BooleanSupplier closeShootTest;
+    // private final BooleanSupplier farShootTest;
     private final BooleanSupplier away; 
-
 
 
 
@@ -58,32 +58,33 @@ public class ShooterCommand extends Command{
         ShooterController shooter,
         FeederSubsystem feeder,
         HopperSubsystem hopper,
+        
         DoubleSupplier shoot,
         //BooleanSupplier pass,
         // BooleanSupplier reverse,
-        // BooleanSupplier feederTest,
+        BooleanSupplier feederTest,
 
         BooleanSupplier passTest,
-        BooleanSupplier closeShootTest,
-        BooleanSupplier farShootTest,
+        // BooleanSupplier closeShootTest,
+        // BooleanSupplier farShootTest,
         BooleanSupplier away
         // BooleanSupplier testShoot 
          //DoubleSupplier hopperPowerSupplier
-
 
         ){
 
         this.shooter = shooter;
         this.feeder = feeder;        
         this.hopper = hopper;
+
         this.shoot = shoot;
        // this.pass = pass;
         // this.reverse = reverse;
-        // this.feederTest = feederTest;
+        this.feederTest = feederTest;
 
         this.passTest = passTest;
-        this.closeShootTest = closeShootTest;
-        this.farShootTest= farShootTest;
+        // this.closeShootTest = closeShootTest;
+        // this.farShootTest= farShootTest;
         this.away = away;
         // this.testShoot = testShoot;
         //this.hopperPowerSupplier = hopperPowerSupplier;
@@ -102,18 +103,12 @@ public class ShooterCommand extends Command{
             shooter.pass();
         }
 
-        else if (closeShootTest.getAsBoolean()){
-            shooter.closeShoot();
-        }
-
-          else if (farShootTest.getAsBoolean()){
-            shooter.farShoot();
-        }
 
           else if (away.getAsBoolean()){
             shooter.hoodAway();
         }
 
+       
 
 
 
@@ -121,16 +116,17 @@ public class ShooterCommand extends Command{
 
 
 
-        // if (feederTest.getAsBoolean()){
 
-        //     feeder.driveFeederIn();
-        //     hopper.driveHopperIn();
-        // }
+        if (feederTest.getAsBoolean()){
 
-        // else{
-        //     feeder.stopFeeder();
-        //     hopper.stopHopper();
-        // }
+            feeder.driveFeederIn();
+            hopper.driveHopperIn();
+        }
+
+        else{
+            feeder.stopFeeder();
+            hopper.stopHopper();
+        }
 
         // if (testShoot.getAsBoolean()){
         //     shooter.runShooter();
@@ -199,8 +195,9 @@ public class ShooterCommand extends Command{
         else{
             shooter.stop();
             // feeder.stopFeeder();
-            //hopper.stopHopper();
+            // hopper.stopHopper();
             //shooter.hoodAway();
+            // shooter.testHood(testHood.getAsDouble());
             //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
         }
 
@@ -208,11 +205,13 @@ public class ShooterCommand extends Command{
         //     hopper.driveHopperOut();
         //     feeder.driveFeederOut();
         // }
+
+        SmartDashboard.putNumber("distance",distance);
     }
 
     @Override
     public void end(boolean interrupted) {
         shooter.stop();
-        feeder.stopFeeder();
+        // feeder.stopFeeder();
     }
 }

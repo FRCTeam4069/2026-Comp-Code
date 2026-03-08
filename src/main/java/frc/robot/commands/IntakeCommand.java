@@ -8,14 +8,16 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeCommand extends Command{
   private final IntakeSubsystem intake;
   private final BooleanSupplier inSupplier;
-  private final BooleanSupplier outSupplier;
+  //private final BooleanSupplier outSupplier;
 
    public IntakeCommand(
       IntakeSubsystem intake,
-      BooleanSupplier in, BooleanSupplier out){
+      BooleanSupplier in 
+      //BooleanSupplier out
+      ){
 
       this.intake = intake;
-      this.outSupplier = out;
+    //   this.outSupplier = out;
       this.inSupplier = in;
 
 
@@ -26,8 +28,8 @@ public class IntakeCommand extends Command{
   public void execute(){
       if (inSupplier.getAsBoolean()){
           intake.driveFeedIn();
-      } else if (outSupplier.getAsBoolean()) {
-          intake.driveFeedOut();
+    //   } else if (outSupplier.getAsBoolean()) {
+    //       intake.driveFeedOut();
       } else {
           intake.stopFeed();
       }

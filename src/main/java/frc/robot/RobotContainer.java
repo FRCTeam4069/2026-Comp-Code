@@ -131,13 +131,13 @@ public class RobotContainer {
                () -> controller0.getHID().getRightBumperButton()); //lock heading
    }
 
-  //  public Command defaultIntakeCommand() {
-  //     return new IntakeCommand(
-  //             intake,
-  //             () -> controller1.getHID().getAButton(), // In
-  //             () -> controller1.getHID().getBButton()  // out
-  //     );
-  // }
+   public Command defaultIntakeCommand() {
+      return new IntakeCommand(
+              intake,
+              () -> controller1.getHID().getAButton() // In
+              //() -> controller1.getHID().getBButton()  // out //B for everything out
+      );
+  }
 
   
   public Command defaultPivotCommand() {
@@ -158,14 +158,18 @@ public class RobotContainer {
               //() -> controller1.getHID().getLeftBumperButton(), //pass
               // () -> controller1.getHID().getYButton(), //reverse in case gets stuck
               // () -> controller1.getHID().getXButton(), //feeder test
+              () -> controller1.getHID().getAButton(),
+              // () -> controller1.getHID().getXButton(),
+              // () -> controller1.getHID().getYButton(),
               () -> controller1.getHID().getBButton(),
-              () -> controller1.getHID().getXButton(),
-              () -> controller1.getHID().getYButton(),
-              () -> controller1.getHID().getAButton()
+              () -> controller1.getHID().getXButton()// feeder test for right now
 
 
 
-              
+             //x away
+             // a for feeder ad intake and hopper
+             //trigeger for shooter
+             //b button for up to position 
       );
 
  

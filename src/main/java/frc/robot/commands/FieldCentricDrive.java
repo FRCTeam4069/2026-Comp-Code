@@ -115,6 +115,7 @@ public class FieldCentricDrive extends Command {
 
         @Override
         public void initialize() {
+            
             headingController.enableContinuousInput(-Math.PI, Math.PI);
             currentPosition= drive.getPose();
     
@@ -233,6 +234,8 @@ public class FieldCentricDrive extends Command {
 
         odometryError = encoderOnly.relativeTo(withVision);
         odometryErrorPublisher.set(odometryError);
+
+        
 
     }
 

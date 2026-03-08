@@ -27,6 +27,7 @@ public class ShooterController extends SubsystemBase {
     private double hoodPos = 0.0;
     private double pidOutHood = 0.0;
     private static final double farShootPos = 0.0;
+    private static final double hoodTolerace = 0.5;
 
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),
@@ -104,7 +105,7 @@ public class ShooterController extends SubsystemBase {
         targetRPMOne = 0;
         targetRPMTwo = 0;
 
-        hoodArticulate.stopMotor();
+        //hoodArticulate.stopMotor();
 
     }
 
@@ -132,14 +133,17 @@ public class ShooterController extends SubsystemBase {
         // targetRPMOne = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
         // targetRPMTwo = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
 
-        targetRPMOne = 5000;
-        targetRPMTwo = 5000;
-
+        targetRPMOne = 3000;
+        targetRPMTwo = 3000;
 
     }
 
     public void hoodAway(){
         targetDeg = HoodConstants.AWAY;
+    }
+
+    public void stopHood(){
+        hoodArticulate.set(0);
     }
 
      public void closeShoot(){
@@ -148,6 +152,11 @@ public class ShooterController extends SubsystemBase {
 
      public void farShoot(){
         targetDeg = HoodConstants.FAR_SHOOT;
+    }
+
+    public void testHood( double hoodPower){
+        double power = MathUtil.clamp(hoodPower, -0.7, 0.7);
+        hoodArticulate.set(power);
     }
 
      public void passPosition(){
@@ -221,14 +230,6 @@ public class ShooterController extends SubsystemBase {
         // ffOutTwo = shooterFFTwo.calculate(MetersPerSecondTwo);
         // voltsTwo = MathUtil.clamp (0 + ffOutTwo, 0.0, 12.0); 
 
-        // // hoodPos = getHoodPos();
-
-        // // targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
-
-        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
-        pidOutHood = MathUtil.clamp(pidOutHood, -12.0, 12.0);
-        if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-        if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
 
         if(currentRPMOne < targetRPMOne){
             voltsOne = 10.5;
@@ -237,6 +238,7 @@ public class ShooterController extends SubsystemBase {
             voltsOne = 0;
         }
 
+        
         if(currentRPMTwo < targetRPMTwo){
             voltsTwo = 10.5;
         }
@@ -245,17 +247,26 @@ public class ShooterController extends SubsystemBase {
         }
 
         if(targetRPMOne <= 200){
-            shooterOneMotorOne.setVoltage(0);
-            shooterTwoMotorOne.setVoltage(0);
-            shooterOneMotorTwo.setVoltage(0);
-            shooterTwoMotorTwo.setVoltage(0);
 
+            shooterOneMotorOne.setVoltage(0);
+            shooterOneMotorTwo.setVoltage(0);
+        }
+
+         else{
+
+            shooterOneMotorOne.setVoltage(voltsOne);
+            shooterOneMotorTwo.setVoltage(voltsOne);
+         }
+
+         if (targetRPMTwo <= 200){
+
+            shooterTwoMotorOne.setVoltage(0);
+            shooterTwoMotorTwo.setVoltage(0);
 
         }
 
         else{
-            shooterOneMotorOne.setVoltage(voltsOne);
-            shooterOneMotorTwo.setVoltage(voltsOne);
+
             shooterTwoMotorOne.setVoltage(voltsTwo);
             shooterTwoMotorTwo.setVoltage(voltsTwo);
 
@@ -265,7 +276,30 @@ public class ShooterController extends SubsystemBase {
             // shooterTwoMotorTwo.setVoltage(12);
         }
 
-        hoodArticulate.setVoltage(pidOutHood);
+    
+
+       
+        hoodPos = getHoodPos();
+
+        targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
+
+        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
+        pidOutHood = MathUtil.clamp(pidOutHood, -12, 12);
+        // if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
+        // if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
+        
+
+       if (Math.abs(hoodPos - targetDeg) < hoodTolerace){
+            hoodArticulate.setVoltage(0.0);
+
+        }
+
+        else{
+            hoodArticulate.setVoltage(pidOutHood);
+        }
+
+
+
 
         SmartDashboard.putNumber("target RPM 1",targetRPMOne);
         SmartDashboard.putNumber("target RPM 2",targetRPMTwo);
@@ -281,7 +315,7 @@ public class ShooterController extends SubsystemBase {
         SmartDashboard.putNumber("current one two",shooterOneMotorTwo.getOutputCurrent());
          SmartDashboard.putNumber("current two two",shooterTwoMotorTwo.getOutputCurrent());
 
-        SmartDashboard.putNumber("Hood Position", hoodPos);
+        SmartDashboard.putNumber("Hood Position", hoodArticulate.getEncoder().getPosition());
         SmartDashboard.putNumber("Hood Target", targetDeg);
 
         //drive better and shoot better and in the net, do what driver says 
