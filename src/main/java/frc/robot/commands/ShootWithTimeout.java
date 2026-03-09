@@ -60,35 +60,32 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public void execute(){
-        var result = DriverStation.getAlliance();
+        // var result = DriverStation.getAlliance();
 
-        currentPositionX = shooter.getCurrentRobotPose().getX();
-        currentPositionY = shooter.getCurrentRobotPose().getY();
+        // currentPositionX = shooter.getCurrentRobotPose().getX();
+        // currentPositionY = shooter.getCurrentRobotPose().getY();
 
-        if (result.isPresent()) {
-            alliance = result.get();
-        }
+        // if (result.isPresent()) {
+        //     alliance = result.get();
+        // }
 
-        if(alliance == Alliance.Blue){
+        // if(alliance == Alliance.Blue){
 
-            deltaX = blueHubX - currentPositionX;
-            deltaY = blueHubY - currentPositionY; 
+        //     deltaX = blueHubX - currentPositionX;
+        //     deltaY = blueHubY - currentPositionY; 
 
-        }
+        // }
 
-        else {
+        // else {
 
-            deltaX = redHubX - currentPositionX;
-            deltaY = redHubY - currentPositionY;
+        //     deltaX = redHubX - currentPositionX;
+        //     deltaY = redHubY - currentPositionY;
 
-        }
+        // }
 
+        // distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-
-
-        distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-
-        shooter.shoot(distance);
+        shooter.autoShoot();
 
         if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
             shootReady = true;
