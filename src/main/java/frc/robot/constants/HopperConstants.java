@@ -7,7 +7,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public final class HopperConstants {
 
-    //TODO test current limits
     public static final int hopperSmartCurrentLimit = 30; 
     public static final SparkMaxConfig hopperConfig = new SparkMaxConfig();
 

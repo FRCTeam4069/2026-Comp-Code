@@ -69,7 +69,7 @@ public class Vision {
 
     private double lowestDistance = Double.MAX_VALUE;
 
-    private static final double tooFar = 1.7;//FIXME
+    private static final double tooFar = 1.3;//FIXME //2.5
     private static final double closeEnough = 2.7; //TODO:tune checking that autoalign still works far
 
     public Matrix<N3, N1> getStdDeviations() {

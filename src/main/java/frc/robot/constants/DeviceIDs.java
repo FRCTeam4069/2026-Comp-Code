@@ -16,13 +16,12 @@ public class DeviceIDs {
     public static final byte ENCODER_BL = 33;
     public static final byte ENCODER_BR = 34;
 
-    //TODO test these IDS, from 2024 code but might be wrong
     public static final byte INTAKE = 16; 
     public static final byte PIVOT = 15; 
     public static final byte HOPPER = 14; 
     public static final byte FEEDER = 13;
 
-    public static final byte HOOD = 57; //FIXME
+    public static final byte HOOD = 57; 
  
     public static final byte SHOOTER_ONE_MOTOR_ONE = 8;
     public static final byte SHOOTER_ONE_MOTOR_TWO = 9;

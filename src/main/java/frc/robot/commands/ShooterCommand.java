@@ -8,6 +8,7 @@ import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
@@ -20,8 +21,8 @@ public class ShooterCommand extends Command{
 
 
     private final DoubleSupplier shoot;
-   // private final BooleanSupplier pass;
-    // private final BooleanSupplier reverse;
+   private final BooleanSupplier pass;
+    private final BooleanSupplier reverse;
 
     private double distance = 0.0;
     private double currentPositionX = 0.0;
@@ -32,7 +33,7 @@ public class ShooterCommand extends Command{
 
     private Alliance alliance = Alliance.Blue;
 
-    private static final double RPMDiff = 50; //FIXME
+    private static final double RPMDiff = 50; 
 
 
     private final double redHubX = Units.inchesToMeters(469.1);
@@ -42,14 +43,15 @@ public class ShooterCommand extends Command{
 
    // private final DoubleSupplier hopperPowerSupplier;
 //    private final BooleanSupplier testShoot;
-    private final BooleanSupplier feederTest;
+    private final BooleanSupplier feederManual;
 
-    private final BooleanSupplier passTest;
+    // private final BooleanSupplier passTest;
     // private final BooleanSupplier closeShootTest;
     // private final BooleanSupplier farShootTest;
-    private final BooleanSupplier away; 
+    // private final BooleanSupplier away; 
 
-
+    private Boolean shootReady;
+    private final Timer timer = new Timer();
 
 
    
@@ -60,14 +62,14 @@ public class ShooterCommand extends Command{
         HopperSubsystem hopper,
         
         DoubleSupplier shoot,
-        //BooleanSupplier pass,
-        // BooleanSupplier reverse,
-        BooleanSupplier feederTest,
+        BooleanSupplier pass,
+        BooleanSupplier reverse,
+        BooleanSupplier feederManual
 
-        BooleanSupplier passTest,
+        // BooleanSupplier passTest,
         // BooleanSupplier closeShootTest,
         // BooleanSupplier farShootTest,
-        BooleanSupplier away
+        // BooleanSupplier away
         // BooleanSupplier testShoot 
          //DoubleSupplier hopperPowerSupplier
 
@@ -78,14 +80,14 @@ public class ShooterCommand extends Command{
         this.hopper = hopper;
 
         this.shoot = shoot;
-       // this.pass = pass;
-        // this.reverse = reverse;
-        this.feederTest = feederTest;
+        this.pass = pass;
+        this.reverse = reverse;
+        this.feederManual = feederManual;
 
-        this.passTest = passTest;
+        // this.passTest = passTest;
         // this.closeShootTest = closeShootTest;
         // this.farShootTest= farShootTest;
-        this.away = away;
+        // this.away = away;
         // this.testShoot = testShoot;
         //this.hopperPowerSupplier = hopperPowerSupplier;
 
@@ -98,43 +100,7 @@ public class ShooterCommand extends Command{
     @Override
     public void execute(){
         var result = DriverStation.getAlliance();
-
-        if(passTest.getAsBoolean()){
-            shooter.pass();
-        }
-
-
-          else if (away.getAsBoolean()){
-            shooter.hoodAway();
-        }
-
        
-
-
-
-
-
-
-
-
-        if (feederTest.getAsBoolean()){
-
-            feeder.driveFeederIn();
-            hopper.driveHopperIn();
-        }
-
-        else{
-            feeder.stopFeeder();
-            hopper.stopHopper();
-        }
-
-        // if (testShoot.getAsBoolean()){
-        //     shooter.runShooter();
-        // }
-        // else{
-        //     shooter.stop();
-        // }
-
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
 
@@ -164,47 +130,54 @@ public class ShooterCommand extends Command{
 
             shooter.shoot(distance);
 
-            
+            if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
+            }
 
-            // if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
-            //     feeder.driveFeederIn();
-            //     hopper.driveHopperIn();
-            // }
-
-            // else{
-            //     feeder.stopFeeder();
-            //     hopper.stopHopper();
-
-            // }
+            if(shootReady = true && timer.hasElapsed(0.5)){
+                hopper.driveHopperIn();
+                feeder.driveFeederIn();
+            }
 
         }
 
-        // else if (pass.getAsBoolean()){
-        //     shooter.pass();
-        //      if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) ) { //&& shooter.hoodInPosition() 
-        //         feeder.driveFeederIn();
-        //         hopper.driveHopperIn();
-        //     }
+         else if (feederManual.getAsBoolean()){
 
-        //     else{
-        //         feeder.stopFeeder();
-        //         hopper.stopHopper();
-        //     }
-        // }
+            feeder.driveFeederIn();
+            hopper.driveHopperIn();
+        }
+
+        else if (pass.getAsBoolean()){
+            shooter.pass();
+             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
+            }
+
+            if(shootReady = true && timer.hasElapsed(0.75)){
+                hopper.driveHopperIn();
+                feeder.driveFeederIn();
+            }
+        }
+
+        else if(reverse.getAsBoolean()){
+            hopper.driveHopperOut();
+            feeder.driveFeederOut();
+        }
 
         else{
             shooter.stop();
-            // feeder.stopFeeder();
-            // hopper.stopHopper();
-            //shooter.hoodAway();
-            // shooter.testHood(testHood.getAsDouble());
-            //hopper.driveHopper(hopperPowerSupplier.getAsDouble());
+            feeder.stopFeeder();
+            hopper.stopHopper();
+            shooter.hoodAway();
+            shootReady = false;
+
+            timer.stop();
+            timer.reset();
         }
 
-        // if(reverse.getAsBoolean()){
-        //     hopper.driveHopperOut();
-        //     feeder.driveFeederOut();
-        // }
+       
 
         SmartDashboard.putNumber("distance",distance);
     }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.2071653963414635,
-        "y": 7.5198986280487805
+        "x": 5.068366044207318,
+        "y": 7.559188135162602
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.188347433943091,
-        "y": 7.774473894817072
+        "x": 7.089125635162602,
+        "y": 7.226782774390244
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.862481020833094,
-        "y": 5.798514018983179
+        "x": 7.946293635670733,
+        "y": 5.504093432418699
       },
       "prevControl": {
-        "x": 7.219240891603359,
-        "y": 6.817687247246665
+        "x": 7.303053506440998,
+        "y": 6.523266660682185
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0.7472541099773241,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.0,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,

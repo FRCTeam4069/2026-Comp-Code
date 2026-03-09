@@ -26,8 +26,9 @@ public class ShooterController extends SubsystemBase {
     private double targetDeg = 0.0;
     private double hoodPos = 0.0;
     private double pidOutHood = 0.0;
-    private static final double farShootPos = 0.0;
     private static final double hoodTolerace = 0.5;
+    private static final double maxDistance = 4.36483;
+    private static final double minHoodDistance = 2.95;
 
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),
@@ -44,10 +45,7 @@ public class ShooterController extends SubsystemBase {
     public double MetersPerSecondOne = 0.0;
     public double MetersPerSecondTwo = 0.0;
 
-    public double passRPM = 3000.0; //FIXME
-
-    private final double a = 0.0; //FIXME
-    private final double b = 0.0; //FIXME
+    public double passRPM = 3500.0; //FIXME
 
     double pidOutOne = 0.0;
     double ffOutOne = 0.0;
@@ -105,8 +103,6 @@ public class ShooterController extends SubsystemBase {
         targetRPMOne = 0;
         targetRPMTwo = 0;
 
-        //hoodArticulate.stopMotor();
-
     }
 
     // public void runShooter(){
@@ -121,47 +117,50 @@ public class ShooterController extends SubsystemBase {
 
     public void shoot(double distance){
 
-        // if (distance > farShootPos){
-        //     targetDeg = HoodConstants.FAR_SHOOT;
-        // }
+        if(distance > maxDistance){
+            targetRPMOne = 0;
+            targetRPMTwo = 0;
+        }
 
-        // else{
-        //     targetDeg = HoodConstants.CLOSE_SHOOT;
-        // }
+        else{
+        targetRPMOne = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
+         - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
 
-        // // probably need two equations, one for close hood up to that point and then another one for far hood position
-        // targetRPMOne = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
-        // targetRPMTwo = (a * Math.pow(b, distance)); //FIXME make less bad, regression, maybe quadratic
+         targetRPMTwo = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
+         - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
 
-        targetRPMOne = 3000;
-        targetRPMTwo = 3000;
+        }
 
+        if(distance > maxDistance){
+            targetDeg = 0;
+        }
+
+        else if (distance < minHoodDistance){
+            targetDeg = 0;
+        }
+
+        else{
+            targetDeg = (21.44172 * Math.pow(distance, 3)) - (227.32753 * Math.pow(distance, 2)) + (802.95969 * distance) - 940.86642;
+        }
+      
     }
 
     public void hoodAway(){
         targetDeg = HoodConstants.AWAY;
     }
 
-    public void stopHood(){
-        hoodArticulate.set(0);
-    }
+    // public void stopHood(){
+    //     hoodArticulate.set(0);
+    // }
 
-     public void closeShoot(){
-        targetDeg = HoodConstants.CLOSE_SHOOT;
-    }
+    // public void testHood( double hoodPower){
+    //     double power = MathUtil.clamp(hoodPower, -0.7, 0.7);
+    //     hoodArticulate.set(power);
+    // }
 
-     public void farShoot(){
-        targetDeg = HoodConstants.FAR_SHOOT;
-    }
-
-    public void testHood( double hoodPower){
-        double power = MathUtil.clamp(hoodPower, -0.7, 0.7);
-        hoodArticulate.set(power);
-    }
-
-     public void passPosition(){
-        targetDeg = HoodConstants.PASS;
-    }
+    //  public void passPosition(){
+    //     targetDeg = HoodConstants.PASS;
+    // }
 
     public void setCurrentRobotPose(Pose2d updatedRobotPose){
         currentRobotPose = updatedRobotPose;
@@ -238,7 +237,7 @@ public class ShooterController extends SubsystemBase {
             voltsOne = 0;
         }
 
-        
+
         if(currentRPMTwo < targetRPMTwo){
             voltsTwo = 10.5;
         }
@@ -269,11 +268,6 @@ public class ShooterController extends SubsystemBase {
 
             shooterTwoMotorOne.setVoltage(voltsTwo);
             shooterTwoMotorTwo.setVoltage(voltsTwo);
-
-            //  shooterOneMotorOne.setVoltage(12);
-            // shooterOneMotorTwo.setVoltage(12);
-            // shooterTwoMotorOne.setVoltage(12);
-            // shooterTwoMotorTwo.setVoltage(12);
         }
 
     
@@ -285,8 +279,6 @@ public class ShooterController extends SubsystemBase {
 
         pidOutHood = hoodController.calculate (hoodPos, targetDeg);
         pidOutHood = MathUtil.clamp(pidOutHood, -12, 12);
-        // if (hoodPos <= HoodConstants.lowerLimit && pidOutHood < 0) pidOutHood = 0;
-        // if (hoodPos >= HoodConstants.upperLimit && pidOutHood > 0) pidOutHood = 0;
         
 
        if (Math.abs(hoodPos - targetDeg) < hoodTolerace){

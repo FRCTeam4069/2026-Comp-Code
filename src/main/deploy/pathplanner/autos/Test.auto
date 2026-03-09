@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "intakeOn"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
+            "pathName": "Test"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intakeOff"
+            "name": "shoot"
           }
         }
       ]

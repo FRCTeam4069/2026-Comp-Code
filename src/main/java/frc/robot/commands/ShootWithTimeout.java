@@ -18,24 +18,25 @@ public class ShootWithTimeout extends Command{
     private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
     private final PivotSubsystem pivot;
-    private final SwerveDrivetrain swerve;
+    //private final SwerveDrivetrain drive;
 
 
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
     private final double shootTime = 5.0; //FIXME
-    private double desiredHeading = 0.0;
 
     private final Timer timer = new Timer();
-    private boolean finished = false;
 
     private double deltaX = 0.0;
     private double deltaY = 0.0;
 
     private Alliance alliance = Alliance.Blue;
 
+
     private static final double RPMDiff = 50; //FIXME
+
+    private  Boolean shootReady;
 
 
     private final double redHubX = Units.inchesToMeters(469.1);
@@ -48,15 +49,13 @@ public class ShootWithTimeout extends Command{
         ShooterController shooter,
         FeederSubsystem feeder,
         HopperSubsystem hopper,
-        PivotSubsystem pivot,
-        SwerveDrivetrain swerve
+        PivotSubsystem pivot
 
     ){
         this.shooter = shooter;
         this.feeder = feeder;
         this.hopper = hopper;
         this.pivot = pivot;
-        this.swerve = swerve;
     }
 
     @Override
@@ -86,25 +85,36 @@ public class ShootWithTimeout extends Command{
 
 
 
+
         distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
         shooter.shoot(distance);
 
-        if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)) { //&& shooter.hoodInPosition() 
-            feeder.autoFeederIn();
-            hopper.autoHopperIn();
+        if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+            shootReady = true;
 
             if (!timer.isRunning()){
                 timer.restart();
             }
+            
+        }
+
+        else{
+            shootReady = false;
+        }
+    
+
+        if(shootReady ){
+            feeder.driveFeederIn();
+            hopper.driveHopper(RPMDiff);
 
             if(timer.hasElapsed(2.5)){
                 pivot.goUpper();
             }
-        }
-        
 
+        }
         else{
+
             feeder.stopFeeder();
             hopper.stopHopper();
             timer.stop();
@@ -122,9 +132,10 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public boolean isFinished(){
-        // for second comp do this with the limelite detects no balls thing
 
         return timer.hasElapsed(shootTime);
 
     }
+
 }
+

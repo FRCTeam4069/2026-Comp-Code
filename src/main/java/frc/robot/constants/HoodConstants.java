@@ -8,19 +8,12 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 40; 
 
-    public static final double PASS = 10.0; // 17 but 10 for testing 
-    public static final double CLOSE_SHOOT = 5.0; //TODO
-    public static final double FAR_SHOOT = 10.0; //TODO
+    public static final double PASS = 17;
+
     public static final double AWAY = 0.0;
 
     public static final double lowerLimit = 0;
     public static final double upperLimit = 18;
-
-    // public enum hoodPositions{
-    //     CLOSE_SHOOT,
-    //     FAR_SHOOT,
-    //     PASS
-    // }
 
     public static final SparkMaxConfig hoodConfig = new SparkMaxConfig();
 
@@ -53,7 +46,6 @@ public class HoodConstants {
         0.0,
         0.0
 
-        //FIXME tune
         );
     
 }

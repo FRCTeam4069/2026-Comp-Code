@@ -30,7 +30,13 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "intakeOff"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -44,12 +50,6 @@
                 "data": {
                   "name": "intakeOff"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "autoRamp"
-                }
               }
             ]
           }
@@ -57,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootWithTimeout"
+            "name": "shoot"
           }
         },
         {
@@ -86,7 +86,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -100,12 +100,6 @@
                 "data": {
                   "name": "intakeOff"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "autoRamp"
-                }
               }
             ]
           }
@@ -113,7 +107,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootWithTimeout"
+            "name": "shoot"
           }
         }
       ]

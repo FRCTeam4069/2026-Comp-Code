@@ -38,7 +38,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void stopFeed(){
-      intakeMotor.stopMotor();
+      intakeMotor.set(0);
   }
 
   public double getFeedSpeed(){

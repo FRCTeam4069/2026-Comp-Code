@@ -1,7 +1,6 @@
 
 package frc.robot;
 import frc.robot.commands.FieldCentricDrive;
-import frc.robot.commands.PivotCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -40,7 +39,7 @@ public class RobotContainer {
 
     public static final ShooterController shooter = new ShooterController();
 
-    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot, drive);
+    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
 
 
@@ -134,20 +133,16 @@ public class RobotContainer {
    public Command defaultIntakeCommand() {
       return new IntakeCommand(
               intake,
-              () -> controller1.getHID().getAButton() // In
-              //() -> controller1.getHID().getBButton()  // out //B for everything out
+              pivot,
+              () -> controller1.getHID().getAButton(), // In
+              () -> controller1.getHID().getBButton(),  // out //B for everything out
+              () -> controller1.getHID().getPOV() == 0,    // D-pad up
+              () -> controller1.getHID().getPOV() == 180  // OUT
       );
   }
 
   
-  public Command defaultPivotCommand() {
-      return new PivotCommand(
-              pivot,
-              () -> controller1.getHID().getPOV() == 0,    // D-pad up
-              () -> controller1.getHID().getPOV() == 180  // OUT
-              //() -> controller1.getLeftY()
-      );
-  }
+ 
   
   public Command defaultShooterCommand() { 
       return new ShooterCommand(
@@ -155,13 +150,12 @@ public class RobotContainer {
               feeder,
               hopper,
               () -> controller1.getHID().getRightTriggerAxis(), // shoot //TODO switch to triggers
-              //() -> controller1.getHID().getLeftBumperButton(), //pass
               // () -> controller1.getHID().getYButton(), //reverse in case gets stuck
               // () -> controller1.getHID().getXButton(), //feeder test
-              () -> controller1.getHID().getAButton(),
+              () -> controller1.getHID().getLeftBumperButton(),//pass
               // () -> controller1.getHID().getXButton(),
               // () -> controller1.getHID().getYButton(),
-              () -> controller1.getHID().getBButton(),
+              () -> controller1.getHID().getBButton(), //reverse
               () -> controller1.getHID().getXButton()// feeder test for right now
 
 

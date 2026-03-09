@@ -15,7 +15,6 @@ public class HopperSubsystem extends SubsystemBase {
 
     private double volts = 0.0;
 
-    //private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(10.0);
 
 
     public HopperSubsystem(){
@@ -25,12 +24,10 @@ public class HopperSubsystem extends SubsystemBase {
   }
 
   public void driveHopperIn(){
-      //volts = slewRateLimiter.calculate(7.2);
-      hopperMotor.setVoltage((10));
+      hopperMotor.setVoltage((8.0));
   }
 
   public void driveHopperOut(){
-      //volts = slewRateLimiter.calculate(4.8);
       hopperMotor.setVoltage((7.2));
   }
 
@@ -43,7 +40,7 @@ public class HopperSubsystem extends SubsystemBase {
   }
 
   public void autoHopperIn(){
-    hopperMotor.setVoltage(10.5);
+    hopperMotor.setVoltage(0.0);
   }
 }
 

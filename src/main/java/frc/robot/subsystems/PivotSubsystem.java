@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,106 +29,97 @@ public class PivotSubsystem extends SubsystemBase {
     private final double LOWER_POS = PivotConstants.LOWER_POSITION;
     private final double UPPER_POS = PivotConstants.UPPER_POSITION;
 
-
-    PIDController upController;
-    PIDController downController;
-
-    private static final double pivotTolerance = 1.;
-
-    private boolean inPosition;
-    private double error;
-
-    double pidOutput;
-
-    public PivotSubsystem(){
-
-      pivotMotor = new SparkMax(DeviceIDs.PIVOT, MotorType.kBrushless);
-      pivotMotor.configure(PivotConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      pivotMotor.getEncoder().setPosition(UPPER_POS);
-
-      upController = new PIDController(PivotConstants.upCoefficients.kP(), PivotConstants.upCoefficients.kI(), PivotConstants.upCoefficients.kD());
-      downController = new PIDController(PivotConstants.downCoefficients.kP(), PivotConstants.downCoefficients.kI(), PivotConstants.downCoefficients.kD());
-
-      pidOutput = 0.0;
-  }
-
-  public void pivotPower(double pivotPower){
-    pivotMotor.set(pivotPower);
-  }
-
-  public void stopPivot(){
-      pivotMotor.stopMotor();
-  }
-
-  public double getPivotEncoder(){
-      return pivotMotor.getEncoder().getPosition();
-  }
-
-  public void goUpper() {
-    p = positions.UPPER;
-  }
-
-  public void goLower() {
-    p = positions.LOWER;
-  }
-
-  public positions getPosition(){
-      return p;
-  }
-
-  public Command intakeDown(){ //ANNIE LOOK AT THIS AND TELL ME IF IT WORKS
-    goLower();
-    return run(()-> goLower());
-  }
-
-  public Command intakeUp(){
-    goUpper();
-    return run(()->goUpper());
-
-  }
-
-  public double getPositionValue(){
-      return p == positions.LOWER ? LOWER_POS : UPPER_POS;
-  }
-
-  public void periodic() {
-      SmartDashboard.putNumber("PivotPosition", getPivotEncoder());
-
-
-      if (getPosition() == positions.UPPER) {
-
-        pidOutput = upController.calculate(getPivotEncoder(), UPPER_POS);
+    private double power = 0.0;
+    
+    
+        PIDController upController;
+        PIDController downController;
+    
+        private static final double pivotTolerance = 1.;
+    
+        private double error;
+    
+        double pidOutput;
+    
+    
+        public PivotSubsystem(){
+    
+          pivotMotor = new SparkMax(DeviceIDs.PIVOT, MotorType.kBrushless);
+          pivotMotor.configure(PivotConstants.pivotConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+          pivotMotor.getEncoder().setPosition(UPPER_POS);
+    
+          upController = new PIDController(PivotConstants.upCoefficients.kP(), PivotConstants.upCoefficients.kI(), PivotConstants.upCoefficients.kD());
+          downController = new PIDController(PivotConstants.downCoefficients.kP(), PivotConstants.downCoefficients.kI(), PivotConstants.downCoefficients.kD());
+    
+          pidOutput = 0.0;
+      }
+    
+      // public void pivotPower(double pivotPower){
+      //   pivotMotor.set(pivotPower);
+      // }
+    
+      public void stopPivot(){
+          pivotMotor.stopMotor();
+      }
+    
+      public double getPivotEncoder(){
+          return pivotMotor.getEncoder().getPosition();
+      }
+    
+      public void goUpper() {
+        p = positions.UPPER;
+      }
+    
+      public void goLower() {
+        p = positions.LOWER;
+      }
+    
+      public positions getPosition(){
+          return p;
+      }
+    
+      public Command intakeDown(){ //ANNIE LOOK AT THIS AND TELL ME IF IT WORKS
+        goLower();
+        return run(()-> goLower());
+      }
+    
+      public Command intakeUp(){
+        goUpper();
+        return run(()->goUpper());
+    
+      }
+    
+      public double getPositionValue(){
+          return p == positions.LOWER ? LOWER_POS : UPPER_POS;
+      }
+    
+      public void periodic() {
+          SmartDashboard.putNumber("PivotPosition", getPivotEncoder());
+    
+          error = getPivotEncoder() - getPositionValue();
+          SmartDashboard.putNumber("pivot error", error);
+    
+           if( Math.abs(error) < pivotTolerance){
+            stopPivot();
+          }
+    
+          else{
+          if (getPosition() == positions.UPPER) {
+    
+            pidOutput = (upController.calculate(getPivotEncoder(), UPPER_POS));
+            power = MathUtil.clamp(pidOutput, 0., 0.3);
 
       } 
       
       else if (getPosition()== positions.LOWER) {
-
         pidOutput = downController.calculate(getPivotEncoder(), LOWER_POS);
+        power =MathUtil.clamp(pidOutput, -0.7, 0);
       }  
-
-      error = getPivotEncoder() - getPositionValue();
-
-      if( Math.abs(error) < pivotTolerance){
-        stopPivot();
-      }
-
-      else{
-
-        if(p == positions.LOWER){
-
-          pidOutput = MathUtil.clamp(pidOutput, -0.7, 0);
-
-        }
-
-        else if(p == positions.UPPER){
-
-          pidOutput = MathUtil.clamp(pidOutput, 0, 0.4);
-          
-        }
-        
-        pivotMotor.set(pidOutput);
-      }
     }
+
+        
+        pivotMotor.set(power);
+     }
 
   public Command setPosition(positions po){
       return this.runOnce(() -> p = po);

@@ -28,7 +28,7 @@ public final class PivotConstants {
           .closedLoopRampRate(0.0);
 
           pivotConfig.softLimit
-          .forwardSoftLimit(-1.5)
+          .forwardSoftLimit(-2.0)
           .reverseSoftLimit(-38)//PivotConstants.UPPER_POSITION
           .forwardSoftLimitEnabled(true)
           .reverseSoftLimitEnabled(true);
@@ -39,7 +39,6 @@ public final class PivotConstants {
             .p(kP)
             .i(kI)
             .d(kD);
-            //TODO
       
     }
 
