@@ -105,6 +105,23 @@ public class ShooterController extends SubsystemBase {
 
     }
 
+    public void trenchShoot(){
+        targetRPMOne = 3500;
+        targetRPMTwo = 3500 ;
+
+        targetDeg = 4;
+
+    }
+
+    public void manualCloseShoot(){
+
+        targetRPMOne = 2800;
+        targetRPMTwo = 2800 ;
+
+        targetDeg = 0;
+
+    }
+
     public void autoShoot(){
         targetRPMOne = 3500;
         targetRPMTwo = 3500;

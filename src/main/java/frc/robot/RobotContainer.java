@@ -149,27 +149,15 @@ public class RobotContainer {
               shooter,
               feeder,
               hopper,
-              () -> controller1.getHID().getRightTriggerAxis(), // shoot //TODO switch to triggers
-              // () -> controller1.getHID().getYButton(), //reverse in case gets stuck
-              // () -> controller1.getHID().getXButton(), //feeder test
-              () -> controller1.getHID().getLeftBumperButton(),//pass
-              // () -> controller1.getHID().getXButton(),
-              // () -> controller1.getHID().getYButton(),
+              () -> controller1.getHID().getRightTriggerAxis(), // shoot 
+              () -> controller1.getHID().getLeftTriggerAxis(),//pass
               () -> controller1.getHID().getBButton(), //reverse
-              () -> controller1.getHID().getXButton()// feeder test for right now
-
-
-
-             //x away
-             // a for feeder ad intake and hopper
-             //trigeger for shooter
-             //b button for up to position 
+              () -> controller1.getHID().getXButton(),// feeder manual
+              () -> controller1.getHID().getRightBumperButton(), //manual trench shoot
+              () -> controller1.getHID().getLeftBumperButton() // manual close shoot
       );
 
- 
-
-      //TODO reverse feed X
-  }
+   }
 
 }
 

@@ -48,7 +48,7 @@ public class DrivetrainConstants {
     public static final double angularVelocityDeadband = 0.01;
     public static final double headingCorrectionDeadband = 0.05;
 
-    public static final double mass = Pounds.of(121.0).in(Kilograms); //FIXME 141 prob with shooter
+    public static final double mass = Pounds.of(146.0).in(Kilograms); //FIXME 141 prob with shooter
 
 
      public static final Pose2d[] redShooterPoses = new Pose2d[]{
@@ -136,7 +136,7 @@ public class DrivetrainConstants {
 
 
     // used in swerve drivetrain
-    public static final PIDConstants translationPIDConstants = new PIDConstants(0.5, 0.0, 0.0);
+    public static final PIDConstants translationPIDConstants = new PIDConstants(1.0, 0.0, 0.0);
     public static final PIDConstants rotationPIDConstants = new PIDConstants(0.1, 0.0, 0.0);
 
     public static double yScalar = 0.93;
@@ -190,7 +190,7 @@ public class DrivetrainConstants {
         new Tolerances(0.02, 0.20));
 
     public static volatile DrivetrainPIDConstants autoPidToPositionConstants = new DrivetrainPIDConstants(
-        new PIDCoefficients(4.0, 0.0, 0.01), 
+        new PIDCoefficients(5.0, 0.0, 0.01), 
         new PIDCoefficients(8.0, 0.0, 0.6), 
         new Constraints(5.0, 4.0), 
         new Constraints(10.0, 10.0), 
@@ -198,7 +198,7 @@ public class DrivetrainConstants {
         new Tolerances(0.02, 0.20));
 
     public static volatile DrivetrainPIDConstants autoCloseEnoughConstants = new DrivetrainPIDConstants(
-        new PIDCoefficients(4.0, 0.0, 0.01), 
+        new PIDCoefficients(5.0, 0.0, 0.01), 
         new PIDCoefficients(8.0, 0.0, 0.6), 
         new Constraints(5.0, 4.0), 
         new Constraints(10.0, 10.0), 

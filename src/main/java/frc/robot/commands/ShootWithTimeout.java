@@ -4,12 +4,10 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
 
@@ -36,7 +34,7 @@ public class ShootWithTimeout extends Command{
 
     private static final double RPMDiff = 50; //FIXME
 
-    private  Boolean shootReady;
+    private  boolean shootReady;
 
 
     private final double redHubX = Units.inchesToMeters(469.1);
@@ -60,6 +58,7 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public void execute(){
+        feeder.driveFeederIn();
         // var result = DriverStation.getAlliance();
 
         // currentPositionX = shooter.getCurrentRobotPose().getX();

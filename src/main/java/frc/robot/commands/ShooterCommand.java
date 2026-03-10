@@ -21,7 +21,7 @@ public class ShooterCommand extends Command{
 
 
     private final DoubleSupplier shoot;
-   private final BooleanSupplier pass;
+   private final DoubleSupplier pass;
     private final BooleanSupplier reverse;
 
     private double distance = 0.0;
@@ -53,6 +53,9 @@ public class ShooterCommand extends Command{
     private Boolean shootReady;
     private final Timer timer = new Timer();
 
+    private final BooleanSupplier trenchShoot;
+    private final BooleanSupplier closeShoot;
+
 
    
     public ShooterCommand(
@@ -62,9 +65,12 @@ public class ShooterCommand extends Command{
         HopperSubsystem hopper,
         
         DoubleSupplier shoot,
-        BooleanSupplier pass,
+        DoubleSupplier pass,
         BooleanSupplier reverse,
-        BooleanSupplier feederManual
+        BooleanSupplier feederManual,
+
+        BooleanSupplier trenchShoot,
+        BooleanSupplier closeShoot
 
         // BooleanSupplier passTest,
         // BooleanSupplier closeShootTest,
@@ -83,6 +89,9 @@ public class ShooterCommand extends Command{
         this.pass = pass;
         this.reverse = reverse;
         this.feederManual = feederManual;
+
+        this.trenchShoot= trenchShoot;
+        this.closeShoot = closeShoot;
 
         // this.passTest = passTest;
         // this.closeShootTest = closeShootTest;
@@ -148,8 +157,17 @@ public class ShooterCommand extends Command{
             hopper.driveHopperIn();
         }
 
-        else if (pass.getAsBoolean()){
+        else if(closeShoot.getAsBoolean()){
+            shooter.manualCloseShoot();
+        }
+
+        else if (trenchShoot.getAsBoolean()){
+            shooter.trenchShoot();
+        }
+
+        else if (pass.getAsDouble() > 0.2){
             shooter.pass();
+
              if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();

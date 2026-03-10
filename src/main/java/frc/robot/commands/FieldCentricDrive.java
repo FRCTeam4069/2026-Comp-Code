@@ -51,7 +51,7 @@ public class FieldCentricDrive extends Command {
     private final double blueHubY = Units.inchesToMeters(158.85);
     private double deltaX = 0.0;
     private double deltaY = 0.0;
-    private double tolerance = 2.0;
+    private double tolerance = 0.75;
     double rotationalSpeed = 0.0;
     private final BooleanSupplier throughTrench;
     private final ThroughTrench controller;
@@ -115,7 +115,6 @@ public class FieldCentricDrive extends Command {
 
         @Override
         public void initialize() {
-            
             headingController.enableContinuousInput(-Math.PI, Math.PI);
             currentPosition= drive.getPose();
     
@@ -234,8 +233,6 @@ public class FieldCentricDrive extends Command {
 
         odometryError = encoderOnly.relativeTo(withVision);
         odometryErrorPublisher.set(odometryError);
-
-        
 
     }
 
