@@ -22,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedIn(){
-      intakeMotor.set((-0.85));
+      intakeMotor.set((-0.95));
   }
 
   public Command intakeOn(){

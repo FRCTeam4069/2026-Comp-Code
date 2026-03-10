@@ -144,14 +144,17 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.5)){
-                hopper.driveHopperIn();
+            if(shootReady = true && timer.hasElapsed(0.25)){
+            hopper.driveHopperIn();            
+            }
+
+            if(shootReady = true && timer.hasElapsed(0.3)){
                 feeder.driveFeederIn();
             }
 
         }
 
-         else if (feederManual.getAsBoolean()){
+        else if (feederManual.getAsBoolean()){
 
             feeder.driveFeederIn();
             hopper.driveHopperIn();
@@ -159,22 +162,47 @@ public class ShooterCommand extends Command{
 
         else if(closeShoot.getAsBoolean()){
             shooter.manualCloseShoot();
-        }
 
-        else if (trenchShoot.getAsBoolean()){
-            shooter.trenchShoot();
-        }
+            hopper.driveHopperIn();
 
-        else if (pass.getAsDouble() > 0.2){
-            shooter.pass();
 
              if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.75)){
-                hopper.driveHopperIn();
+            if(shootReady = true && timer.hasElapsed(0.3)){
+                feeder.driveFeederIn();
+            }
+        }
+
+        else if (trenchShoot.getAsBoolean()){
+            shooter.trenchShoot();
+
+            hopper.driveHopperIn();
+
+
+             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
+            }
+
+            if(shootReady = true && timer.hasElapsed(0.3)){
+                feeder.driveFeederIn();
+            }
+        }
+
+        else if (pass.getAsDouble() > 0.2){
+            shooter.pass();
+            hopper.driveHopperIn();
+
+
+             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
+            }
+
+            if(shootReady = true && timer.hasElapsed(0.3)){
                 feeder.driveFeederIn();
             }
         }

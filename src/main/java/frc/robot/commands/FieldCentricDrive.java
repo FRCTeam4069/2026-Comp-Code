@@ -53,10 +53,10 @@ public class FieldCentricDrive extends Command {
     private double deltaY = 0.0;
     private double tolerance = 0.75;
     double rotationalSpeed = 0.0;
-    private final BooleanSupplier throughTrench;
-    private final ThroughTrench controller;
-    private boolean trenchActive = false;
-    private ChassisSpeeds trenchSpeeds;
+    // private final BooleanSupplier throughTrench;
+    // private final ThroughTrench controller;
+    // private boolean trenchActive = false;
+    // private ChassisSpeeds trenchSpeeds;
     private ChassisSpeeds driveSpeeds;
     private BooleanSupplier lockHeading;
     private boolean lockHeadingActive = false;
@@ -95,7 +95,7 @@ public class FieldCentricDrive extends Command {
             DoubleSupplier turnSpeed, 
             BooleanSupplier autoAlign,
             BooleanSupplier resetOdometry,
-            BooleanSupplier throughTrench,
+            // BooleanSupplier throughTrench,
             BooleanSupplier lockHeading) {
     
             this.drive = drive;
@@ -104,10 +104,10 @@ public class FieldCentricDrive extends Command {
             this.strafeSpeed = strafeSpeed;
             this.autoAlign = autoAlign;
             this.resetOdometry = resetOdometry;
-            this.throughTrench = throughTrench;
+            // this.throughTrench = throughTrench;
             this.lockHeading = lockHeading;
     
-            this.controller = new ThroughTrench(drive);
+            // this.controller = new ThroughTrench(drive);
     
     
             addRequirements(drive);
@@ -136,21 +136,21 @@ public class FieldCentricDrive extends Command {
     
             currentPosition= drive.getPose();
            
-           if (throughTrench.getAsBoolean()){
+        //    if (throughTrench.getAsBoolean()){
     
-                if (!trenchActive) {
-                    controller.initialize();
-                    trenchActive = true;
-                }
+        //         if (!trenchActive) {
+        //             controller.initialize();
+        //             trenchActive = true;
+        //         }
 
-            trenchSpeeds = controller.getSpeeds();
-            trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
+        //     trenchSpeeds = controller.getSpeeds();
+        //     trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
 
-            }
+        //     }
 
-            else {
-                trenchActive = false;
-            }
+        //     else {
+        //         trenchActive = false;
+        //     }
     
             if (resetOdometry.getAsBoolean()){
                 drive.resetDrivePose(currentPosition);
@@ -205,13 +205,13 @@ public class FieldCentricDrive extends Command {
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
 
-            if(throughTrench.getAsBoolean()){
-            driveSpeeds = trenchSpeeds;     
-            }
+            // if(throughTrench.getAsBoolean()){
+            // driveSpeeds = trenchSpeeds;     
+            // }
 
-            else{
+            // else{
                 driveSpeeds = outputSpeeds;
-            }
+            // }
 
             if (alliance == Alliance.Blue) {
             
@@ -225,7 +225,7 @@ public class FieldCentricDrive extends Command {
             }
 
         //test for odometry fix
-        setPointPublisher.set(controller.setPoint);
+        // setPointPublisher.set(controller.setPoint);
 
         withVision = drive.poseEstimator.getEstimatedPosition();
         encoderOnly = drive.swerveOdometry.getPoseMeters();

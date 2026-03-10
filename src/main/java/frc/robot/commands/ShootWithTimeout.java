@@ -22,7 +22,7 @@ public class ShootWithTimeout extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private final double shootTime = 5.0; //FIXME
+    private final double shootTime = 8.0; 
 
     private final Timer timer = new Timer();
 
@@ -32,7 +32,7 @@ public class ShootWithTimeout extends Command{
     private Alliance alliance = Alliance.Blue;
 
 
-    private static final double RPMDiff = 50; //FIXME
+    private static final double RPMDiff = 200; 
 
     private  boolean shootReady;
 
@@ -85,6 +85,8 @@ public class ShootWithTimeout extends Command{
         // distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
         shooter.autoShoot();
+        hopper.driveHopperIn();
+
 
         if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
             shootReady = true;
@@ -99,14 +101,12 @@ public class ShootWithTimeout extends Command{
             shootReady = false;
         }
     
+        if(timer.hasElapsed(5)){
+                pivot.goUpper();
+        }
 
         if(shootReady ){
             feeder.driveFeederIn();
-            hopper.driveHopper(RPMDiff);
-
-            if(timer.hasElapsed(2.5)){
-                pivot.goUpper();
-            }
 
         }
         else{
@@ -124,6 +124,8 @@ public class ShootWithTimeout extends Command{
         feeder.stopFeeder();
         timer.stop();
         timer.reset();
+        shooter.hoodAway();
+
     }
 
     @Override

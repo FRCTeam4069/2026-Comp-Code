@@ -63,8 +63,9 @@ public class RobotContainer {
 
        autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
        autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
-       autoChooser.addOption("Test", new PathPlannerAuto("Test"));
-       autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
+       autoChooser.addOption ("HP Auto Blue ", new PathPlannerAuto("HP Auto Blue "));
+      //  autoChooser.addOption("Test", new PathPlannerAuto("Test"));
+      //  autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
 
        SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -126,7 +127,7 @@ public class RobotContainer {
                () -> -controller0.getRightX(), //rotation
                () -> controller0.getHID().getAButton(), //autoalign
                () -> controller0.getHID().getYButton(), //reset odometry
-               () -> controller0.getHID().getXButton(), // through trench
+               //() -> controller0.getHID().getXButton(), // through trench
                () -> controller0.getHID().getRightBumperButton()); //lock heading
    }
 

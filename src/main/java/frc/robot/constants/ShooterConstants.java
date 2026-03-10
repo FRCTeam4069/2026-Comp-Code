@@ -79,7 +79,6 @@ public class ShooterConstants {
             0.33,
             0.0
 
-            //FIXME tune PID and check FF
         );
 
 
@@ -91,7 +90,6 @@ public class ShooterConstants {
             0.33,//2857
             0.0
 
-            //FIXME tune PID and check FF
         );
     }
 
