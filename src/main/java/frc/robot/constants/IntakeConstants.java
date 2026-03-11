@@ -8,7 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class IntakeConstants {
 
 
-  public static final int intakeSmartCurrentLimit = 40;
+  public static final int intakeSmartCurrentLimit = 30;
 
   public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
 

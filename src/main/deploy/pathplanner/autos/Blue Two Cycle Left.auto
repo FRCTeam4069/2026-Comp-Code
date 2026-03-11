@@ -11,25 +11,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.6
+                  "waitTime": 2.1
                 }
               },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Blue 2 Cycle Left 1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeOn"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeDown"
                 }
               }
             ]
@@ -42,7 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 2.3
                 }
               },
               {
@@ -54,7 +42,76 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "intakeDown"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeOn"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.4
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "intakeOff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.37
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left 4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left Align"
                 }
               }
             ]
@@ -87,7 +144,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "drivetrain off"
+                              "name": "stop drivetrain"
                             }
                           }
                         ]
@@ -143,7 +200,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 3"
+                  "pathName": "Blue 2 Cycle Left 5"
                 }
               },
               {
@@ -168,13 +225,32 @@
               {
                 "type": "wait",
                 "data": {
+                  "waitTime": 2.7
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left 6"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
                   "waitTime": 2.75
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 4"
+                  "pathName": "Blue 2 Cycle Left 7"
                 }
               },
               {
@@ -187,9 +263,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.75
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left 8"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue 2 Cycle Left Align"
+                }
+              }
+            ]
           }
         },
         {
