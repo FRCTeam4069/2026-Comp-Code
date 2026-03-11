@@ -58,7 +58,6 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public void execute(){
-        feeder.driveFeederIn();
         // var result = DriverStation.getAlliance();
 
         // currentPositionX = shooter.getCurrentRobotPose().getX();
@@ -85,7 +84,6 @@ public class ShootWithTimeout extends Command{
         // distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
         shooter.autoShoot();
-        hopper.driveHopperIn();
 
 
         if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
@@ -107,12 +105,14 @@ public class ShootWithTimeout extends Command{
 
         if(shootReady ){
             feeder.driveFeederIn();
+            hopper.driveHopperIn();
+
+
 
         }
         else{
 
             feeder.stopFeeder();
-            hopper.stopHopper();
             timer.stop();
             timer.reset();
         }

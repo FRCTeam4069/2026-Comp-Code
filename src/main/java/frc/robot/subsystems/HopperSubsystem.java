@@ -28,20 +28,20 @@ public class HopperSubsystem extends SubsystemBase {
   }
 
   public void driveHopperOut(){
-      hopperMotor.setVoltage((7.2));
+      hopperMotor.setVoltage((-7.2));
   }
 
-  public void driveHopper(double hopperPower){
-      hopperMotor.set((hopperPower));
-  }
+//   public void driveHopper(double hopperPower){
+//       hopperMotor.set((hopperPower));
+//   }
 
   public void stopHopper(){
       hopperMotor.stopMotor();
   }
 
-  public void autoHopperIn(){
-    hopperMotor.setVoltage(0.0);
-  }
+//   public void autoHopperIn(){
+//     hopperMotor.setVoltage(0.0);
+//   }
 }
 
 

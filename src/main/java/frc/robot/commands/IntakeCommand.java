@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -11,8 +13,8 @@ public class IntakeCommand extends Command{
   private final PivotSubsystem pivot;
 
 
-  private final BooleanSupplier inSupplier;
-  private final BooleanSupplier outSupplier;
+  private final DoubleSupplier inSupplier;
+  private final DoubleSupplier outSupplier;
 
 
   private final BooleanSupplier up;
@@ -21,10 +23,10 @@ public class IntakeCommand extends Command{
    public IntakeCommand(
       IntakeSubsystem intake,
       PivotSubsystem pivot,
-      BooleanSupplier in, 
-      BooleanSupplier out,
+      DoubleSupplier in, 
+      DoubleSupplier out,
 
-       BooleanSupplier up, 
+      BooleanSupplier up, 
       BooleanSupplier down
       ){
 
@@ -44,10 +46,10 @@ public class IntakeCommand extends Command{
   @Override
   public void execute(){
 
-      if (inSupplier.getAsBoolean()){
-          intake.driveFeedIn();
+      if (inSupplier.getAsDouble() > 0.2){
+          intake.driveFeedInTele(inSupplier.getAsDouble());
       } 
-      else if (outSupplier.getAsBoolean()) {
+      else if (outSupplier.getAsDouble() > 0.2) {
           intake.driveFeedOut();
       } 
 

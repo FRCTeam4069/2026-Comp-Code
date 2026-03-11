@@ -176,16 +176,32 @@ public class FieldCentricDrive extends Command {
             desiredHeading = Math.atan(deltaY / deltaX);
             SmartDashboard.putNumber("desiredHeading", desiredHeading);
             desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
-            deltaXDoublePublisher.set(deltaX);
-            deltaYDoublePublisher.set(deltaY);
+           
+           
+            // deltaXDoublePublisher.set(deltaX);
+            //deltaYDoublePublisher.set(deltaY);
     
                 
             if (autoAlign.getAsBoolean()){
-                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
-    
-                if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
-                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+                
+                if(alliance == Alliance.Blue){
+                    rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+
+                    if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                        outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+
+                        }
+                    }
+                else {
+                    rotationalSpeed = headingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
+
+                    
+                    if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                        outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+
+                        }
                 }
+                
             }
     
             if(lockHeading.getAsBoolean()){

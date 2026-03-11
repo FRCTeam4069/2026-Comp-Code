@@ -20,9 +20,9 @@ public class ShooterCommand extends Command{
     private final HopperSubsystem hopper;
 
 
-    private final DoubleSupplier shoot;
-   private final DoubleSupplier pass;
-    private final BooleanSupplier reverse;
+    private final BooleanSupplier shoot;
+    private final BooleanSupplier pass;
+    private final BooleanSupplier reverseAll;
 
     private double distance = 0.0;
     private double currentPositionX = 0.0;
@@ -57,6 +57,7 @@ public class ShooterCommand extends Command{
     private final BooleanSupplier closeShoot;
 
 
+
    
     public ShooterCommand(
 
@@ -64,9 +65,9 @@ public class ShooterCommand extends Command{
         FeederSubsystem feeder,
         HopperSubsystem hopper,
         
-        DoubleSupplier shoot,
-        DoubleSupplier pass,
-        BooleanSupplier reverse,
+        BooleanSupplier shoot,
+        BooleanSupplier pass,
+        BooleanSupplier reverseAll,
         BooleanSupplier feederManual,
 
         BooleanSupplier trenchShoot,
@@ -87,7 +88,7 @@ public class ShooterCommand extends Command{
 
         this.shoot = shoot;
         this.pass = pass;
-        this.reverse = reverse;
+        this.reverseAll = reverseAll;
         this.feederManual = feederManual;
 
         this.trenchShoot= trenchShoot;
@@ -119,7 +120,7 @@ public class ShooterCommand extends Command{
         }
 
 
-        if (shoot.getAsDouble() > 0.2){
+        if (shoot.getAsBoolean()){
 
             if(alliance == Alliance.Blue){
 
@@ -160,6 +161,11 @@ public class ShooterCommand extends Command{
             hopper.driveHopperIn();
         }
 
+        else if (reverseAll.getAsBoolean()){
+            feeder.driveFeederOut();
+            hopper.driveHopperOut();
+        }
+ 
         else if(closeShoot.getAsBoolean()){
             shooter.manualCloseShoot();
 
@@ -192,7 +198,7 @@ public class ShooterCommand extends Command{
             }
         }
 
-        else if (pass.getAsDouble() > 0.2){
+        else if (pass.getAsBoolean()){
             shooter.pass();
             hopper.driveHopperIn();
 
@@ -207,11 +213,7 @@ public class ShooterCommand extends Command{
             }
         }
 
-        else if(reverse.getAsBoolean()){
-            hopper.driveHopperOut();
-            feeder.driveFeederOut();
-        }
-
+      
         else{
             shooter.stop();
             feeder.stopFeeder();

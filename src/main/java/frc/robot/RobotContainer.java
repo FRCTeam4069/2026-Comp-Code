@@ -44,6 +44,7 @@ public class RobotContainer {
 
 
     private final SendableChooser<Command> autoChooser;
+    //= new SendableChooser<>();
 
        // addSysIdCommands()
 
@@ -61,19 +62,21 @@ public class RobotContainer {
 
        // addSysIdCommands()
 
-       autoChooser.addOption("Blue 2 Cycle Left ", new PathPlannerAuto("Blue 2 Cycle Left"));
-       autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
-       autoChooser.addOption ("HP Auto Blue ", new PathPlannerAuto("HP Auto Blue "));
+      autoChooser.addOption("Blue Two Cycle Left ", new PathPlannerAuto("Blue Two Cycle Left"));
+      autoChooser.addOption ("Red Two Cycle Left ", new PathPlannerAuto("Red Two Cycle Left"));
+
+       //autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+      autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
+      autoChooser.addOption ("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
+
       //  autoChooser.addOption("Test", new PathPlannerAuto("Test"));
       //  autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
+
 
        SmartDashboard.putData("Auto Chooser", autoChooser);
 
        configureBindings();
 
-     //SmartDashboard.putData("Auto Chooser", autoChooser);
-
-   configureBindings();
  }
 
  /**
@@ -104,6 +107,8 @@ public class RobotContainer {
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
       NamedCommands.registerCommand("autoRamp", shooter.autoRampCommand());
+      NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
+
 
       
    }
@@ -135,27 +140,24 @@ public class RobotContainer {
       return new IntakeCommand(
               intake,
               pivot,
-              () -> controller1.getHID().getAButton(), // In
-              () -> controller1.getHID().getBButton(),  // out //B for everything out
-              () -> controller1.getHID().getPOV() == 0,    // D-pad up
-              () -> controller1.getHID().getPOV() == 180  // OUT
+              () -> controller1.getHID().getRightTriggerAxis(), // In
+              () -> controller1.getHID().getLeftTriggerAxis(),  // out //B for everything out
+              () -> controller1.getHID().getPOV() == 180,    // down
+              () -> controller1.getHID().getPOV() == 0  // up
       );
   }
-
-  
- 
   
   public Command defaultShooterCommand() { 
       return new ShooterCommand(
               shooter,
               feeder,
               hopper,
-              () -> controller1.getHID().getRightTriggerAxis(), // shoot 
-              () -> controller1.getHID().getLeftTriggerAxis(),//pass
-              () -> controller1.getHID().getBButton(), //reverse
-              () -> controller1.getHID().getXButton(),// feeder manual
-              () -> controller1.getHID().getRightBumperButton(), //manual trench shoot
-              () -> controller1.getHID().getLeftBumperButton() // manual close shoot
+              () -> controller1.getHID().getAButton(), // shoot 
+              () -> controller1.getHID().getYButton(),//pass
+              () -> controller1.getHID().getLeftBumperButton(),// feeder out
+              () -> controller1.getHID().getRightBumperButton(), //feeder manual
+              () -> controller1.getHID().getXButton(), // manual trench shoot
+              () -> controller1.getHID().getBButton()// manual close shoot
       );
 
    }
