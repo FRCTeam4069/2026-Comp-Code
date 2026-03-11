@@ -43,8 +43,7 @@ public class RobotContainer {
 
 
 
-    private final SendableChooser<Command> autoChooser;
-    //= new SendableChooser<>();
+    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
        // addSysIdCommands()
 
@@ -58,7 +57,7 @@ public class RobotContainer {
       // Configure the trigger bindings
 
 
-     autoChooser = AutoBuilder.buildAutoChooser();
+     //autoChooser = AutoBuilder.buildAutoChooser();
 
        // addSysIdCommands()
 

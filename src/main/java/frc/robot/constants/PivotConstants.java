@@ -15,7 +15,7 @@ public final class PivotConstants {
   public static double kI = 0;
   public static double kD = 0;
 
-  public static final int pivotSmartCurrentLimit = 40;
+  public static final int pivotSmartCurrentLimit = 20;
 
   public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
 
