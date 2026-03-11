@@ -171,6 +171,12 @@
                 "data": {
                   "pathName": "HP Auto Red 4"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeOn"
+                }
               }
             ]
           }
@@ -195,12 +201,6 @@
                 "type": "named",
                 "data": {
                   "name": "intakeDown"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeOn"
                 }
               }
             ]
