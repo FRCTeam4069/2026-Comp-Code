@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 1"
+                  "pathName": "Red 2 Cycle Left 1"
                 }
               }
             ]
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 2"
+                  "pathName": "Red 2 Cycle Left 2"
                 }
               },
               {
@@ -67,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 3"
+                  "pathName": "Red 2 Cycle Left 3"
                 }
               },
               {
@@ -92,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 4"
+                  "pathName": "Red 2 Cycle Left 4"
                 }
               }
             ]
@@ -111,7 +111,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left Align"
+                  "pathName": "Red 2 Cycle Left Align"
                 }
               }
             ]
@@ -200,7 +200,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 5"
+                  "pathName": "Red 2 Cycle Left 5"
                 }
               },
               {
@@ -231,7 +231,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 6"
+                  "pathName": "Red 2 Cycle Left 6"
                 }
               }
             ]
@@ -250,7 +250,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 7"
+                  "pathName": "Red 2 Cycle Left 7"
                 }
               },
               {
@@ -275,7 +275,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left 8"
+                  "pathName": "Red 2 Cycle Left 8"
                 }
               }
             ]
@@ -294,7 +294,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left Align"
+                  "pathName": "Red 2 Cycle Left Align"
                 }
               }
             ]
