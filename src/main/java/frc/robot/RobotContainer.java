@@ -139,8 +139,8 @@ public class RobotContainer {
       return new IntakeCommand(
               intake,
               pivot,
-              () -> controller1.getHID().getRightTriggerAxis(), // In
-              () -> controller1.getHID().getLeftTriggerAxis(),  // out //B for everything out
+              () -> controller0.getHID().getRightTriggerAxis(), // In //ON DRIVE 1
+              () -> controller0.getHID().getLeftTriggerAxis(),  // out //B for everything out //ON DRIVEr 1
               () -> controller1.getHID().getPOV() == 180,    // down
               () -> controller1.getHID().getPOV() == 0  // up
       );
