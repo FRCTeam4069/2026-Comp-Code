@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Red Middle 1"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shoot middle"
           }
         }
       ]

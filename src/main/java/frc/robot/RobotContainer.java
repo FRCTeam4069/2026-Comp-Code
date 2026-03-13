@@ -20,6 +20,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
+import frc.robot.commands.ShootWithTimeoutMiddle;
 
 
 public class RobotContainer {
@@ -41,6 +42,10 @@ public class RobotContainer {
 
     public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
+   public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder, hopper, pivot);
+
+
+    private String autoName;
 
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -54,6 +59,8 @@ public class RobotContainer {
  public RobotContainer() {
 
       registerAutoCommands();
+
+      autoName = "";
       // Configure the trigger bindings
 
 
@@ -67,6 +74,16 @@ public class RobotContainer {
        //autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
       autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
       autoChooser.addOption ("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
+
+      autoChooser.addOption ("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
+      autoChooser.addOption ("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
+
+      autoChooser.addOption ("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
+      autoChooser.addOption ("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+
+
+
+
 
       //  autoChooser.addOption("Test", new PathPlannerAuto("Test"));
       //  autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
@@ -108,6 +125,9 @@ public class RobotContainer {
       NamedCommands.registerCommand("autoRamp", shooter.autoRampCommand());
       NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
 
+      NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
+
+
 
       
    }
@@ -120,9 +140,16 @@ public class RobotContainer {
   */
  public Command getAutonomousCommand() {
      //An example command will be run in autonomous
-     return autoChooser.getSelected();
-  
+     Command selectedCommand = autoChooser.getSelected();
+     if (selectedCommand != null)
+      autoName = selectedCommand.getName();
+     return selectedCommand;  
  }
+
+ public String getAutonomousName(){
+   return autoName;
+ }
+
     public Command defaultDriveCommand() {
        return new FieldCentricDrive(
                drive,
@@ -132,6 +159,7 @@ public class RobotContainer {
                () -> controller0.getHID().getAButton(), //autoalign
                () -> controller0.getHID().getYButton(), //reset odometry
                //() -> controller0.getHID().getXButton(), // through trench
+               () -> controller0.getHID().getLeftBumperButton(),//lock closest
                () -> controller0.getHID().getRightBumperButton()); //lock heading
    }
 

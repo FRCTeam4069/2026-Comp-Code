@@ -128,6 +128,12 @@ public class ShooterController extends SubsystemBase {
         targetDeg = 4;
     }
 
+    public void autoShootMiddle(){
+        targetRPMOne = 3100;
+        targetRPMTwo = 3100;
+        targetDeg = 0;
+    }
+
     // public void runShooter(){
     //     // shooterOneMotorOne.setVoltage(7);        
     //     shooterOneMotorTwo.setVoltage(7);

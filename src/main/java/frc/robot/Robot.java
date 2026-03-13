@@ -50,6 +50,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // SmartDashboard.putString("Auto Selected", m_robotContainer.getAutonomousName());
   
     CommandScheduler.getInstance().run();
 
@@ -68,7 +71,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    SmartDashboard.putString("Auto Selected", m_robotContainer.getAutonomousName());
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -85,7 +91,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+
+    //SmartDashboard.putString("Auto Selected", m_robotContainer.getAutonomousName());
+  }
 
   @Override
   public void teleopInit() {
@@ -96,7 +105,7 @@ public class Robot extends TimedRobot {
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
+    // continue untilsinterrupted by another command, remove
     // this line or comment it out.
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.cancel();

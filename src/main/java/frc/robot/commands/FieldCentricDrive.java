@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.time.LocalDate;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -61,6 +62,9 @@ public class FieldCentricDrive extends Command {
     private BooleanSupplier lockHeading;
     private boolean lockHeadingActive = false;
     private double lockHeadingTarget = 0.0;
+    private BooleanSupplier lockClosest;
+    private boolean lockClosestActive = false;
+    private double lockClosestTarget;
     
         private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
             .getDoubleTopic("desiredHeading").publish();
@@ -95,8 +99,10 @@ public class FieldCentricDrive extends Command {
             DoubleSupplier turnSpeed, 
             BooleanSupplier autoAlign,
             BooleanSupplier resetOdometry,
+            BooleanSupplier lockClosest,
             // BooleanSupplier throughTrench,
-            BooleanSupplier lockHeading) {
+            BooleanSupplier lockHeading
+            ) {
     
             this.drive = drive;
             this.turnSpeed = turnSpeed;
@@ -104,6 +110,7 @@ public class FieldCentricDrive extends Command {
             this.strafeSpeed = strafeSpeed;
             this.autoAlign = autoAlign;
             this.resetOdometry = resetOdometry;
+            this.lockClosest = lockClosest;            
             // this.throughTrench = throughTrench;
             this.lockHeading = lockHeading;
     
@@ -204,7 +211,7 @@ public class FieldCentricDrive extends Command {
                 
             }
     
-            if(lockHeading.getAsBoolean()){
+            if(lockHeading.getAsBoolean() && !lockClosestActive){
     
                 if(!lockHeadingActive){
                     lockHeadingTarget = drive.getRotation2d().getRadians();
@@ -218,6 +225,29 @@ public class FieldCentricDrive extends Command {
             else{
                 lockHeadingActive = false;
             }
+
+            if (lockClosest.getAsBoolean() && !lockHeadingActive){
+                if(!lockClosestActive){
+                    lockClosestTarget = drive.getRotation2d().getDegrees();
+
+                    if (lockClosestTarget >90 || lockClosestTarget <-90) {
+                        lockClosestTarget = Math.toRadians(180);
+                    }
+                    else {
+                        lockClosestTarget = Math.toRadians(0);
+                    }
+                    
+                    lockClosestActive = true;
+                }
+
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            }  
+            
+            else{
+                lockClosestActive = false;
+            }
+            
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
 

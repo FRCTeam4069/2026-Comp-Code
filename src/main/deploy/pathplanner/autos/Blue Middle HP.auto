@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootWithTimeout"
+            "name": "shoot"
           }
         },
         {
@@ -76,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootWithTimeout"
+            "name": "shoot"
           }
         }
       ]
