@@ -56,6 +56,8 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putNumber("voltage", PowerDistribution.getVoltage());
     //SmartDashboard.putNumber("current", pdh.getTotalCurrent());
     SmartDashboard.putNumber("match timer", DriverStation.getMatchTime());
+
+      currentPosition= m_robotContainer.drive.getPose();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

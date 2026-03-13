@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class HoodConstants {
 
-    public static final int hoodSmartCurrentLimit = 40; 
+    public static final int hoodSmartCurrentLimit = 30; 
 
     public static final double PASS = 17;
 

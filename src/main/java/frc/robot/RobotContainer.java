@@ -141,8 +141,11 @@ public class RobotContainer {
               pivot,
               () -> controller0.getHID().getRightTriggerAxis(), // In //ON DRIVE 1
               () -> controller0.getHID().getLeftTriggerAxis(),  // out //B for everything out //ON DRIVEr 1
+              () -> controller1.getHID().getRightTriggerAxis(),
+              () -> controller1.getHID().getLeftTriggerAxis(),
               () -> controller1.getHID().getPOV() == 180,    // down
               () -> controller1.getHID().getPOV() == 0  // up
+            
       );
   }
   

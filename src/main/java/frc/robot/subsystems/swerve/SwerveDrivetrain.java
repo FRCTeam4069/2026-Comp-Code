@@ -286,6 +286,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public Pose2d getPose() {
         // var pose = poseEstimator.getPoseMeters();
+
+        visionPosePublisher.set(poseEstimator.getEstimatedPosition());
         var pose = poseEstimator.getEstimatedPosition();
         return pose;
     }

@@ -10,7 +10,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class PivotConstants {
 
   public static final double UPPER_POSITION = -3;
-  public static final double LOWER_POSITION = -37;
+  public static final double LOWER_POSITION = -53.5;
   public static double kP = 0;
   public static double kI = 0;
   public static double kD = 0;
@@ -28,8 +28,8 @@ public final class PivotConstants {
           .closedLoopRampRate(0.0);
 
           pivotConfig.softLimit
-          .forwardSoftLimit(-2.0)
-          .reverseSoftLimit(-38)//PivotConstants.UPPER_POSITION
+          .forwardSoftLimit(-2.5)
+          .reverseSoftLimit(-54)//PivotConstants.UPPER_POSITION
           .forwardSoftLimitEnabled(true)
           .reverseSoftLimitEnabled(true);
 
@@ -42,8 +42,8 @@ public final class PivotConstants {
       
     }
 
-  public static PIDCoefficients upCoefficients = new PIDCoefficients(0.0625, 0.0, 0.001);
-  public static PIDCoefficients downCoefficients = new PIDCoefficients(0.0625, 0.0, 0.001);
+  public static PIDCoefficients upCoefficients = new PIDCoefficients(0.03, 0.0, 0.00);
+  public static PIDCoefficients downCoefficients = new PIDCoefficients(0.03, 0.0, 0.00);
 
  }
 

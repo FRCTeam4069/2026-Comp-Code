@@ -21,7 +21,8 @@ public class PivotSubsystem extends SubsystemBase {
 
     public enum positions{
       UPPER,
-      LOWER
+      LOWER,
+      NEUTRAL
     }
 
     positions p = positions.UPPER;
@@ -35,7 +36,7 @@ public class PivotSubsystem extends SubsystemBase {
         PIDController upController;
         PIDController downController;
     
-        private static final double pivotTolerance = 1.;
+        private static final double pivotTolerance = 1.0;
     
         private double error;
     
@@ -67,7 +68,9 @@ public class PivotSubsystem extends SubsystemBase {
       }
     
       public void goUpper() {
-        p = positions.UPPER;
+        if (Math.abs(getPivotEncoder() - getPositionValue()) < 1) {
+          p = positions.UPPER;
+        } 
       }
     
       public void goLower() {
@@ -79,46 +82,59 @@ public class PivotSubsystem extends SubsystemBase {
       }
     
       public Command intakeDown(){ //ANNIE LOOK AT THIS AND TELL ME IF IT WORKS
-        goLower();
-        return run(()-> goLower());
+        return runOnce(()-> goLower());
       }
     
       public Command intakeUp(){
-        goUpper();
-        return run(()->goUpper());
-    
+        return runOnce(()->goUpper());
       }
     
       public double getPositionValue(){
           return p == positions.LOWER ? LOWER_POS : UPPER_POS;
       }
+
+      public positions getDesiredPosition(){
+        return p;
+      }
     
       public void periodic() {
           SmartDashboard.putNumber("PivotPosition", getPivotEncoder());
-    
-          error = getPivotEncoder() - getPositionValue();
-          SmartDashboard.putNumber("pivot error", error);
-    
-           if( Math.abs(error) < pivotTolerance){
+
+          if (p == positions.NEUTRAL) {
             stopPivot();
           }
-    
-          else{
-          if (getPosition() == positions.UPPER) {
-    
-            pidOutput = (upController.calculate(getPivotEncoder(), UPPER_POS));
-            power = MathUtil.clamp(pidOutput, 0., 0.3);
 
-      } 
+
+          else {
+            error = getPivotEncoder() - getPositionValue();
+            SmartDashboard.putNumber("pivot error", error);
+            SmartDashboard.putNumber("pivot current", pivotMotor.getOutputCurrent());
+
       
-      else if (getPosition()== positions.LOWER) {
-        pidOutput = downController.calculate(getPivotEncoder(), LOWER_POS);
-        power =MathUtil.clamp(pidOutput, -0.7, 0);
-      }  
-    }
+            if( Math.abs(error) < pivotTolerance){
+              stopPivot();
+            }
+      
+            else{
+              if (getPosition() == positions.UPPER) {
+      
+                pidOutput = (upController.calculate(getPivotEncoder(), UPPER_POS));
+                power = MathUtil.clamp(pidOutput, 0., 0.5);
+                
+                if (pivotMotor.getOutputCurrent() > 10 && getPivotEncoder() > -17) {
+                  p = positions.NEUTRAL;
+                }
 
-        
-        pivotMotor.set(power);
+              } 
+              else if (getPosition()== positions.LOWER) {
+                pidOutput = downController.calculate(getPivotEncoder(), LOWER_POS);
+                power =MathUtil.clamp(pidOutput, -0.5, 0);
+              }  
+
+              pivotMotor.set(power);
+            }
+          }
+
      }
 
   public Command setPosition(positions po){
