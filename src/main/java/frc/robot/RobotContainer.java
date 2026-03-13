@@ -1,5 +1,6 @@
 
 package frc.robot;
+import frc.robot.commands.AutoAlignAutoCommand;
 import frc.robot.commands.FieldCentricDrive;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -43,6 +44,9 @@ public class RobotContainer {
     public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
    public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder, hopper, pivot);
+
+   public static final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
+
 
 
     private String autoName;
@@ -127,6 +131,9 @@ public class RobotContainer {
 
       NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
 
+      NamedCommands.registerCommand("auto align", autoAlignAutoCommand);
+
+
 
 
       
@@ -171,8 +178,8 @@ public class RobotContainer {
               () -> controller0.getHID().getLeftTriggerAxis(),  // out //B for everything out //ON DRIVEr 1
               () -> controller1.getHID().getRightTriggerAxis(),
               () -> controller1.getHID().getLeftTriggerAxis(),
-              () -> controller1.getHID().getPOV() == 180,    // down
-              () -> controller1.getHID().getPOV() == 0  // up
+              () -> controller1.getHID().getPOV() == 180,    // up
+              () -> controller1.getHID().getPOV() == 0  // down
             
       );
   }

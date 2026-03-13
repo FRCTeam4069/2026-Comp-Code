@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedOut(){
-      intakeMotor.set((0.85));
+      intakeMotor.set((1));
   }
 
   public void stopFeed(){

@@ -68,7 +68,7 @@ public class PivotSubsystem extends SubsystemBase {
       }
     
       public void goUpper() {
-        if (Math.abs(getPivotEncoder() - getPositionValue()) < 1) {
+        if ((getPivotEncoder() - getPositionValue()) < 15) {
           p = positions.UPPER;
         } 
       }

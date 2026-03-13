@@ -146,7 +146,7 @@ public class ShooterCommand extends Command{
             }
 
             if(shootReady = true && timer.hasElapsed(0.25)){
-            hopper.driveHopperIn();            
+                hopper.driveHopperIn();            
             }
 
             if(shootReady = true && timer.hasElapsed(0.3)){
@@ -169,8 +169,6 @@ public class ShooterCommand extends Command{
         else if(closeShoot.getAsBoolean()){
             shooter.manualCloseShoot();
 
-            hopper.driveHopperIn();
-
 
              if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
@@ -179,14 +177,14 @@ public class ShooterCommand extends Command{
 
             if(shootReady = true && timer.hasElapsed(0.3)){
                 feeder.driveFeederIn();
+                hopper.driveHopperIn();
+
             }
         }
 
         else if (trenchShoot.getAsBoolean()){
             shooter.trenchShoot();
 
-            hopper.driveHopperIn();
-
 
              if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
@@ -195,12 +193,13 @@ public class ShooterCommand extends Command{
 
             if(shootReady = true && timer.hasElapsed(0.3)){
                 feeder.driveFeederIn();
+                hopper.driveHopperIn();
+
             }
         }
 
         else if (pass.getAsBoolean()){
             shooter.pass();
-            hopper.driveHopperIn();
 
 
              if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
@@ -210,6 +209,8 @@ public class ShooterCommand extends Command{
 
             if(shootReady = true && timer.hasElapsed(0.3)){
                 feeder.driveFeederIn();
+                hopper.driveHopperIn();
+
             }
         }
 

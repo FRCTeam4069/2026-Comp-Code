@@ -136,7 +136,7 @@ public class DrivetrainConstants {
 
 
     // used in swerve drivetrain
-    public static final PIDConstants translationPIDConstants = new PIDConstants(1.0, 0.0, 0.0);
+    public static final PIDConstants translationPIDConstants = new PIDConstants(1.4, 0.0, 0.0);
     public static final PIDConstants rotationPIDConstants = new PIDConstants(0.1, 0.0, 0.0);
 
     public static double yScalar = 0.93;

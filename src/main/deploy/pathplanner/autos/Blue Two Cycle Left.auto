@@ -99,7 +99,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -109,9 +109,9 @@
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Blue 2 Cycle Left Align"
+                  "name": "auto align"
                 }
               }
             ]

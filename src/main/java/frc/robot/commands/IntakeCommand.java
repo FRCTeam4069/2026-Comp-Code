@@ -66,9 +66,9 @@ public class IntakeCommand extends Command{
       else if (inSupplier.getAsDouble() > 0.2){
           intake.driveFeedInTele(inSupplier.getAsDouble());
       } 
-      else if (outSupplier.getAsDouble() > 0.2) {
-          intake.driveFeedOut();
-      } 
+      // else if (outSupplier.getAsDouble() > 0.2) {
+      //     intake.driveFeedOut();
+      // } 
 
       else if (inSupplier2.getAsDouble() > 0.2){
         intake.driveFeedIn();
