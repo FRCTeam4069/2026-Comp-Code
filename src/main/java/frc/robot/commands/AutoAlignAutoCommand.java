@@ -48,7 +48,7 @@ public class AutoAlignAutoCommand extends Command {
   
     private double deltaX = 0.0;
     private double deltaY = 0.0;
-    private double tolerance = 1;
+    private double tolerance = 0.5;
     double rotationalSpeed = 0.0;
    
     private ChassisSpeeds driveSpeeds;

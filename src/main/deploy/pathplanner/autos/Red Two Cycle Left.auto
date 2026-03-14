@@ -99,183 +99,19 @@
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.25
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "auto align"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 4.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stop drivetrain"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeUp"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeOn"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "stop drivetrain"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.7
+                  "waitTime": 2.37
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Red 2 Cycle Left 5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeOn"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeDown"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.7
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Red 2 Cycle Left 6"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.75
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Red 2 Cycle Left 7"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeOff"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.75
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Red 2 Cycle Left 8"
+                  "pathName": "Red 2 Cycle Left 4.5"
                 }
               }
             ]
@@ -288,7 +124,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.5
+                  "waitTime": 1.0
                 }
               },
               {

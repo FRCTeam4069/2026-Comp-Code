@@ -183,19 +183,19 @@ public class ShooterCommand extends Command{
         }
 
         else if (trenchShoot.getAsBoolean()){
-            shooter.trenchShoot();
+            //shooter.trenchShoot();
+            shooter.manualCloseShoot();
 
+            //  if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+            //    shootReady = true;
+            //    timer.start();
+            // }
 
-             if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
-            }
+            // if(shootReady = true && timer.hasElapsed(0.3)){
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
-
-            }
+            // }
         }
 
         else if (pass.getAsBoolean()){

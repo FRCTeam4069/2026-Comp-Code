@@ -123,9 +123,9 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void autoShoot(){
-        targetRPMOne = 3500;
-        targetRPMTwo = 3500;
-        targetDeg = 4;
+        targetRPMOne = 3350;
+        targetRPMTwo = 3350;
+        targetDeg = 0;
     }
 
     public void autoShootMiddle(){
