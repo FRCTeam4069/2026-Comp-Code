@@ -86,7 +86,7 @@ public class ShootWithTimeoutMiddle extends Command{
         shooter.autoShootMiddle();
 
 
-        if ((Math.abs(shooter.targetRPMOne -shooter.currentRPMOne) <= RPMDiff) && shooter.hoodInPosition() ) { 
+        if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff) && shooter.hoodInPosition() ) { 
             shootReady = true;
 
             if (!timer.isRunning()){

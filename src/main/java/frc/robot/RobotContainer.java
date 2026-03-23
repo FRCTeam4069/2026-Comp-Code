@@ -165,7 +165,6 @@ public class RobotContainer {
                () -> -controller0.getRightX(), //rotation
                () -> controller0.getHID().getAButton(), //autoalign
                () -> controller0.getHID().getYButton(), //reset odometry
-               //() -> controller0.getHID().getXButton(), // through trench
                () -> controller0.getHID().getLeftBumperButton(),//lock closest
                () -> controller0.getHID().getRightBumperButton()); //lock heading
    }

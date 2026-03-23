@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.subsystems.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
@@ -77,6 +76,9 @@ public class FieldCentricDrive extends Command {
     
         private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
             .getStructTopic("odometryError", Pose2d.struct).publish();
+
+        private DoublePublisher desiredModuleState = NetworkTableInstance.getDefault()
+            .getDoubleTopic("desiredModuleStateTest").publish();
     
     
     
@@ -181,7 +183,9 @@ public class FieldCentricDrive extends Command {
             }
     
             desiredHeading = Math.atan(deltaY / deltaX);
+
             SmartDashboard.putNumber("desiredHeading", desiredHeading);
+
             desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
            
            
@@ -230,12 +234,20 @@ public class FieldCentricDrive extends Command {
                 if(!lockClosestActive){
                     lockClosestTarget = drive.getRotation2d().getDegrees();
 
-                    if (lockClosestTarget >90 || lockClosestTarget <-90) {
-                        lockClosestTarget = Math.toRadians(180);
-                    }
-                    else {
-                        lockClosestTarget = Math.toRadians(0);
-                    }
+
+                    lockClosestTarget = Math.toRadians(90); // keep for test
+
+
+                    // if (lockClosestTarget >90 || lockClosestTarget <-90) {
+                    //     lockClosestTarget = Math.toRadians(180);
+                    //     desiredModuleState.set(Math.toRadians(180));
+
+                    // }
+                    // else {
+                    //     lockClosestTarget = Math.toRadians(0);
+                    //     desiredModuleState.set(Math.toRadians(0));
+
+                    // }
                     
                     lockClosestActive = true;
                 }

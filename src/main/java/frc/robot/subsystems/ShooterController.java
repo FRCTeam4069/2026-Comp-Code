@@ -2,15 +2,17 @@ package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +22,31 @@ import frc.robot.constants.ShooterConstants;
 
 
 public class ShooterController extends SubsystemBase {
+
+        private DoublePublisher ShooterOneTopRPM = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterOneTopRPM").publish();
+
+        private DoublePublisher ShooterOneBottomRPM = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterOneBottomRPM").publish();
+
+        private DoublePublisher ShooterTwoTopRPM = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterTwoTopRPM").publish();
+        
+        private DoublePublisher ShooterTwoBottomRPM = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterTwoBottomRPM").publish();
+
+            private DoublePublisher ShooterOneTopVoltage = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterOneTopVoltage").publish();
+
+        private DoublePublisher ShooterOneBottomVoltage = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterOneBottomVoltage").publish();
+
+        private DoublePublisher ShooterTwoTopVoltage = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterTwoTopVoltage").publish();
+        
+        private DoublePublisher ShooterTwoBottomVoltage = NetworkTableInstance.getDefault()
+            .getDoubleTopic("ShooterTwoBottomVoltage").publish();
+        
     SparkFlex shooterOneMotorOne, shooterOneMotorTwo, shooterTwoMotorOne, shooterTwoMotorTwo;
     SparkMax hoodArticulate;
 
@@ -35,44 +62,36 @@ public class ShooterController extends SubsystemBase {
     HoodConstants.hoodCoefficients.kI(),
     HoodConstants.hoodCoefficients.kD());
 
-    public double targetRPMOne = 0.0;
-    public double currentRPMOne = 0.0;
+    public double targetRPM = 0.0;
+    public double currentRPM = 0.0;
     public double autoRPM = 4000.0; 
 
-    public  double targetRPMTwo = 0.0;
-    public double currentRPMTwo = 0.0;
-
     public double MetersPerSecondOne = 0.0;
-    public double MetersPerSecondTwo = 0.0;
 
     public double passRPM = 3500.0; //FIXME
 
-    double pidOutOne = 0.0;
-    double ffOutOne = 0.0;
-    double voltsOne = 0.0;
+    double pidOut = 0.0;
+    
+    
+    double volts = 0.0;
 
-    double pidOutTwo = 0.0;
-    double ffOutTwo = 0.0;
-    double voltsTwo = 0.0;
+    double RPMDiff = 0.0;
 
     private boolean inPosition = false;
 
     private Pose2d currentRobotPose;
 
-    PIDController shooterPIDOne = new PIDController( 
-        ShooterConstants.shooterCoefficientsOne.kP(),
-        ShooterConstants.shooterCoefficientsOne.kI(), 
-        ShooterConstants.shooterCoefficientsOne.kD());
+    
 
-     PIDController shooterPIDTwo = new PIDController( 
-        ShooterConstants.shooterCoefficientsTwo.kP(),
-        ShooterConstants.shooterCoefficientsTwo.kI(), 
-        ShooterConstants.shooterCoefficientsTwo.kD());
+    SparkClosedLoopController shooterOneTopPID;
+    SparkClosedLoopController shooterOneBottomPID;
+    
+    SparkClosedLoopController shooterTwoTopPID;
+    SparkClosedLoopController shooterTwoBottomPID;
 
-    SimpleMotorFeedforward shooterFFOne = new SimpleMotorFeedforward(0, ShooterConstants.shooterCoefficientsOne.kV(),ShooterConstants.shooterCoefficientsOne.kA()); 
 
-    SimpleMotorFeedforward shooterFFTwo = new SimpleMotorFeedforward(0, ShooterConstants.shooterCoefficientsTwo.kV(),ShooterConstants.shooterCoefficientsTwo.kA()); 
 
+    //SimpleMotorFeedforward shooterFFOne = new SimpleMotorFeedforward(0, ShooterConstants.shooterCoefficientsOne.kV(),ShooterConstants.shooterCoefficientsOne.kA()); 
 
 
     public ShooterController(){
@@ -82,6 +101,10 @@ public class ShooterController extends SubsystemBase {
         shooterTwoMotorOne = new SparkFlex(DeviceIDs.SHOOTER_TWO_MOTOR_ONE, MotorType.kBrushless);
         shooterTwoMotorTwo = new SparkFlex(DeviceIDs.SHOOTER_TWO_MOTOR_TWO, MotorType.kBrushless);
 
+        shooterOneTopPID = shooterOneMotorOne.getClosedLoopController();
+        shooterOneBottomPID = shooterOneMotorTwo.getClosedLoopController();
+        shooterTwoTopPID = shooterTwoMotorOne.getClosedLoopController();
+        shooterTwoBottomPID = shooterTwoMotorTwo.getClosedLoopController();
 
         shooterOneMotorOne.configure(ShooterConstants.shooterOneMotorOneConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         shooterOneMotorTwo.configure(ShooterConstants.shooterOneMotorTwoConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -100,37 +123,31 @@ public class ShooterController extends SubsystemBase {
 
     public void stop(){
 
-        targetRPMOne = 0;
-        targetRPMTwo = 0;
-
+        targetRPM = 0;
     }
 
     public void trenchShoot(){
-        targetRPMOne = 3500;
-        targetRPMTwo = 3500 ;
+        targetRPM = 3500;
 
-        targetDeg = 4;
+        //targetDeg = 4;
 
     }
 
     public void manualCloseShoot(){
 
-        targetRPMOne = 2800;
-        targetRPMTwo = 2800 ;
+        targetRPM = 2800;
 
         targetDeg = 0;
 
     }
 
     public void autoShoot(){
-        targetRPMOne = 3350;
-        targetRPMTwo = 3350;
+        targetRPM = 3350;
         targetDeg = 0;
     }
 
     public void autoShootMiddle(){
-        targetRPMOne = 3100;
-        targetRPMTwo = 3100;
+        targetRPM = 3100;
         targetDeg = 0;
     }
 
@@ -146,19 +163,16 @@ public class ShooterController extends SubsystemBase {
 
     public void shoot(double distance){
 
-        if(distance > maxDistance){
-            targetRPMOne = 0;
-            targetRPMTwo = 0;
-        }
+        // if(distance > maxDistance){
+        //     targetRPM = 0;
+        // }
 
-        else{
-        targetRPMOne = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
-         - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
-
-         targetRPMTwo = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
-         - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
-
-        }
+        // else{ //FIXME
+        // targetRPM = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
+        //  - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
+        
+            targetRPM = 2800;
+   
 
         if(distance > maxDistance){
             targetDeg = 0;
@@ -201,8 +215,8 @@ public class ShooterController extends SubsystemBase {
 
     public void pass(){
 
-        targetRPMOne = passRPM;
-        targetRPMTwo = passRPM;
+        //targetRPM = passRPM;
+        targetRPM = 4000;
         targetDeg = HoodConstants.PASS;
     }
 
@@ -232,8 +246,7 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void autoRamp(){
-        targetRPMOne = autoRPM;
-        targetRPMTwo = autoRPM;
+        targetRPM = autoRPM;
     }
 
     public Command autoRampCommand(){
@@ -242,65 +255,37 @@ public class ShooterController extends SubsystemBase {
 
     public void periodic(){
 
-        // MetersPerSecondOne = (targetRPMOne / 60) * 0.31918581;
-        // MetersPerSecondTwo = (targetRPMTwo / 60) * 0.31918581;
-
-        
-        currentRPMOne = (shooterOneMotorOne.getEncoder().getVelocity());
-
-        // pidOutOne = shooterPIDOne.calculate(currentRPMOne, targetRPMOne);//targetRPMOne
-        // ffOutOne = shooterFFOne.calculate(MetersPerSecondOne);
-        // voltsOne = MathUtil.clamp (0 + ffOutOne, 0.0, 12.0); 
-
-        currentRPMTwo = -(shooterTwoMotorOne.getEncoder().getVelocity());
-
-        // pidOutTwo = shooterPIDTwo.calculate(currentRPMTwo, targetRPMTwo );
-        // ffOutTwo = shooterFFTwo.calculate(MetersPerSecondTwo);
-        // voltsTwo = MathUtil.clamp (0 + ffOutTwo, 0.0, 12.0); 
+        MetersPerSecondOne = (targetRPM / 60) * 0.31918581;
 
 
-        if(currentRPMOne < targetRPMOne){
-            voltsOne = 10.5;
-        }
-        else{
-            voltsOne = 0;
-        }
 
 
-        if(currentRPMTwo < targetRPMTwo){
-            voltsTwo = 10.5;
-        }
-        else{
-            voltsTwo = 0;
-        }
-
-        if(targetRPMOne <= 200){
+        if(targetRPM <= 200){
 
             shooterOneMotorOne.setVoltage(0);
             shooterOneMotorTwo.setVoltage(0);
-        }
-
-         else{
-
-            shooterOneMotorOne.setVoltage(voltsOne);
-            shooterOneMotorTwo.setVoltage(voltsOne);
-         }
-
-         if (targetRPMTwo <= 200){
-
             shooterTwoMotorOne.setVoltage(0);
             shooterTwoMotorTwo.setVoltage(0);
 
         }
 
-        else{
+         else{
 
-            shooterTwoMotorOne.setVoltage(voltsTwo);
-            shooterTwoMotorTwo.setVoltage(voltsTwo);
-        }
+            shooterOneTopPID.setSetpoint(targetRPM, ControlType.kVelocity);
+            shooterOneBottomPID.setSetpoint(targetRPM, ControlType.kVelocity);
+            shooterTwoTopPID.setSetpoint(targetRPM, ControlType.kVelocity);
+            shooterTwoBottomPID.setSetpoint(targetRPM, ControlType.kVelocity);
 
-    
+            // shooterOneMotorOne.setVoltage(volts);
+            // shooterOneMotorTwo.setVoltage(volts);
+            // shooterTwoMotorOne.setVoltage(volts);
+            // shooterTwoMotorTwo.setVoltage(volts);
 
+            // shooterOneMotorOne.setVoltage(5);
+            // shooterOneMotorTwo.setVoltage(5);
+            // shooterTwoMotorOne.setVoltage(5);
+            // shooterTwoMotorTwo.setVoltage(5);
+         }
        
         hoodPos = getHoodPos();
 
@@ -310,6 +295,7 @@ public class ShooterController extends SubsystemBase {
         pidOutHood = MathUtil.clamp(pidOutHood, -12, 12);
         
 
+        
        if (Math.abs(hoodPos - targetDeg) < hoodTolerace){
             hoodArticulate.setVoltage(0.0);
 
@@ -320,21 +306,34 @@ public class ShooterController extends SubsystemBase {
         }
 
 
+        ShooterOneTopRPM.set(shooterOneMotorOne.getEncoder().getVelocity());
+        ShooterOneBottomRPM.set(shooterOneMotorTwo.getEncoder().getVelocity());
+        ShooterTwoTopRPM.set(shooterOneMotorTwo.getEncoder().getVelocity());
+        ShooterTwoBottomRPM.set(shooterTwoMotorTwo.getEncoder().getVelocity());
+
+        ShooterOneTopVoltage.set(shooterOneMotorOne.getAppliedOutput());
+        ShooterOneBottomVoltage.set(shooterOneMotorTwo.getAppliedOutput());
+        ShooterTwoTopVoltage.set(shooterTwoMotorOne.getAppliedOutput());
+        ShooterTwoBottomVoltage.set(shooterTwoMotorTwo.getAppliedOutput());
 
 
-        SmartDashboard.putNumber("target RPM 1",targetRPMOne);
-        SmartDashboard.putNumber("target RPM 2",targetRPMTwo);
 
-        SmartDashboard.putNumber("RPM One", currentRPMOne);
-        SmartDashboard.putNumber("RPM Two", currentRPMTwo);
 
-        SmartDashboard.putNumber("volts One", voltsOne);
-        SmartDashboard.putNumber("volts two", voltsTwo);
+        SmartDashboard.putNumber("target RPM",targetRPM);
+
+        SmartDashboard.putNumber("RPM One", currentRPM);
+
+        SmartDashboard.putNumber("volts One", volts);
 
         SmartDashboard.putNumber("current one one",shooterOneMotorOne.getOutputCurrent());
         SmartDashboard.putNumber("current two one", shooterTwoMotorOne.getOutputCurrent());
         SmartDashboard.putNumber("current one two",shooterOneMotorTwo.getOutputCurrent());
          SmartDashboard.putNumber("current two two",shooterTwoMotorTwo.getOutputCurrent());
+
+        SmartDashboard.putNumber("RPM one top",shooterOneMotorOne.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM one Bottom", shooterTwoMotorOne.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM Two top",shooterOneMotorTwo.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM two bottom",shooterTwoMotorTwo.getEncoder().getVelocity());
 
         SmartDashboard.putNumber("Hood Position", hoodArticulate.getEncoder().getPosition());
         SmartDashboard.putNumber("Hood Target", targetDeg);

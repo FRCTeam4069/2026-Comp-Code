@@ -11,86 +11,69 @@ public class ShooterConstants {
     public static final SparkFlexConfig shooterTwoMotorOneConfig = new SparkFlexConfig();
     public static final SparkFlexConfig shooterTwoMotorTwoConfig = new SparkFlexConfig();
 
+    public static final double kP = 0.0000001;
+    public static final double kI = 0.0;
+
+    public static final double kV = 0.001875;
+
 
     static{
         shooterOneMotorOneConfig
             .inverted(false)
             .idleMode(IdleMode.kCoast)
-            .voltageCompensation(12)
             .smartCurrentLimit(40)
             .secondaryCurrentLimit(124)
-            .closedLoopRampRate(0.0);
-
+            .closedLoop.pid(kP, kI, 0)
+            .feedForward
+                .kV(kV);
     }
 
      static{
         shooterOneMotorTwoConfig
             .inverted(false)
             .idleMode(IdleMode.kCoast)
-            .voltageCompensation(12)
             .smartCurrentLimit(40)
             .secondaryCurrentLimit(124)
-            .closedLoopRampRate(0.0);
-           //.follow(DeviceIDs.SHOOTER_ONE_MOTOR_ONE);
-
-
+            .closedLoop.pid(kP, kI, 0)
+            .feedForward
+                .kV(kV);
     }
 
     static{
         shooterTwoMotorOneConfig
             .inverted(false)
             .idleMode(IdleMode.kCoast)
-            .voltageCompensation(12)
             .smartCurrentLimit(40)
             .secondaryCurrentLimit(124)
-            .closedLoopRampRate(0.0);
-
-
+            .closedLoop.pid(kP, kI, 0)
+            .feedForward
+                .kV(kV);
     }
 
      static{
         shooterTwoMotorTwoConfig
             .inverted(true)
             .idleMode(IdleMode.kCoast)
-            .voltageCompensation(12)
             .smartCurrentLimit(40)
             .secondaryCurrentLimit(124)
-            .closedLoopRampRate(0.0);
+            .closedLoop.pid(kP, kI, 0)
+            .feedForward
+                .kV(kV);
             //.follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
-
-
     }
   
-    public record ShooterCoefficients(
-        double kP,
-        double kI,
-        double kD,
+    // public record ShooterCoefficients(
+     
 
-        double kV,
-        double kA
+    //     double kV,
+    //     double kA
 
-        ) {}
+    //     ) {}
 
-        public static ShooterCoefficients shooterCoefficientsOne = new ShooterCoefficients(
-            0.025, //0.5 suggested
-            0.0,
-            0.0,
+    //     public static ShooterCoefficients shooterCoefficientsOne = new ShooterCoefficients(
 
-            0.33,
-            0.0
+    //         0.33,
+    //         0.0
 
-        );
-
-
-        public static ShooterCoefficients shooterCoefficientsTwo = new ShooterCoefficients(
-            0.025, 
-            0.0,
-            0.0,
-
-            0.33,//2857
-            0.0
-
-        );
+    //     );
     }
-
-
