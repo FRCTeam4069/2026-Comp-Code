@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
@@ -85,6 +87,8 @@ public class RobotContainer {
       autoChooser.addOption ("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
       autoChooser.addOption ("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
 
+      autoChooser.addOption("Module Test", new PathPlannerAuto("Module Test"));
+
 
 
 
@@ -112,7 +116,8 @@ public class RobotContainer {
    // new Trigger(exampleSubsystem::exampleCondition)
    //     .onTrue(new ExampleCommand(exampleSubsystem));
 
-   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+   controller1.rightBumper().whileTrue(drive.snapModulesCommand(Rotation2d.fromDegrees(90.0)));   
+   controller1.leftBumper().whileTrue(drive.snapModulesCommand(Rotation2d.fromDegrees(90.0)));   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
  }
 
    private void registerAutoCommands(){
@@ -167,9 +172,11 @@ public class RobotContainer {
                () -> controller0.getHID().getYButton(), //reset odometry
                //() -> controller0.getHID().getXButton(), // through trench
                () -> controller0.getHID().getLeftBumperButton(),//lock closest
-               () -> controller0.getHID().getRightBumperButton()), //lock heading
-               () -> controller0.getHID().getXButton(); //TODO: bind this to the button you want
-               () -> controller0.getHID().getRightBumperButton()); //lock heading //switched to snapheading for now
+             //  () -> controller0.getHID().getRightBumperButton(), //lock heading
+               //()) -> controller0.getHID().getXButton(), //TODO: bind this to the button you want
+               //() -> controller0.getHID().getRightBumperButton()); //lock heading //switched to snapheading for now
+               () ->false,
+               () -> false);
    }
 
    public Command defaultIntakeCommand() {

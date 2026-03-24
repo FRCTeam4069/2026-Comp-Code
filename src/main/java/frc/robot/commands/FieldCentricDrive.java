@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -33,30 +35,41 @@ public class FieldCentricDrive extends Command {
     private Pose2d withVision;
     private Pose2d encoderOnly;
     private Pose2d odometryError;
+    private final double FIELD_MIN_X = 0.2;
+    private final double FIELD_MAX_X = 16.34;
+    private final double FIELD_MIN_Y = 0.2;
+    private final double FIELD_MAX_Y = 7.87;
 
 
 
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
+
     private PIDController headingController = new PIDController(
         DrivetrainConstants.teleOpHeadingCoefficients.kP(), 
         DrivetrainConstants.teleOpHeadingCoefficients.kI(), 
         DrivetrainConstants.teleOpHeadingCoefficients.kD());
+
     private Pose2d currentPosition;
     private double desiredHeading = 0.0;
     private Alliance alliance = Alliance.Blue;
+
     private final double redHubX = Units.inchesToMeters(469.1);
     private final double redHubY = Units.inchesToMeters(158.85);
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
+
     private double deltaX = 0.0;
     private double deltaY = 0.0;
+
     private double tolerance = 0.75;
     double rotationalSpeed = 0.0;
+
     // private final BooleanSupplier throughTrench;
     // private final ThroughTrench controller;
     // private boolean trenchActive = false;
     // private ChassisSpeeds trenchSpeeds;
+
     private ChassisSpeeds driveSpeeds;
     private BooleanSupplier lockHeading;
     private boolean lockHeadingActive = false;
@@ -82,10 +95,8 @@ public class FieldCentricDrive extends Command {
 
 
 
-
-
-
     private static double controllerDeadband = 0.05;
+    
     /**
      * Teleop drive command
      * @param drive swerve drivetrain
@@ -103,8 +114,8 @@ public class FieldCentricDrive extends Command {
         BooleanSupplier resetOdometry,
         BooleanSupplier lockClosest,
         // BooleanSupplier throughTrench,
-        BooleanSupplier lockHeading,
-        BooleanSupplier missWalls
+        BooleanSupplier missWalls,
+        BooleanSupplier lockHeading
         ) {
 
         this.drive = drive;
@@ -115,8 +126,8 @@ public class FieldCentricDrive extends Command {
         this.resetOdometry = resetOdometry;
         this.lockClosest = lockClosest;            
         // this.throughTrench = throughTrench;
-        this.lockHeading = lockHeading;
         this.missWalls = missWalls;
+        this.lockHeading = lockHeading;
 
         // this.controller = new ThroughTrench(drive);
 
@@ -124,106 +135,19 @@ public class FieldCentricDrive extends Command {
         addRequirements(drive);
     }
 
+
     @Override
-    public void initialize() {
-        headingController.enableContinuousInput(-Math.PI, Math.PI);
-        currentPosition= drive.getPose();
-        private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("desiredHeading").publish();
-        private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaX").publish();
-        private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaY").publish();
-        private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
-            .getStructTopic("setPoint", Pose2d.struct).publish();
-    
-        private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
-            .getStructTopic("odometryError", Pose2d.struct).publish();
+    public void execute() {
+                headingController.enableContinuousInput(-Math.PI, Math.PI);
 
-        private DoublePublisher desiredModuleState = NetworkTableInstance.getDefault()
-            .getDoubleTopic("desiredModuleStateTest").publish();
-    
-        private static double controllerDeadband = 0.05;
-        /**
-         * Teleop drive command
-         * @param drive swerve drivetrain
-         * @param forwardSpeed -1.0 to 1.0
-         * @param strafeSpeed -1.0 to 1.0
-         * @param turnSpeed -1.0 to 1.0
-         * @param autoAlign true for align to goal
-         */
-        public FieldCentricDrive(
-            SwerveDrivetrain drive, 
-            DoubleSupplier forwardSpeed, 
-            DoubleSupplier strafeSpeed, 
-            DoubleSupplier turnSpeed, 
-            BooleanSupplier autoAlign,
-            BooleanSupplier resetOdometry,
-            BooleanSupplier lockClosest,
-            // BooleanSupplier throughTrench,
-            BooleanSupplier lockHeading
-            ) {
-    
-            this.drive = drive;
-            this.turnSpeed = turnSpeed;
-            this.forwardSpeed = forwardSpeed;
-            this.strafeSpeed = strafeSpeed;
-            this.autoAlign = autoAlign;
-            this.resetOdometry = resetOdometry;
-            this.lockClosest = lockClosest;            
-            // this.throughTrench = throughTrench;
-            this.lockHeading = lockHeading;
-    
-            // this.controller = new ThroughTrench(drive);
-    
-            addRequirements(drive);
-        }
 
-        @Override
-        public void initialize() {
-            headingController.enableContinuousInput(-Math.PI, Math.PI);
-            currentPosition= drive.getPose();
-    
-            var result = DriverStation.getAlliance();
-            if (result.isPresent()) {
-                alliance = result.get();
-            }
-    
-            // if (controller.isFinished()){
-            //     drive.stop();  
-            // }
-    
-        }
-    
-        @Override
-        public void execute() {
-    
-            currentPosition= drive.getPose();
-           
-        //    if (throughTrench.getAsBoolean()){
-    
-        //         if (!trenchActive) {
-        //             controller.initialize();
-        //             trenchActive = true;
-        //         }
+        currentPosition = drive.getPose();
 
-        var result = DriverStation.getAlliance();
+         var result = DriverStation.getAlliance();
         if (result.isPresent()) {
             alliance = result.get();
         }
 
-        // if (controller.isFinished()){
-
-        //     drive.stop();
-            
-        // }
-
-    }
-
-    @Override
-    public void execute() {
-
-        currentPosition = drive.getPose();
        
     //    if (throughTrench.getAsBoolean()){
 
@@ -374,7 +298,7 @@ public class FieldCentricDrive extends Command {
 
                 rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
 
-                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+               outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
 
             //TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0 but might return to this for driers later thanks//
@@ -455,7 +379,7 @@ public class FieldCentricDrive extends Command {
         driveSpeeds = outputSpeeds;
         // }
 
-        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition > FIELD_MAX_X || currentPosition < FIELD_MIN_Y || currentPosition > FIELD_MAX_Y)) {
+        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition.getX() > FIELD_MAX_X || currentPosition.getY() < FIELD_MIN_Y || currentPosition.getY() > FIELD_MAX_Y)) {
             driveSpeeds = new ChassisSpeeds();
         }
 

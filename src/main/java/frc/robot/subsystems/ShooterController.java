@@ -68,7 +68,7 @@ public class ShooterController extends SubsystemBase {
 
     public double MetersPerSecondOne = 0.0;
 
-    public double passRPM = 3500.0; //FIXME
+    public double passRPM = 4500.0; //FIXME
 
     double pidOut = 0.0;
     
@@ -128,8 +128,7 @@ public class ShooterController extends SubsystemBase {
 
     public void trenchShoot(){
         targetRPM = 3500;
-
-        //targetDeg = 4;
+        targetDeg = 4;
 
     }
 
@@ -170,7 +169,7 @@ public class ShooterController extends SubsystemBase {
         // else{ //FIXME
         // targetRPM = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
         //  - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
-        
+
             targetRPM = 2800;
    
 
@@ -215,8 +214,7 @@ public class ShooterController extends SubsystemBase {
 
     public void pass(){
 
-        //targetRPM = passRPM;
-        targetRPM = 4000;
+        targetRPM = passRPM;
         targetDeg = HoodConstants.PASS;
     }
 

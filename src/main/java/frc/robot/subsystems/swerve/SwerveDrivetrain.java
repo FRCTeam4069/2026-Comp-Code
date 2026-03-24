@@ -223,6 +223,14 @@ public class SwerveDrivetrain extends SubsystemBase {
         br.setDesiredState(moduleStates[3]);
     }
 
+    public void setAllModuleAngles(Rotation2d angle) {
+        setModuleStates(new SwerveModuleState[] {
+            new SwerveModuleState(0.0, angle),
+            new SwerveModuleState(0.0, angle),
+            new SwerveModuleState(0.0, angle),
+            new SwerveModuleState(0.0, angle)
+        });
+    }
     /**
      * drive with robot relatve chassis speeds. corrects for angular velocity
      * @param speeds robot relative
@@ -276,6 +284,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         return run(() -> stop());
     }
     
+    public Command snapModulesCommand(Rotation2d angle) {
+        return run(() -> setAllModuleAngles(angle));
+    }
     public Command stopOnceCommand() {
         return runOnce(() -> stop());
     }
@@ -384,7 +395,18 @@ public class SwerveDrivetrain extends SubsystemBase {
         desiredSwervePublisher.set(desiredState);
         posePublisher.set(swerveOdometry.getPoseMeters());
         var speeds = getRobotRelativeSpeeds();
-        speedsPublisher.set(speeds);       
+        speedsPublisher.set(speeds);     
+    
+        SmartDashboard.putNumber("Swerve/DesiredAngleDeg/FL", desiredState[0].angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/DesiredAngleDeg/FR", desiredState[1].angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/DesiredAngleDeg/BL", desiredState[2].angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/DesiredAngleDeg/BR", desiredState[3].angle.getDegrees());
+
+        SmartDashboard.putNumber("Swerve/ActualAngleDeg/FL", fl.getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Swerve/ActualAngleDeg/FR", fr.getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Swerve/ActualAngleDeg/BL", bl.getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Swerve/ActualAngleDeg/BR", br.getRotation2d().getDegrees());
+
         
 
     }
