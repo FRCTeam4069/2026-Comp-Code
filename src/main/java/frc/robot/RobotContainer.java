@@ -22,60 +22,57 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.ShootWithTimeoutMiddle;
+import frc.robot.commands.DriveToShootPosition;
+
 
 
 public class RobotContainer {
 
-     
 
-    public static final SwerveDrivetrain drive = new SwerveDrivetrain();
-    public static final IntakeSubsystem intake = new IntakeSubsystem();
-    public static final PivotSubsystem pivot = new PivotSubsystem();
-    public static final FeederSubsystem feeder = new FeederSubsystem();
-    public static final HopperSubsystem hopper = new HopperSubsystem();
+   public static final SwerveDrivetrain drive = new SwerveDrivetrain();
+   public static final IntakeSubsystem intake = new IntakeSubsystem();
+   public static final PivotSubsystem pivot = new PivotSubsystem();
+   public static final FeederSubsystem feeder = new FeederSubsystem();
+   public static final HopperSubsystem hopper = new HopperSubsystem();
 
-    public static final TestSubsystem testSubsystem = new TestSubsystem();
+   public static final TestSubsystem testSubsystem = new TestSubsystem();
 
-    private final CommandXboxController controller0 = new CommandXboxController(0);
-    private final CommandXboxController controller1 = new CommandXboxController(1);
+   private final CommandXboxController controller0 = new CommandXboxController(0);
+   private final CommandXboxController controller1 = new CommandXboxController(1);
 
-    public static final ShooterController shooter = new ShooterController();
+   public static final ShooterController shooter = new ShooterController();
 
-    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+   public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
    public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder, hopper, pivot);
 
    public static final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
 
+   private String autoName;
 
 
-    private String autoName;
-
-
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
        // addSysIdCommands()
 
 
-    private final CommandXboxController m_driverController =
-    new CommandXboxController(OperatorConstants.kDriverControllerPort);
+   private final CommandXboxController m_driverController =
+   new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
- public RobotContainer() {
+   public RobotContainer() {
 
       registerAutoCommands();
 
       autoName = "";
-      // Configure the trigger bindings
 
 
-     //autoChooser = AutoBuilder.buildAutoChooser();
+      //autoChooser = AutoBuilder.buildAutoChooser();
 
        // addSysIdCommands()
 
       autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
       autoChooser.addOption ("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
 
-       //autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
       autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
       autoChooser.addOption ("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
 
@@ -84,14 +81,6 @@ public class RobotContainer {
 
       autoChooser.addOption ("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
       autoChooser.addOption ("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
-
-
-
-
-
-      //  autoChooser.addOption("Test", new PathPlannerAuto("Test"));
-      //  autoChooser.addOption("test first seg", new PathPlannerAuto("test first seg"));
-
 
        SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -108,18 +97,25 @@ public class RobotContainer {
   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
   * joysticks}.
   */
- private void configureBindings() {
-   // new Trigger(exampleSubsystem::exampleCondition)
-   //     .onTrue(new ExampleCommand(exampleSubsystem));
+   private void configureBindings() {
+      // new Trigger(exampleSubsystem::exampleCondition)
+      //     .onTrue(new ExampleCommand(exampleSubsystem));
 
-   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
-   controller0.leftBumper().whileTrue(drive.snapModulesCommand(edu.wpi.first.math.geometry.Rotation2d.fromDegrees(90.0)));
-   controller0.rightBumper().whileTrue(drive.snapModulesCommand(edu.wpi.first.math.geometry.Rotation2d.fromDegrees(0.0)));
- }
+      // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+      controller0.povLeft()
+         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.LEFT))
+         .onFalse(drive.stopOnceCommand());
+      controller0.povDown()
+         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.CENTER))
+         .onFalse(drive.stopOnceCommand());
+      controller0.povRight()
+         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
+         .onFalse(drive.stopOnceCommand());
+
+   
+   }
 
    private void registerAutoCommands(){
-      // NamedCommands.registerCommand("shooterArticulate", testSubsystem.driveWithEighteyCommand());
-      // NamedCommands.registerCommand("driveStop", testSubsystem.driveStop());
 
       NamedCommands.registerCommand("intakeOn", intake.intakeOn());
       NamedCommands.registerCommand("intakeOff", intake.intakeOff());
@@ -134,11 +130,7 @@ public class RobotContainer {
       NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
 
       NamedCommands.registerCommand("auto align", autoAlignAutoCommand);
-
-
-
-
-      
+   
    }
 
 
@@ -147,34 +139,37 @@ public class RobotContainer {
   *
   * @return the command to run in autonomous
   */
- public Command getAutonomousCommand() {
-     //An example command will be run in autonomous
-     Command selectedCommand = autoChooser.getSelected();
-     if (selectedCommand != null)
-      autoName = selectedCommand.getName();
-     return selectedCommand;  
- }
+   public Command getAutonomousCommand() {
+      //An example command will be run in autonomous
+      Command selectedCommand = autoChooser.getSelected();
+      if (selectedCommand != null)
+         autoName = selectedCommand.getName();
+         return selectedCommand;  
+      }
 
- public String getAutonomousName(){
-   return autoName;
- }
+   public String getAutonomousName(){
+      return autoName;
+   }
 
    public Command defaultDriveCommand() {
-       return new FieldCentricDrive(
+      return new FieldCentricDrive(
                drive,
                () -> -controller0.getLeftY(), //drive
                () -> -controller0.getLeftX(), //strafe
                () -> -controller0.getRightX(), //rotation
-               () -> controller0.getHID().getAButton(), //autoalign
-               () -> controller0.getHID().getYButton(), //reset odometry
-               //() -> controller0.getHID().getXButton(), // through trench
-               () -> controller0.getHID().getLeftBumperButton(),//lock closest
-             //  () -> controller0.getHID().getRightBumperButton(), //lock heading
-               //()) -> controller0.getHID().getXButton(), //TODO: bind this to the button you want
-               //() -> controller0.getHID().getRightBumperButton()); //lock heading //switched to snapheading for now
-               () ->false,
-               () -> false);
+               () -> controller0.getHID().getRightBumperButton(), //autoalign
+               () -> controller0.getHID().getStartButton(), //controller0.getHID().getYButton(), //reset odometry
+               () -> controller0.getHID().getLeftBumperButton(), //lock closest
+               () ->false,//-> controller0.getHID().getRightBumperButton(), //lock heading
+               () -> false, //miss walls 
+               () -> controller0.getRightY(), //snap modules
+               () -> controller0.getHID().getXButton(),
+               () -> controller0.getHID().getBButton(),
+               () -> controller0.getHID().getYButton(),
+               () -> controller0.getHID().getAButton());
+
    }
+
 
    public Command defaultIntakeCommand() {
       return new IntakeCommand(
@@ -204,6 +199,4 @@ public class RobotContainer {
       );
 
    }
-
 }
-

@@ -123,17 +123,17 @@ public class DrivetrainConstants {
         return result;
     }
 
-    // public static final Pose2d[] blueClimbPoses = new Pose2d[]{
-    //     new Pose2d(7.8, 7.26, Rotation2d.fromDegrees(180.0)),//. //TODO
-    //     new Pose2d(7.8, 6.160, Rotation2d.fromDegrees(180.0)),//. //TODO
-    //     new Pose2d(7.8, 5.15, Rotation2d.fromDegrees(180.0))//. //TODO
-    // };
+    public static final Pose2d[] blueClimbPoses = new Pose2d[]{
+        new Pose2d(3.7, 6.1, Rotation2d.fromDegrees(-68.5)),//. //TODO
+        new Pose2d(3.0, 4.1, Rotation2d.fromDegrees(0)),//. //TODO
+        new Pose2d(3.7, 1.9, Rotation2d.fromDegrees(68.5))//. //TODO
+    };
 
-    // public static final Pose2d[] redClimbPoses = new Pose2d[]{
-    //     new Pose2d(9.75, 3.06, Rotation2d.fromDegrees(0.0)),//. //TODO
-    //     new Pose2d(9.75, 2.01, Rotation2d.fromDegrees(0.0)),//. //TODO
-    //     new Pose2d(9.75, 0.94, Rotation2d.fromDegrees(0.0))//. //TODO
-    // };
+    public static final Pose2d[] redClimbPoses = new Pose2d[]{
+        new Pose2d(9.75, 3.06, Rotation2d.fromDegrees(0.0)),//. //TODO
+        new Pose2d(9.75, 2.01, Rotation2d.fromDegrees(0.0)),//. //TODO
+        new Pose2d(9.75, 0.94, Rotation2d.fromDegrees(0.0))//. //TODO
+    };
 
     // offset = 0.164m
 
@@ -187,8 +187,8 @@ public class DrivetrainConstants {
     ) {}
 
     public static volatile DrivetrainPIDConstants pidToPositionConstants = new DrivetrainPIDConstants(
-        new PIDCoefficients(2.0, 0.0, 0.0), 
-        new PIDCoefficients(3.5, 0.0, 0.4), 
+        new PIDCoefficients(3, 0.0, 0.0), 
+        new PIDCoefficients(4, 0.0, 0.4), 
         new Constraints(5.0, 3.0), 
         new Constraints(10.0, 10.0), 
         new Tolerances(0.01, 0.20), 

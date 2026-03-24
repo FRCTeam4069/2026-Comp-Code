@@ -59,7 +59,7 @@ public class DrivetrainPIDController {
     public ChassisSpeeds calculate(Pose2d currentPose, Pose2d targetPose) {
         double xSpeed = xController.calculate(currentPose.getX(), targetPose.getX());
         double ySpeed = yController.calculate(currentPose.getY(), targetPose.getY());
-        double headingSpeed = headingController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+        double headingSpeed = -headingController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         return new ChassisSpeeds(xSpeed, ySpeed, headingSpeed);
     }

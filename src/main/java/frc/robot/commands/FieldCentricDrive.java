@@ -2,9 +2,6 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix6.swerve.SwerveModule;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -23,6 +20,7 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
+
 public class FieldCentricDrive extends Command {
     private final SwerveDrivetrain drive;
     private final DoubleSupplier forwardSpeed;
@@ -30,17 +28,24 @@ public class FieldCentricDrive extends Command {
     private final DoubleSupplier turnSpeed;
     private final BooleanSupplier autoAlign;
     private final BooleanSupplier resetOdometry;
+    private BooleanSupplier lockHeading;
+    private BooleanSupplier lockClosest;
     private final BooleanSupplier missWalls;
+    private final DoubleSupplier snapModulesAxis;
+    private final BooleanSupplier leftSnap;
+    private final BooleanSupplier rightSnap;
+    private final BooleanSupplier frontSnap;
+    private final BooleanSupplier backSnap;
+
 
     private Pose2d withVision;
     private Pose2d encoderOnly;
     private Pose2d odometryError;
+
     private final double FIELD_MIN_X = 0.2;
     private final double FIELD_MAX_X = 16.34;
     private final double FIELD_MIN_Y = 0.2;
     private final double FIELD_MAX_Y = 7.87;
-
-
 
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
@@ -71,10 +76,8 @@ public class FieldCentricDrive extends Command {
     // private ChassisSpeeds trenchSpeeds;
 
     private ChassisSpeeds driveSpeeds;
-    private BooleanSupplier lockHeading;
     private boolean lockHeadingActive = false;
     private double lockHeadingTarget = 0.0;
-    private BooleanSupplier lockClosest;
     private boolean lockClosestActive = false;
     private double lockClosestTarget;
 
@@ -93,9 +96,10 @@ public class FieldCentricDrive extends Command {
     private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
         .getStructTopic("odometryError", Pose2d.struct).publish();
 
-
-
     private static double controllerDeadband = 0.05;
+    private static final double SNAP_MODULE_ANGLE_THRESH_0 = 0.65;
+    private static final double SNAP_MODULE_ANGLE_THRESH_180 = -0.65;
+
     
     /**
      * Teleop drive command
@@ -114,8 +118,13 @@ public class FieldCentricDrive extends Command {
         BooleanSupplier resetOdometry,
         BooleanSupplier lockClosest,
         // BooleanSupplier throughTrench,
+        BooleanSupplier lockHeading,
         BooleanSupplier missWalls,
-        BooleanSupplier lockHeading
+        DoubleSupplier snapModuleAxis,
+        BooleanSupplier leftSnap,
+        BooleanSupplier rightSnap,
+        BooleanSupplier frontSnap,
+        BooleanSupplier backSnap
         ) {
 
         this.drive = drive;
@@ -126,11 +135,14 @@ public class FieldCentricDrive extends Command {
         this.resetOdometry = resetOdometry;
         this.lockClosest = lockClosest;            
         // this.throughTrench = throughTrench;
-        this.missWalls = missWalls;
         this.lockHeading = lockHeading;
-
+        this.missWalls = missWalls;
+        this.snapModulesAxis = snapModuleAxis;
+        this.leftSnap = leftSnap;
+        this.rightSnap = rightSnap;
+        this.frontSnap = frontSnap;
+        this.backSnap = backSnap;
         // this.controller = new ThroughTrench(drive);
-
 
         addRequirements(drive);
     }
@@ -138,12 +150,11 @@ public class FieldCentricDrive extends Command {
 
     @Override
     public void execute() {
-                headingController.enableContinuousInput(-Math.PI, Math.PI);
-
+        headingController.enableContinuousInput(-Math.PI, Math.PI);
 
         currentPosition = drive.getPose();
 
-         var result = DriverStation.getAlliance();
+        var result = DriverStation.getAlliance();
         if (result.isPresent()) {
             alliance = result.get();
         }
@@ -173,6 +184,97 @@ public class FieldCentricDrive extends Command {
         xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
         ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
         Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
+
+        //SNAP MODULES 180/0 WITH JOYSTICK
+        if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
+
+            double target = 0;
+
+            rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+        }
+
+        else if (snapModulesAxis.getAsDouble() >  SNAP_MODULE_ANGLE_THRESH_0) {
+
+                double target = 180;
+
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            //return;
+        }  
+
+        //SNAP MODULES FOR WALLPICKUP left and right
+        if (leftSnap.getAsBoolean()) {
+
+            double currentDeg = drive.getRotation2d().getDegrees();
+            double target =0;
+
+            if ((currentDeg<90 && currentDeg>0) || (currentDeg>-90&& currentDeg<0)) {
+                target = 18;
+            }
+            else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)) {
+                target = 162;
+            }
+            rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+
+        }   else if (rightSnap.getAsBoolean()) {
+
+                double currentDeg = drive.getRotation2d().getDegrees();
+                double target = 0;
+
+                if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
+                    target = -18;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
+                    target = -162;
+                }
+
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+
+        }   else if (frontSnap.getAsBoolean()) {
+
+                double currentDeg = drive.getRotation2d().getDegrees();
+                double target = 0;
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -72;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 72;
+                }
+
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+
+        } else if (backSnap.getAsBoolean()) {
+
+                double currentDeg = drive.getRotation2d().getDegrees();
+                double target = 0;
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -108;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 108;
+                }
+
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+        } 
+
+        
+        
+
+        
+    
         
         if (alliance == Alliance.Blue){
             deltaX = blueHubX - currentPosition.getX();
@@ -186,11 +288,9 @@ public class FieldCentricDrive extends Command {
         SmartDashboard.putNumber("desiredHeading", desiredHeading);
         desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
        
-       
         // deltaXDoublePublisher.set(deltaX);
         //deltaYDoublePublisher.set(deltaY);
-
-            
+   
         if (autoAlign.getAsBoolean()){
             if(alliance == Alliance.Blue){
                 rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
@@ -298,7 +398,7 @@ public class FieldCentricDrive extends Command {
 
                 rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
 
-               outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
 
             //TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0 but might return to this for driers later thanks//
