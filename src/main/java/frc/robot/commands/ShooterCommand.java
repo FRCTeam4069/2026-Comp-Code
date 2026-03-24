@@ -33,7 +33,7 @@ public class ShooterCommand extends Command{
 
     private Alliance alliance = Alliance.Blue;
 
-    private static final double RPMDiff = 50; 
+    private static final double RPMDiff = 200; 
 
 
     private final double redHubX = Units.inchesToMeters(469.1);
@@ -113,6 +113,7 @@ public class ShooterCommand extends Command{
        
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
+        
 
 
         if (result.isPresent()) {
@@ -140,7 +141,7 @@ public class ShooterCommand extends Command{
 
             shooter.shoot(distance);
 
-            if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+            if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
             }

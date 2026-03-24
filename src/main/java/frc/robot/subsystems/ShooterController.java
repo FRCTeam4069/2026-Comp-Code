@@ -54,8 +54,9 @@ public class ShooterController extends SubsystemBase {
     private double hoodPos = 0.0;
     private double pidOutHood = 0.0;
     private static final double hoodTolerace = 0.5;
-    private static final double maxDistance = 4.36483;
+    private static final double maxDistance = 4.8;
     private static final double minHoodDistance = 2.95;
+    private static final double  minShootDistance = 1.65;
 
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),
@@ -68,7 +69,7 @@ public class ShooterController extends SubsystemBase {
 
     public double MetersPerSecondOne = 0.0;
 
-    public double passRPM = 4500.0; //FIXME
+    public double passRPM = 3500.0; //FIXME
 
     double pidOut = 0.0;
     
@@ -162,16 +163,20 @@ public class ShooterController extends SubsystemBase {
 
     public void shoot(double distance){
 
-        // if(distance > maxDistance){
-        //     targetRPM = 0;
-        // }
+        if(distance > maxDistance){ 
+            targetRPM = 0;
+        }
 
-        // else{ //FIXME
-        // targetRPM = (552.083971 * Math.pow(distance, 5)) - (7515.328409 * Math.pow(distance, 4)) + (39805.52653 * Math.pow(distance, 3))
-        //  - (102322.966701 * Math.pow(distance, 2)) + (127617.991848 * distance) - 58567.737702;
+         else if (distance < minHoodDistance){
+            targetRPM = 0;
+        }
 
-            targetRPM = 2800;
-   
+
+        else{ 
+        targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4)) + (7929.250003 * Math.pow(distance, 3))
+         - ( 23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
+
+        }
 
         if(distance > maxDistance){
             targetDeg = 0;
@@ -222,6 +227,12 @@ public class ShooterController extends SubsystemBase {
         hoodPos = hoodArticulate.getEncoder().getPosition();
          return hoodPos;
 
+     }
+
+     public double getCurrentRPM(){
+
+        currentRPM = shooterOneMotorOne.getEncoder().getVelocity();
+        return currentRPM;
      }
 
      public boolean hoodInPosition(){
@@ -298,6 +309,7 @@ public class ShooterController extends SubsystemBase {
             hoodArticulate.setVoltage(0.0);
 
         }
+
 
         else{
             hoodArticulate.setVoltage(pidOutHood);
