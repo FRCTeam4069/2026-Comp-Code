@@ -69,7 +69,8 @@ public class ShooterController extends SubsystemBase {
 
     public double MetersPerSecondOne = 0.0;
 
-    public double passRPM = 3500.0; //FIXME
+    public double closePassRPM = 3500.0; //FIXME
+    public double farPassRPM = 4500.0;
 
     double pidOut = 0.0;
     
@@ -127,8 +128,8 @@ public class ShooterController extends SubsystemBase {
         targetRPM = 0;
     }
 
-    public void trenchShoot(){
-        targetRPM = 3500;
+    public void towerShoot(){
+        targetRPM = 3250;
         targetDeg = 4;
 
     }
@@ -217,9 +218,15 @@ public class ShooterController extends SubsystemBase {
         return currentRobotPose;
     }
 
-    public void pass(){
+    public void farPass(){
 
-        targetRPM = passRPM;
+        targetRPM = farPassRPM;
+        targetDeg = HoodConstants.PASS;
+    }
+
+    public void closePass(){
+
+        targetRPM = closePassRPM;
         targetDeg = HoodConstants.PASS;
     }
 

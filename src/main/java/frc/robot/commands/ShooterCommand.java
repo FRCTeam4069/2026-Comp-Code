@@ -27,9 +27,13 @@ public class ShooterCommand extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
+    private static final double feedStartTime = 0.2;
+
+    private final double farPassThresh = 2;
 
     private double deltaX = 0.0;
     private double deltaY = 0.0;
+    private double hubX = 0.0;
 
     private Alliance alliance = Alliance.Blue;
 
@@ -53,7 +57,7 @@ public class ShooterCommand extends Command{
     private Boolean shootReady;
     private final Timer timer = new Timer();
 
-    private final BooleanSupplier trenchShoot;
+    private final BooleanSupplier towerShoot;
     private final BooleanSupplier closeShoot;
 
 
@@ -70,7 +74,7 @@ public class ShooterCommand extends Command{
         BooleanSupplier reverseAll,
         BooleanSupplier feederManual,
 
-        BooleanSupplier trenchShoot,
+        BooleanSupplier towerShoot,
         BooleanSupplier closeShoot
 
         // BooleanSupplier passTest,
@@ -91,7 +95,7 @@ public class ShooterCommand extends Command{
         this.reverseAll = reverseAll;
         this.feederManual = feederManual;
 
-        this.trenchShoot= trenchShoot;
+        this.towerShoot= towerShoot;
         this.closeShoot = closeShoot;
 
         // this.passTest = passTest;
@@ -115,9 +119,16 @@ public class ShooterCommand extends Command{
         currentPositionY = shooter.getCurrentRobotPose().getY();
         
 
-
         if (result.isPresent()) {
             alliance = result.get();
+        }
+
+        if (alliance == Alliance.Blue){
+            hubX = blueHubX;
+        }
+
+        else{
+            hubX = redHubX;
         }
 
 
@@ -171,27 +182,27 @@ public class ShooterCommand extends Command{
             shooter.manualCloseShoot();
 
 
-             if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
+            if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
 
             }
         }
 
-        else if (trenchShoot.getAsBoolean()){
-            shooter.trenchShoot();
+        else if (towerShoot.getAsBoolean()){
+            shooter.towerShoot();
 
-             if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
+            if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
 
@@ -199,15 +210,22 @@ public class ShooterCommand extends Command{
         }
 
         else if (pass.getAsBoolean()){
-            shooter.pass();
+
+            if (Math.abs(currentPositionX - hubX) > farPassThresh){
+                shooter.farPass();
+            }
+
+            else if (Math.abs(currentPositionX - hubX) < farPassThresh){
+                shooter.closePass();
+            }
 
 
-             if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
+            if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
 
