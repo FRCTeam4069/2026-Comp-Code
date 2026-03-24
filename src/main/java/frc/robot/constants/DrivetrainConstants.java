@@ -210,7 +210,7 @@ public class DrivetrainConstants {
         new Tolerances(0.04, 0.40), 
         new Tolerances(0.04, 0.30));
     
-    public static final PIDCoefficients teleOpHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
+    public static final PIDCoefficients teleOpHeadingCoefficients = new PIDCoefficients(14.0, 0.0, 0.0);
 
     public record ModuleCoefficients(
         double steerKS,
@@ -235,7 +235,7 @@ public class DrivetrainConstants {
         0.0,
         0.0,
 
-        0.55,
+        0.64,
         0.0,
         0.0,
 
@@ -251,9 +251,9 @@ public class DrivetrainConstants {
         2.20,
         0.20,
         
+        0.6,
         0.0,
-        0.0,
-        0.0
+        0.02
     );
 
     public static ModuleCoefficients frCoefficients = new ModuleCoefficients(
@@ -277,9 +277,9 @@ public class DrivetrainConstants {
         2.14,
         0.20,
         
+        0.6,
         0.0,
-        0.0,
-        0.0
+        0.02
     );
 
     public static ModuleCoefficients blCoefficients = new ModuleCoefficients(
@@ -303,9 +303,9 @@ public class DrivetrainConstants {
         2.18,
         0.20,
         
+        0.6,
         0.0,
-        0.0,
-        0.0
+        0.02
     );
 
     public static ModuleCoefficients brCoefficients = new ModuleCoefficients(
@@ -329,9 +329,9 @@ public class DrivetrainConstants {
         2.14,
         0.20,
         
+        0.6,
         0.0,
-        0.0,
-        0.0
+        0.02
     );
 
     public record ModuleConfig(

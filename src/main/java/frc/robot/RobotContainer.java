@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
@@ -87,8 +85,6 @@ public class RobotContainer {
       autoChooser.addOption ("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
       autoChooser.addOption ("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
 
-      autoChooser.addOption("Module Test", new PathPlannerAuto("Module Test"));
-
 
 
 
@@ -116,8 +112,9 @@ public class RobotContainer {
    // new Trigger(exampleSubsystem::exampleCondition)
    //     .onTrue(new ExampleCommand(exampleSubsystem));
 
-   controller1.rightBumper().whileTrue(drive.snapModulesCommand(Rotation2d.fromDegrees(90.0)));   
-   controller1.leftBumper().whileTrue(drive.snapModulesCommand(Rotation2d.fromDegrees(90.0)));   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+   // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+   controller0.leftBumper().whileTrue(drive.snapModulesCommand(edu.wpi.first.math.geometry.Rotation2d.fromDegrees(90.0)));
+   controller0.rightBumper().whileTrue(drive.snapModulesCommand(edu.wpi.first.math.geometry.Rotation2d.fromDegrees(0.0)));
  }
 
    private void registerAutoCommands(){
@@ -162,7 +159,7 @@ public class RobotContainer {
    return autoName;
  }
 
-    public Command defaultDriveCommand() {
+   public Command defaultDriveCommand() {
        return new FieldCentricDrive(
                drive,
                () -> -controller0.getLeftY(), //drive
@@ -209,5 +206,4 @@ public class RobotContainer {
    }
 
 }
-
 
