@@ -72,8 +72,8 @@ public class RobotContainer {
 
        // addSysIdCommands()
 
-      autoChooser.addOption("Blue Two Cycle Left ", new PathPlannerAuto("Blue Two Cycle Left"));
-      autoChooser.addOption ("Red Two Cycle Left ", new PathPlannerAuto("Red Two Cycle Left"));
+      autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
+      autoChooser.addOption ("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
 
        //autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
       autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
@@ -165,8 +165,9 @@ public class RobotContainer {
                () -> -controller0.getRightX(), //rotation
                () -> controller0.getHID().getAButton(), //autoalign
                () -> controller0.getHID().getYButton(), //reset odometry
+               //() -> controller0.getHID().getXButton(), // through trench
                () -> controller0.getHID().getLeftBumperButton(),//lock closest
-               () -> controller0.getHID().getRightBumperButton()); //lock heading
+               () -> controller0.getHID().getRightBumperButton()); //lock heading //switched to snapheading for now
    }
 
    public Command defaultIntakeCommand() {
