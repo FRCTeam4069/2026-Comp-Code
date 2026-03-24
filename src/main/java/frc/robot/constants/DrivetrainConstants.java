@@ -50,6 +50,11 @@ public class DrivetrainConstants {
 
     public static final double mass = Pounds.of(146.0).in(Kilograms); //FIXME 141 prob with shooter
 
+    // TODO: ADD THESE MEASUREMENTS
+    public static final double FIELD_MIN_X = 0.0;
+    public static final double FIELD_MAX_X = 0.0;
+    public static final double FIELD_MIN_Y = 0.0;
+    public static final double FIELD_MAX_Y = 0.0;
 
      public static final Pose2d[] redShooterPoses = new Pose2d[]{
         new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(52.5)), //red left //TODO

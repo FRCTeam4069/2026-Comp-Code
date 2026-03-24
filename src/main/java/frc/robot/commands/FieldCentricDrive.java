@@ -28,6 +28,7 @@ public class FieldCentricDrive extends Command {
     private final DoubleSupplier turnSpeed;
     private final BooleanSupplier autoAlign;
     private final BooleanSupplier resetOdometry;
+    private final BooleanSupplier missWalls;
 
     private Pose2d withVision;
     private Pose2d encoderOnly;
@@ -67,6 +68,66 @@ public class FieldCentricDrive extends Command {
     private double buttonTarget = 0.0;
     private boolean buttonActive = false;
     
+    private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("desiredHeading").publish();
+    private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("deltaX").publish();
+    private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("deltaY").publish();
+    private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("setPoint", Pose2d.struct).publish();
+
+    private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("odometryError", Pose2d.struct).publish();
+
+
+
+
+
+
+    private static double controllerDeadband = 0.05;
+    /**
+     * Teleop drive command
+     * @param drive swerve drivetrain
+     * @param forwardSpeed -1.0 to 1.0
+     * @param strafeSpeed -1.0 to 1.0
+     * @param turnSpeed -1.0 to 1.0
+     * @param autoAlign true for align to goal
+     */
+    public FieldCentricDrive(
+        SwerveDrivetrain drive, 
+        DoubleSupplier forwardSpeed, 
+        DoubleSupplier strafeSpeed, 
+        DoubleSupplier turnSpeed, 
+        BooleanSupplier autoAlign,
+        BooleanSupplier resetOdometry,
+        BooleanSupplier lockClosest,
+        // BooleanSupplier throughTrench,
+        BooleanSupplier lockHeading,
+        BooleanSupplier missWalls
+        ) {
+
+        this.drive = drive;
+        this.turnSpeed = turnSpeed;
+        this.forwardSpeed = forwardSpeed;
+        this.strafeSpeed = strafeSpeed;
+        this.autoAlign = autoAlign;
+        this.resetOdometry = resetOdometry;
+        this.lockClosest = lockClosest;            
+        // this.throughTrench = throughTrench;
+        this.lockHeading = lockHeading;
+        this.missWalls = missWalls;
+
+        // this.controller = new ThroughTrench(drive);
+
+
+        addRequirements(drive);
+    }
+
+    @Override
+    public void initialize() {
+        headingController.enableContinuousInput(-Math.PI, Math.PI);
+        currentPosition= drive.getPose();
         private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
             .getDoubleTopic("desiredHeading").publish();
         private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
@@ -146,24 +207,99 @@ public class FieldCentricDrive extends Command {
         //             trenchActive = true;
         //         }
 
-        //     trenchSpeeds = controller.getSpeeds();
-        //     trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
+        var result = DriverStation.getAlliance();
+        if (result.isPresent()) {
+            alliance = result.get();
+        }
 
-        //     }
+        // if (controller.isFinished()){
 
-        //     else {
-        //         trenchActive = false;
-        //     }
-    
-            if (resetOdometry.getAsBoolean()){
-                drive.resetDrivePose(currentPosition);
-            } 
-    
-            var outputSpeeds = new ChassisSpeeds(
-            xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
-            ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-            Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
+        //     drive.stop();
             
+        // }
+
+    }
+
+    @Override
+    public void execute() {
+
+        currentPosition = drive.getPose();
+       
+    //    if (throughTrench.getAsBoolean()){
+
+    //         if (!trenchActive) {
+    //             controller.initialize();
+    //             trenchActive = true;
+    //         }
+
+    //     trenchSpeeds = controller.getSpeeds();
+    //     trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
+
+    //     }
+
+    //     else {
+    //         trenchActive = false;
+    //     }
+
+        if (resetOdometry.getAsBoolean()){
+            drive.resetDrivePose(currentPosition);
+        } 
+
+        var outputSpeeds = new ChassisSpeeds(
+        xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
+        ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
+        Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
+        
+        if (alliance == Alliance.Blue){
+            deltaX = blueHubX - currentPosition.getX();
+            deltaY = blueHubY - currentPosition.getY();
+        } else {
+            deltaX = redHubX - currentPosition.getX();
+            deltaY = redHubY - currentPosition.getY();
+        }
+
+        desiredHeading = Math.atan(deltaY / deltaX);
+        SmartDashboard.putNumber("desiredHeading", desiredHeading);
+        desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
+       
+       
+        // deltaXDoublePublisher.set(deltaX);
+        //deltaYDoublePublisher.set(deltaY);
+
+            
+        if (autoAlign.getAsBoolean()){
+            if(alliance == Alliance.Blue){
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+
+                if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+                }
+            } 
+            else {
+                rotationalSpeed = headingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
+                
+                if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+                }
+            }
+            
+        }
+
+        if(lockHeading.getAsBoolean() && !lockClosestActive){
+            if(!lockHeadingActive){
+                lockHeadingTarget = drive.getRotation2d().getRadians();
+                lockHeadingActive = true;
+            }
+
+            rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+        } else {
+            lockHeadingActive = false;
+        }
+
+        if (lockClosest.getAsBoolean() && !lockHeadingActive){
+            if(!lockClosestActive){
+                lockClosestTarget = drive.getRotation2d().getDegrees();
             if (alliance == Alliance.Blue){
     
                 deltaX = blueHubX - currentPosition.getX();
@@ -292,26 +428,42 @@ public class FieldCentricDrive extends Command {
             }
             
 
-             outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
-
-            // if(throughTrench.getAsBoolean()){
-            // driveSpeeds = trenchSpeeds;     
-            // }
-
-            // else{
-                driveSpeeds = outputSpeeds;
-            // }
-
-            if (alliance == Alliance.Blue) {
-            
-            drive.fieldOrientedDrive(driveSpeeds);
-
-            } 
-
-            else {
-                drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
-
+                if (lockClosestTarget >90 || lockClosestTarget <-90) {
+                    lockClosestTarget = Math.toRadians(180);
+                }
+                else {
+                    lockClosestTarget = Math.toRadians(0);
+                }
+                
+                lockClosestActive = true;
             }
+
+            rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+        } else {
+            lockClosestActive = false;
+        }
+        
+
+        outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
+
+        // if(throughTrench.getAsBoolean()){
+        // driveSpeeds = trenchSpeeds;     
+        // }
+
+        // else{
+        driveSpeeds = outputSpeeds;
+        // }
+
+        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition > FIELD_MAX_X || currentPosition < FIELD_MIN_Y || currentPosition > FIELD_MAX_Y)) {
+            driveSpeeds = new ChassisSpeeds();
+        }
+
+        if (alliance == Alliance.Blue) {
+            drive.fieldOrientedDrive(driveSpeeds);
+        } else {
+            drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
+        }
 
         //test for odometry fix
         // setPointPublisher.set(controller.setPoint);

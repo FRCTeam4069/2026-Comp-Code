@@ -167,6 +167,8 @@ public class RobotContainer {
                () -> controller0.getHID().getYButton(), //reset odometry
                //() -> controller0.getHID().getXButton(), // through trench
                () -> controller0.getHID().getLeftBumperButton(),//lock closest
+               () -> controller0.getHID().getRightBumperButton()), //lock heading
+               () -> controller0.getHID().getXButton(); //TODO: bind this to the button you want
                () -> controller0.getHID().getRightBumperButton()); //lock heading //switched to snapheading for now
    }
 
