@@ -261,14 +261,6 @@ public class ShooterController extends SubsystemBase {
         return run (()->stop());
     }
 
-    public void autoRamp(){
-        targetRPM = autoRPM;
-    }
-
-    public Command autoRampCommand(){
-        return runOnce(()->autoRamp());
-    }
-
     public void periodic(){
 
         MetersPerSecondOne = (targetRPM / 60) * 0.31918581;

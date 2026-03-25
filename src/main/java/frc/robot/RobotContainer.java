@@ -124,7 +124,6 @@ public class RobotContainer {
       NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
-      NamedCommands.registerCommand("autoRamp", shooter.autoRampCommand());
       NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
 
       NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
