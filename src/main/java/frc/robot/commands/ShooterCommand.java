@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -23,6 +22,8 @@ public class ShooterCommand extends Command{
     private final BooleanSupplier shoot;
     private final BooleanSupplier pass;
     private final BooleanSupplier reverseAll;
+    private final BooleanSupplier feederManual;
+
 
     private double distance = 0.0;
     private double currentPositionX = 0.0;
@@ -45,7 +46,6 @@ public class ShooterCommand extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
-    private final BooleanSupplier feederManual;
 
     private Boolean shootReady;
     private final Timer timer = new Timer();
@@ -145,6 +145,11 @@ public class ShooterCommand extends Command{
 
             shooter.shoot(distance);
 
+            if(feederManual.getAsBoolean()){ //FIXME test if this works
+                feeder.driveFeederIn();
+                hopper.driveHopperIn();
+            }
+
             if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
                shootReady = true;
                timer.start();
@@ -198,6 +203,11 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
+            if(feederManual.getAsBoolean()){ //FIXME test if this works
+                feeder.driveFeederIn();
+                hopper.driveHopperIn();
+            }
+
             if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
@@ -213,6 +223,11 @@ public class ShooterCommand extends Command{
 
             else if (Math.abs(currentPositionX - hubX) < farPassThresh){
                 shooter.closePass();
+            }
+
+            if(feederManual.getAsBoolean()){ //FIXME test if this works
+                feeder.driveFeederIn();
+                hopper.driveHopperIn();
             }
 
 
