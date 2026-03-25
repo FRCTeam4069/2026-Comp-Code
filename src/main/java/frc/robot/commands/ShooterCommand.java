@@ -27,7 +27,7 @@ public class ShooterCommand extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private static final double feedStartTime = 0.2;
+    private static final double feedStartTime = 0.3;
 
     private final double farPassThresh = 2;
 
@@ -157,12 +157,15 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.25)){
-                hopper.driveHopperIn();            
+             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
+            if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
+                hopper.driveHopperIn();
+
             }
 
         }
