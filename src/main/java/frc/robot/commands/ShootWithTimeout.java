@@ -5,6 +5,7 @@ import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
@@ -58,35 +59,35 @@ public class ShootWithTimeout extends Command{
 
     @Override
     public void execute(){
-        // var result = DriverStation.getAlliance();
+        var result = DriverStation.getAlliance();
 
-        // currentPositionX = shooter.getCurrentRobotPose().getX();
-        // currentPositionY = shooter.getCurrentRobotPose().getY();
+        currentPositionX = shooter.getCurrentRobotPose().getX();
+        currentPositionY = shooter.getCurrentRobotPose().getY();
 
-        // if (result.isPresent()) {
-        //     alliance = result.get();
-        // }
+        if (result.isPresent()) {
+            alliance = result.get();
+        }
 
-        // if(alliance == Alliance.Blue){
+        if(alliance == Alliance.Blue){
 
-        //     deltaX = blueHubX - currentPositionX;
-        //     deltaY = blueHubY - currentPositionY; 
+            deltaX = blueHubX - currentPositionX;
+            deltaY = blueHubY - currentPositionY; 
 
-        // }
+        }
 
-        // else {
+        else {
 
-        //     deltaX = redHubX - currentPositionX;
-        //     deltaY = redHubY - currentPositionY;
+            deltaX = redHubX - currentPositionX;
+            deltaY = redHubY - currentPositionY;
 
-        // }
+        }
 
-        // distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-        shooter.autoShoot();
+        shooter.shoot(distance);
 
 
-        if ((Math.abs(shooter.targetRPM -shooter.currentRPM) <= RPMDiff) && shooter.hoodInPosition() ) { 
+        if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition() ) { 
             shootReady = true;
 
             if (!timer.isRunning()){
@@ -99,7 +100,7 @@ public class ShootWithTimeout extends Command{
             shootReady = false;
         }
     
-        if(timer.hasElapsed(5)){
+        if(timer.hasElapsed(4)){
                 pivot.goUpper();
         }
 
