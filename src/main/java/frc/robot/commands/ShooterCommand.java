@@ -27,7 +27,7 @@ public class ShooterCommand extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private static final double feedStartTime = 0.2;
+    private static final double feedStartTime = 0.1;
 
     private final double farPassThresh = 2;
 
@@ -45,14 +45,7 @@ public class ShooterCommand extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
-   // private final DoubleSupplier hopperPowerSupplier;
-//    private final BooleanSupplier testShoot;
     private final BooleanSupplier feederManual;
-
-    // private final BooleanSupplier passTest;
-    // private final BooleanSupplier closeShootTest;
-    // private final BooleanSupplier farShootTest;
-    // private final BooleanSupplier away; 
 
     private Boolean shootReady;
     private final Timer timer = new Timer();

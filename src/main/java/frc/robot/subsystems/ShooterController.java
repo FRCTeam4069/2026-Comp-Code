@@ -56,7 +56,7 @@ public class ShooterController extends SubsystemBase {
     private static final double hoodTolerace = 0.5;
     private static final double maxDistance = 4.8;
     private static final double minHoodDistance = 2.95;
-    private static final double  minShootDistance = 1.65;
+    // private static final double  minShootDistance = 1.3;
 
     PIDController hoodController = new PIDController(
     HoodConstants.hoodCoefficients.kP(),
@@ -69,8 +69,8 @@ public class ShooterController extends SubsystemBase {
 
     public double MetersPerSecondOne = 0.0;
 
-    public double closePassRPM = 3500.0; //FIXME
-    public double farPassRPM = 4500.0;
+    public double closePassRPM = 3200.0; //FIXME
+    public double farPassRPM = 4200.0;
 
     double pidOut = 0.0;
     
@@ -129,8 +129,8 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void towerShoot(){
-        targetRPM = 3250;
-        targetDeg = 4;
+        targetRPM = 3000;
+        targetDeg = 6;
 
     }
 
@@ -168,9 +168,9 @@ public class ShooterController extends SubsystemBase {
             targetRPM = 0;
         }
 
-         else if (distance < minHoodDistance){
-            targetRPM = 0;
-        }
+        //  else if (distance < minHoodDistance){
+        //     targetRPM = 0;
+        // }
 
 
         else{ 
