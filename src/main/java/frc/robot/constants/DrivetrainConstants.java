@@ -126,13 +126,17 @@ public class DrivetrainConstants {
     public static final Pose2d[] blueClimbPoses = new Pose2d[]{
         new Pose2d(3.7, 6.1, Rotation2d.fromDegrees(-68.5)),//. //TODO
         new Pose2d(3.0, 4.1, Rotation2d.fromDegrees(0)),//. //TODO
-        new Pose2d(3.7, 1.9, Rotation2d.fromDegrees(68.5))//. //TODO
+        new Pose2d(3.7, 1.9, Rotation2d.fromDegrees(68.5)),//. //TODO
+        new Pose2d(0.82, 4.8, Rotation2d.fromDegrees(0))//. //TODO
+
     };
 
     public static final Pose2d[] redClimbPoses = new Pose2d[]{
-        new Pose2d(9.75, 3.06, Rotation2d.fromDegrees(0.0)),//. //TODO
-        new Pose2d(9.75, 2.01, Rotation2d.fromDegrees(0.0)),//. //TODO
-        new Pose2d(9.75, 0.94, Rotation2d.fromDegrees(0.0))//. //TODO
+        new Pose2d(12.8, 6.1, Rotation2d.fromDegrees(0.0)),//. //TODO
+        new Pose2d(13.5, 4.1, Rotation2d.fromDegrees(0.0)),//. //TODO
+        new Pose2d(12.8, 1.9, Rotation2d.fromDegrees(0.0)),
+        new Pose2d(15.678, 3.204, Rotation2d.fromDegrees(68.5))//. //TODO
+//. //TODO
     };
 
     // offset = 0.164m
@@ -210,7 +214,9 @@ public class DrivetrainConstants {
         new Tolerances(0.04, 0.40), 
         new Tolerances(0.04, 0.30));
     
-    public static final PIDCoefficients teleOpHeadingCoefficients = new PIDCoefficients(14.0, 0.0, 0.0);
+    public static final PIDCoefficients lowerHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
+    public static final PIDCoefficients higherHeadingCoefficients = new PIDCoefficients(14.0, 0.0, 0.0);
+
 
     public record ModuleCoefficients(
         double steerKS,

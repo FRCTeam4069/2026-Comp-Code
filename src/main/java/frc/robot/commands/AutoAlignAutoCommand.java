@@ -1,12 +1,6 @@
 package frc.robot.commands;
 
-import java.time.LocalDate;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.subsystems.ThroughTrench;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
@@ -31,10 +24,15 @@ public class AutoAlignAutoCommand extends Command {
     private Pose2d encoderOnly;
     private Pose2d odometryError;
 
-    private PIDController headingController = new PIDController(
-        DrivetrainConstants.teleOpHeadingCoefficients.kP(), 
-        DrivetrainConstants.teleOpHeadingCoefficients.kI(), 
-        DrivetrainConstants.teleOpHeadingCoefficients.kD());
+    private PIDController lowerHeadingController = new PIDController(
+        DrivetrainConstants.lowerHeadingCoefficients.kP(), 
+        DrivetrainConstants.lowerHeadingCoefficients.kI(), 
+        DrivetrainConstants.lowerHeadingCoefficients.kD());
+
+    private PIDController higherHeadingController = new PIDController(
+        DrivetrainConstants.higherHeadingCoefficients.kP(), 
+        DrivetrainConstants.higherHeadingCoefficients.kI(), 
+        DrivetrainConstants.higherHeadingCoefficients.kD());
 
 
 
@@ -89,7 +87,7 @@ public class AutoAlignAutoCommand extends Command {
 
         @Override
         public void initialize() {
-            headingController.enableContinuousInput(-Math.PI, Math.PI);
+            lowerHeadingController.enableContinuousInput(-Math.PI, Math.PI);
             currentPosition= drive.getPose();
     
             var result = DriverStation.getAlliance();
@@ -129,17 +127,17 @@ public class AutoAlignAutoCommand extends Command {
     
         
             if(alliance == Alliance.Blue){
-                rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
 
-                if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                if (Math.abs(lowerHeadingController.getError()) >= Math.toRadians(tolerance)){
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
                     }
                 }
             else {
-                rotationalSpeed = headingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
 
                 
-                if (Math.abs(headingController.getError()) >= Math.toRadians(tolerance)){
+                if (Math.abs(lowerHeadingController.getError()) >= Math.toRadians(tolerance)){
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
                     }
             }
@@ -178,7 +176,7 @@ public class AutoAlignAutoCommand extends Command {
     public boolean isFinished() {
 
 
-        if(Math.abs(headingController.getError()) < Math.toRadians(tolerance)) {
+        if(Math.abs(lowerHeadingController.getError()) < Math.toRadians(tolerance)) {
             drive.stop();
             return true;
         }

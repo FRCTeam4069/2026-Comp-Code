@@ -111,6 +111,9 @@ public class RobotContainer {
       controller0.povRight()
          .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
          .onFalse(drive.stopOnceCommand());
+      controller0.povUp()
+         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
+         .onFalse(drive.stopOnceCommand());
 
    
    }
@@ -157,15 +160,15 @@ public class RobotContainer {
                () -> -controller0.getLeftX(), //strafe
                () -> -controller0.getRightX(), //rotation
                () -> controller0.getHID().getRightBumperButton(), //autoalign
-               () -> controller0.getHID().getStartButton(), //controller0.getHID().getYButton(), //reset odometry
-               () -> controller0.getHID().getLeftBumperButton(), //lock closest
-               () ->false,//-> controller0.getHID().getRightBumperButton(), //lock heading
+               () -> controller0.getHID().getStartButton(), //reset odometry
+               () -> false, //lock closest
+               () ->false, //lock heading
                () -> false, //miss walls 
                () -> controller0.getRightY(), //snap modules
-               () -> controller0.getHID().getXButton(),
-               () -> controller0.getHID().getBButton(),
-               () -> controller0.getHID().getYButton(),
-               () -> controller0.getHID().getAButton());
+               () -> controller0.getHID().getXButton(), //left
+               () -> controller0.getHID().getBButton(),//right
+               () -> controller0.getHID().getYButton(), //front
+               () -> controller0.getHID().getAButton());//back
 
    }
 
