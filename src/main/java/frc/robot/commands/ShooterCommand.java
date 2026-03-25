@@ -150,12 +150,15 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.25)){
-                hopper.driveHopperIn();            
+             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+               shootReady = true;
+               timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(0.3)){
+            if(shootReady = true && timer.hasElapsed(feedStartTime)){
                 feeder.driveFeederIn();
+                hopper.driveHopperIn();
+
             }
 
         }
