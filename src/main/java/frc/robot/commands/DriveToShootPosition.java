@@ -1,16 +1,10 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -18,15 +12,14 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.commands.DrivetrainPIDController;
 
 public class DriveToShootPosition extends Command {
-        public enum ClimbTarget {
-        CLOSEST,
+    public enum ClimbTarget {
         LEFT,
         CENTER,
-        RIGHT
-    }    
+        RIGHT,
+        UP
+    }
     private final SwerveDrivetrain drive;
     private final DrivetrainPIDController controller;
     private Pose2d setpoint;
@@ -36,10 +29,6 @@ public class DriveToShootPosition extends Command {
         .getStructTopic("target pose", Pose2d.struct).publish();
     private StructPublisher<Translation2d> vecPublisher = NetworkTableInstance.getDefault()
         .getStructTopic("translation", Translation2d.struct).publish();
-
-    public DriveToShootPosition(SwerveDrivetrain drive) {
-        this(drive, ClimbTarget.CLOSEST);
-    }
 
     public DriveToShootPosition(SwerveDrivetrain drive, ClimbTarget target) {
         this.drive = drive;
@@ -74,29 +63,13 @@ public class DriveToShootPosition extends Command {
                 climbPoses.add(pose);
             }
         }
-        if (target == ClimbTarget.CLOSEST) {
-        Pose2d currentPose = drive.getPose();
-        Pose2d closestPose = climbPoses.get(0);
-        double minimumDistance = Double.MAX_VALUE;
-
-        for (Pose2d climbPose : climbPoses) {
-            double distance = getDistance(currentPose, climbPose); //TODO
-            if (distance < minimumDistance) {
-                closestPose = climbPose;
-                minimumDistance = distance;
-            }
-        }
-
-        setpoint = closestPose;
-} else {
-            int index = switch (target) {
-                case LEFT -> 0;
-                case CENTER -> 1;
-                case RIGHT -> 2;
-                default -> 0;
-            };
-            setpoint = climbPoses.get(index);
-        }        
+        int index = switch (target) {
+            case LEFT -> 0;
+            case CENTER -> 1;
+            case RIGHT -> 2;
+            case UP -> 3;
+        };
+        setpoint = climbPoses.get(index);
         posePublisher.set(setpoint);
 
         controller.reset(drive.getPose(), ChassisSpeeds.fromRobotRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRotation2d()));

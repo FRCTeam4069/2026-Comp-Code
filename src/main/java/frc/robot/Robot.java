@@ -60,7 +60,8 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putNumber("current", pdh.getTotalCurrent());
     SmartDashboard.putNumber("match timer", DriverStation.getMatchTime());
 
-      currentPosition= m_robotContainer.drive.getPose();
+      currentPosition = m_robotContainer.drive.getPose();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -92,6 +93,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+
+    currentPosition = m_robotContainer.drive.getPose();
+    m_robotContainer.shooter.setCurrentRobotPose(currentPosition);
 
     //SmartDashboard.putString("Auto Selected", m_robotContainer.getAutonomousName());
   }

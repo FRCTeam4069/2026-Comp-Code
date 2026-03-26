@@ -155,16 +155,16 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
-             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
-            }
+            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+            //    shootReady = true;
+            //    timer.start();
+            // }
 
-            if(shootReady = true && timer.hasElapsed(feedStartTime)){
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
+            // if(shootReady = true && timer.hasElapsed(feedStartTime)){
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
 
-            }
+            // }
 
         }
 
@@ -182,38 +182,44 @@ public class ShooterCommand extends Command{
         else if(closeShoot.getAsBoolean()){
             shooter.manualCloseShoot();
 
-
-             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
-            }
-
-            if(shootReady = true && timer.hasElapsed(feedStartTime)){
+        if(feederManual.getAsBoolean()){ //FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
+         }
 
-            }
+
+
+            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+            //    shootReady = true;
+            //    timer.start();
+            // }
+
+            // if(shootReady = true && timer.hasElapsed(feedStartTime)){
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
+
+            // }
         }
 
         else if (towerShoot.getAsBoolean()){
             shooter.towerShoot();
 
-             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
-            }
+            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
+            //    shootReady = true;
+            //    timer.start();
+            // }
 
             if(feederManual.getAsBoolean()){ //FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
-            if(shootReady = true && timer.hasElapsed(feedStartTime)){
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
+            // if(shootReady = true && timer.hasElapsed(feedStartTime)){
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
 
             }
-        }
+        
 
         else if (pass.getAsBoolean()){
 
@@ -236,11 +242,11 @@ public class ShooterCommand extends Command{
                timer.start();
             }
 
-            if(shootReady = true && timer.hasElapsed(feedStartTime)){
-                feeder.driveFeederIn();
-                hopper.driveHopperIn();
+            // if(shootReady = true && timer.hasElapsed(feedStartTime)){
+            //     feeder.driveFeederIn();
+            //     hopper.driveHopperIn();
 
-            }
+            // }
         }
 
       

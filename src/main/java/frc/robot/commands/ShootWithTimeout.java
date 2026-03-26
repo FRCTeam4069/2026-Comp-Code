@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
 
@@ -43,7 +44,6 @@ public class ShootWithTimeout extends Command{
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
 
-
     public ShootWithTimeout(
         ShooterController shooter,
         FeederSubsystem feeder,
@@ -70,15 +70,15 @@ public class ShootWithTimeout extends Command{
 
         if(alliance == Alliance.Blue){
 
-            deltaX = blueHubX - currentPositionX;
-            deltaY = blueHubY - currentPositionY; 
+            deltaX = Math.abs(blueHubX - currentPositionX);
+            deltaY = Math.abs(blueHubY - currentPositionY); 
 
         }
 
-        else {
+        else if (alliance == Alliance.Red) {
 
-            deltaX = redHubX - currentPositionX;
-            deltaY = redHubY - currentPositionY;
+            deltaX = Math.abs(redHubX - currentPositionX);
+            deltaY = Math.abs(redHubY - currentPositionY); 
 
         }
 
@@ -87,7 +87,7 @@ public class ShootWithTimeout extends Command{
         shooter.shoot(distance);
 
 
-        if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition() ) { 
+        if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition() ) { 
             shootReady = true;
 
             if (!timer.isRunning()){
@@ -102,21 +102,24 @@ public class ShootWithTimeout extends Command{
     
         if(timer.hasElapsed(4)){
                 pivot.goUpper();
+    
         }
 
         if(shootReady ){
             feeder.driveFeederIn();
             hopper.driveHopperIn();
 
-
-
         }
+        
         else{
 
             feeder.stopFeeder();
             timer.stop();
             timer.reset();
         }
+               
+        SmartDashboard.putNumber("distance", distance);
+
     }
 
     @Override

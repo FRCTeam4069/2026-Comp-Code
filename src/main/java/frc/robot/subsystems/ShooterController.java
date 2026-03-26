@@ -129,7 +129,7 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void towerShoot(){
-        targetRPM = 3000;
+        targetRPM = 3100;
         targetDeg = 6;
 
     }
@@ -167,11 +167,6 @@ public class ShooterController extends SubsystemBase {
         if(distance > maxDistance){ 
             targetRPM = 0;
         }
-
-        //  else if (distance < minHoodDistance){
-        //     targetRPM = 0;
-        // }
-
 
         else{ 
         targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4)) + (7929.250003 * Math.pow(distance, 3))

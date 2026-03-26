@@ -30,7 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.55
+                  "waitTime": 1.8
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.9
+                  "waitTime": 2.4
                 }
               },
               {
@@ -105,7 +105,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.6
+                  "waitTime": 1.8
                 }
               },
               {
@@ -232,7 +232,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.1
+                  "waitTime": 1.4
                 }
               },
               {
@@ -282,7 +282,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.9
+                  "waitTime": 2.4
                 }
               },
               {
@@ -326,7 +326,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.6
+                  "waitTime": 1.8
                 }
               },
               {

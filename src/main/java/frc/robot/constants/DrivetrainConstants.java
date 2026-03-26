@@ -48,7 +48,7 @@ public class DrivetrainConstants {
     public static final double angularVelocityDeadband = 0.01;
     public static final double headingCorrectionDeadband = 0.05;
 
-    public static final double mass = Pounds.of(146.0).in(Kilograms); //FIXME 141 prob with shooter
+    public static final double mass = Pounds.of(139.0).in(Kilograms); //FIXME 141 prob with shooter
 
     // TODO: ADD THESE MEASUREMENTS
     public static final double FIELD_MIN_X = 0.0;
@@ -127,7 +127,7 @@ public class DrivetrainConstants {
         new Pose2d(3.7, 6.1, Rotation2d.fromDegrees(-68.5)),//. //TODO
         new Pose2d(3.0, 4.1, Rotation2d.fromDegrees(0)),//. //TODO
         new Pose2d(3.7, 1.9, Rotation2d.fromDegrees(68.5)),//. //TODO
-        new Pose2d(0.82, 4.8, Rotation2d.fromDegrees(0))//. //TODO
+        new Pose2d(0.889, 4.69, Rotation2d.fromDegrees(-6.12))//. //TODO
 
     };
 

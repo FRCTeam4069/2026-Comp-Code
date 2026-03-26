@@ -15,7 +15,6 @@ import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -72,6 +71,8 @@ public class RobotContainer {
 
       autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
       autoChooser.addOption ("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
+
+      autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
 
       autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
       autoChooser.addOption ("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
