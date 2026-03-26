@@ -132,10 +132,10 @@ public class DrivetrainConstants {
     };
 
     public static final Pose2d[] redClimbPoses = new Pose2d[]{
-        new Pose2d(12.8, 6.1, Rotation2d.fromDegrees(0.0)),//. //TODO
-        new Pose2d(13.5, 4.1, Rotation2d.fromDegrees(0.0)),//. //TODO
-        new Pose2d(12.8, 1.9, Rotation2d.fromDegrees(0.0)),
-        new Pose2d(15.678, 3.204, Rotation2d.fromDegrees(68.5))//. //TODO
+        new Pose2d(12.84 , 1.9, Rotation2d.fromDegrees(111.5)),//. //TODO
+        new Pose2d(13.54, 4.035, Rotation2d.fromDegrees(180.0)),//. //TODO
+        new Pose2d(12.84, 6.1, Rotation2d.fromDegrees(-111.5)),
+        new Pose2d(15.651, 3.38, Rotation2d.fromDegrees(173.88))//. //TODO
 //. //TODO
     };
 

@@ -210,12 +210,27 @@ public class FieldCentricDrive extends Command {
             double currentDeg = drive.getRotation2d().getDegrees();
             double target =0;
 
+            if (alliance == Alliance.Blue){
+
             if ((currentDeg<90 && currentDeg>0) || (currentDeg>-90&& currentDeg<0)) {
                 target = 18;
             }
             else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)) {
                 target = 162;
             }
+
+            }
+
+            else if(alliance==Alliance.Red){
+              if ((currentDeg<90 && currentDeg>0) || (currentDeg>-90&& currentDeg<0)) {
+                target = -18;
+            }
+            else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)) {
+                target = -162;
+            }
+ 
+            }
+
 
             rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
@@ -226,27 +241,55 @@ public class FieldCentricDrive extends Command {
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
-                target = -18;
-            }
-            else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
-                target = -162;
-            }
+            if(alliance==Alliance.Blue){
 
+                 if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
+                    target = -18;
+                }
+
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
+                    target = -162;
+                }
+            }
+            else if(alliance==Alliance.Red){
+
+                 if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
+                    target = 18;
+                }
+
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
+                    target = 162;
+                }
+            }
             rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
 
         }   
+
+        //front and back pmo. you know what you did.
         else if (frontSnap.getAsBoolean()) {
 
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
-                target = -72;
+            if (alliance == Alliance.Red){
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -72;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 72;
+                }
             }
-            else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
-                target = 72;
+
+            else if (alliance == Alliance.Blue){
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -72;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 72;
+                }
             }
 
             rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
@@ -258,16 +301,30 @@ public class FieldCentricDrive extends Command {
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
-                target = -108;
+            if (alliance == Alliance.Red){
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -108;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 108;
+                }
             }
-            else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
-                target = 108;
+
+            else if (alliance == Alliance.Blue){
+
+                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                    target = -108;
+                }
+                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                    target = 108;
+                }
             }
 
             rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
         } 
+        
         
         if (alliance == Alliance.Blue){
             deltaX = blueHubX - currentPosition.getX();
