@@ -99,6 +99,7 @@ public class ShootWithTimeout extends Command{
         }
 
         else{
+            
             shootReady = false;
         }
     
@@ -111,7 +112,7 @@ public class ShootWithTimeout extends Command{
         else{
 
             feeder.stopFeeder();
-            //hopper.stopHopper();
+            hopper.stopHopper();
             timer.stop();
             timer.reset();
         }
