@@ -78,6 +78,8 @@ public class RobotContainer {
       autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
 
       autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
+      autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
+
 
 
 
