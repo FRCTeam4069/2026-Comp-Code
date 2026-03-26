@@ -16,10 +16,9 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
-public class AutoAlignAutoCommand extends Command {
+public class AlignNeg90 extends Command {
     private final SwerveDrivetrain drive;
    
-
     private Pose2d withVision;
     private Pose2d encoderOnly;
     private Pose2d odometryError;
@@ -29,17 +28,10 @@ public class AutoAlignAutoCommand extends Command {
         DrivetrainConstants.lowerHeadingCoefficients.kI(), 
         DrivetrainConstants.lowerHeadingCoefficients.kD());
 
-
     private Pose2d currentPosition;
-    private double desiredHeading = 0.0;
+    private double desiredHeading = -90.0;
     private Alliance alliance = Alliance.Blue;
-    private final double redHubX = Units.inchesToMeters(469.1);
-    private final double redHubY = Units.inchesToMeters(158.85);
-    private final double blueHubX = Units.inchesToMeters(182.1);
-    private final double blueHubY = Units.inchesToMeters(158.85);
-  
-    private double deltaX = 0.0;
-    private double deltaY = 0.0;
+
     private double tolerance = 0.5;
     double rotationalSpeed = 0.0;
    
@@ -57,24 +49,16 @@ public class AutoAlignAutoCommand extends Command {
         private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
             .getStructTopic("odometryError", Pose2d.struct).publish();
     
-    
-    
-    
-    
-    
         /**
          * Teleop drive command
          * @param drive swerve drivetrain
          */
 
-        public AutoAlignAutoCommand(
+        public AlignNeg90(
             SwerveDrivetrain drive
             ) {
     
-            this.drive = drive;
-    
-            // this.controller = new ThroughTrench(drive);
-    
+            this.drive = drive;    
     
             addRequirements(drive);
         }
@@ -84,10 +68,7 @@ public class AutoAlignAutoCommand extends Command {
             lowerHeadingController.enableContinuousInput(-Math.PI, Math.PI);
             currentPosition= drive.getPose();
     
-            var result = DriverStation.getAlliance();
-            if (result.isPresent()) {
-                alliance = result.get();
-            }
+            
     
         }
     
@@ -98,70 +79,21 @@ public class AutoAlignAutoCommand extends Command {
 
             var outputSpeeds = new ChassisSpeeds(0,0,0);
             //Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
-            
-            if (alliance == Alliance.Blue){
-    
-                deltaX = blueHubX - currentPosition.getX();
-                deltaY = blueHubY - currentPosition.getY();
-            }
-    
-            else{
-    
-                deltaX = redHubX - currentPosition.getX();
-                deltaY = redHubY - currentPosition.getY();
-            }
-    
-            desiredHeading = Math.atan(deltaY / deltaX);
-            SmartDashboard.putNumber("desiredHeading", desiredHeading);
-            desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
-
-           
-           
-            // deltaXDoublePublisher.set(deltaX);
-            //deltaYDoublePublisher.set(deltaY);
-    
         
-            if(alliance == Alliance.Blue){
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(desiredHeading));
 
                 if (Math.abs(lowerHeadingController.getError()) >= Math.toRadians(tolerance)){
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
                     }
-                }
-            else {
+        
                 rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
-
-                
-                if (Math.abs(lowerHeadingController.getError()) >= Math.toRadians(tolerance)){
-                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-                    }
-            }
             
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
 
-                driveSpeeds = outputSpeeds;
-
-            if (alliance == Alliance.Blue) {
+             driveSpeeds = outputSpeeds;
             
             drive.fieldOrientedDrive(driveSpeeds);
-
-            } 
-
-            else {
-                drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
-
-            }
-
-        //test for odometry fix
-        // setPointPublisher.set(controller.setPoint);
-
-        withVision = drive.poseEstimator.getEstimatedPosition();
-        encoderOnly = drive.swerveOdometry.getPoseMeters();
-
-
-        odometryError = encoderOnly.relativeTo(withVision);
-        odometryErrorPublisher.set(odometryError);
 
     }
 

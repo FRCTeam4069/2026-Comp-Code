@@ -83,8 +83,10 @@ public class ShootWithTimeout extends Command{
         }
 
         distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        SmartDashboard.putNumber("distance", distance);
 
         shooter.shoot(distance);
+
 
 
         if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition() ) { 
@@ -100,11 +102,6 @@ public class ShootWithTimeout extends Command{
             shootReady = false;
         }
     
-        if(timer.hasElapsed(4)){
-                pivot.goUpper();
-    
-        }
-
         if(shootReady ){
             feeder.driveFeederIn();
             hopper.driveHopperIn();
@@ -114,6 +111,7 @@ public class ShootWithTimeout extends Command{
         else{
 
             feeder.stopFeeder();
+            //hopper.stopHopper();
             timer.stop();
             timer.reset();
         }
@@ -125,6 +123,7 @@ public class ShootWithTimeout extends Command{
     @Override
     public void end(boolean interrupted) {
         shooter.stop();
+        hopper.stopHopper();
         feeder.stopFeeder();
         timer.stop();
         timer.reset();

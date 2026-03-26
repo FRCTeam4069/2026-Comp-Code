@@ -1,5 +1,6 @@
 
 package frc.robot;
+import frc.robot.commands.AlignNeg90;
 import frc.robot.commands.AutoAlignAutoCommand;
 import frc.robot.commands.FieldCentricDrive;
 import frc.robot.commands.IntakeCommand;
@@ -42,6 +43,7 @@ public class RobotContainer {
    public static final ShooterController shooter = new ShooterController();
 
    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+   public static final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
 
    public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder, hopper, pivot);
 
@@ -129,6 +131,7 @@ public class RobotContainer {
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
       NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
+      NamedCommands.registerCommand("align negative 90", alignNeg90);
 
       NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
 
