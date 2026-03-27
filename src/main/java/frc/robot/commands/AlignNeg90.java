@@ -23,10 +23,10 @@ public class AlignNeg90 extends Command {
     private Pose2d encoderOnly;
     private Pose2d odometryError;
 
-    private PIDController lowerHeadingController = new PIDController(
-        DrivetrainConstants.lowerHeadingCoefficients.kP(), 
-        DrivetrainConstants.lowerHeadingCoefficients.kI(), 
-        DrivetrainConstants.lowerHeadingCoefficients.kD());
+    private PIDController middleHeadingController = new PIDController(
+        DrivetrainConstants.middleHeadingCoefficients.kP(), 
+        DrivetrainConstants.middleHeadingCoefficients.kI(), 
+        DrivetrainConstants.middleHeadingCoefficients.kD());
 
     private Pose2d currentPosition;
     private double desiredHeading = -90.0;
@@ -65,7 +65,7 @@ public class AlignNeg90 extends Command {
 
         @Override
         public void initialize() {
-            lowerHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+            middleHeadingController.enableContinuousInput(-Math.PI, Math.PI);
             currentPosition= drive.getPose();
     
             
@@ -80,13 +80,13 @@ public class AlignNeg90 extends Command {
             var outputSpeeds = new ChassisSpeeds(0,0,0);
             //Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
         
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(desiredHeading));
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(desiredHeading));
 
-                if (Math.abs(lowerHeadingController.getError()) >= Math.toRadians(tolerance)){
+                if (Math.abs(middleHeadingController.getError()) >= Math.toRadians(tolerance)){
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
                     }
         
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
             
 
              outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
@@ -103,7 +103,7 @@ public class AlignNeg90 extends Command {
     public boolean isFinished() {
 
 
-        if(Math.abs(lowerHeadingController.getError()) < Math.toRadians(tolerance)) {
+        if(Math.abs(middleHeadingController.getError()) < Math.toRadians(tolerance)) {
             drive.stop();
             return true;
         }

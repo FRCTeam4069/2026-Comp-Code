@@ -55,6 +55,11 @@ public class FieldCentricDrive extends Command {
         DrivetrainConstants.higherHeadingCoefficients.kI(), 
         DrivetrainConstants.higherHeadingCoefficients.kD());
 
+    private PIDController middleHeadingController = new PIDController(
+        DrivetrainConstants.middleHeadingCoefficients.kP(),
+        DrivetrainConstants.middleHeadingCoefficients.kI(),
+        DrivetrainConstants.middleHeadingCoefficients.kD());
+
     private PIDController lowerHeadingController = new PIDController(
         DrivetrainConstants.lowerHeadingCoefficients.kP(),
         DrivetrainConstants.lowerHeadingCoefficients.kI(),
@@ -149,14 +154,16 @@ public class FieldCentricDrive extends Command {
         this.backSnap = backSnap;
         // this.controller = new ThroughTrench(drive);
 
+        higherHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        middleHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        lowerHeadingController.enableContinuousInput(-Math.PI, Math.PI);
+
         addRequirements(drive);
     }
 
 
     @Override
     public void execute() {
-        lowerHeadingController.enableContinuousInput(-Math.PI, Math.PI);
-
         currentPosition = drive.getPose();
 
         var result = DriverStation.getAlliance();
@@ -197,12 +204,12 @@ public class FieldCentricDrive extends Command {
 
             if(alliance ==Alliance.Blue){
             double target = 0;
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
             else if (alliance ==Alliance.Red){
             double target = 180;
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
 
@@ -211,12 +218,12 @@ public class FieldCentricDrive extends Command {
 
             if(alliance==Alliance.Blue){
                 double target = 180;
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
             else if(alliance==Alliance.Red) {
                 double target = 0;
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
         }  
@@ -248,7 +255,7 @@ public class FieldCentricDrive extends Command {
             }
 
 
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
 
         }   
@@ -277,7 +284,7 @@ public class FieldCentricDrive extends Command {
                     target = 162;
                 }
             }
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
 
         }   
@@ -308,7 +315,7 @@ public class FieldCentricDrive extends Command {
                 }
             }
 
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
 
         } 
@@ -337,7 +344,7 @@ public class FieldCentricDrive extends Command {
                 }
             }
 
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
         } 
         
@@ -379,7 +386,7 @@ public class FieldCentricDrive extends Command {
                 lockHeadingActive = true;
             }
 
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
         } else {
             lockHeadingActive = false;
@@ -460,7 +467,7 @@ public class FieldCentricDrive extends Command {
                     target = 90.0;
                 }
 
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
 
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
@@ -509,7 +516,7 @@ public class FieldCentricDrive extends Command {
                     target = 0.0;  //near 90, go to 0
                 }
 
-                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
 
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
 
@@ -526,7 +533,7 @@ public class FieldCentricDrive extends Command {
                 lockClosestActive = true;
             }
 
-            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
         } else {
             lockClosestActive = false;

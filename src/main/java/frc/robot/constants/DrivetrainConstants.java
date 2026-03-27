@@ -213,8 +213,10 @@ public class DrivetrainConstants {
         new Constraints(10.0, 10.0), 
         new Tolerances(0.04, 0.40), 
         new Tolerances(0.04, 0.30));
-    
-    public static final PIDCoefficients lowerHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
+
+
+    public static final PIDCoefficients lowerHeadingCoefficients = new PIDCoefficients(5.0, 0.0, 0.0);
+    public static final PIDCoefficients middleHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
     public static final PIDCoefficients higherHeadingCoefficients = new PIDCoefficients(14.0, 0.0, 0.0);
 
 

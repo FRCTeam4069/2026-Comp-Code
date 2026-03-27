@@ -136,7 +136,7 @@ public class ShooterController extends SubsystemBase {
 
     public void manualCloseShoot(){
 
-        targetRPM = 2800;
+        targetRPM = 2400;
 
         targetDeg = 0;
 
