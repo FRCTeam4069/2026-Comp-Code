@@ -194,15 +194,31 @@ public class FieldCentricDrive extends Command {
 
         //SNAP MODULES 180/0 WITH JOYSTICK
         if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
+
+            if(alliance ==Alliance.Blue){
             double target = 0;
             rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            }
+            else if (alliance ==Alliance.Red){
+            double target = 180;
+            rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            }
 
         } 
         else if (snapModulesAxis.getAsDouble() >  SNAP_MODULE_ANGLE_THRESH_0) {
+
+            if(alliance==Alliance.Blue){
                 double target = 180;
                 rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            }
+            else if(alliance==Alliance.Red) {
+                double target = 0;
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            }
         }  
 
         //SNAP MODULES FOR WALLPICKUP left and right
@@ -275,10 +291,10 @@ public class FieldCentricDrive extends Command {
             if (alliance == Alliance.Red){
 
                 if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
-                    target = -72;
+                    target = -108;
                 }
                 else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
-                    target = 72;
+                    target = 108;
                 }
             }
 
@@ -304,10 +320,10 @@ public class FieldCentricDrive extends Command {
             if (alliance == Alliance.Red){
 
                 if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
-                    target = -108;
+                    target = -72;
                 }
                 else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
-                    target = 108;
+                    target = 72;
                 }
             }
 
