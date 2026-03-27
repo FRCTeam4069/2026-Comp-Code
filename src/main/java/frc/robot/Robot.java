@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.HubShiftUtil;
 
 
 
@@ -62,12 +63,20 @@ public class Robot extends TimedRobot {
 
       currentPosition = m_robotContainer.drive.getPose();
 
+      var shift = HubShiftUtil.getShiftedShiftInfo();
+      SmartDashboard.putString("Shifts/Game State", shift.currentShift().toString());
+      SmartDashboard.putBoolean("Shifts/Shift Active", shift.active());
+      SmartDashboard.putNumber(
+        "Shifts/Remaining Shift Time", Math.max(shift.remainingTime(), 0.0));
+
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
         //m_robotContainer.pivot.setBrakeState(1);
+        HubShiftUtil.initialize();
 
   }
 
@@ -82,7 +91,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
       m_autonomousCommand = m_robotContainer.getAutonomousCommand();
       m_robotContainer.drive.setDefaultCommand(m_robotContainer.drive.stopCommand());
-        
+
+      HubShiftUtil.initialize();
+
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
@@ -104,6 +115,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
        // m_robotContainer.pivot.setBrakeState(0);
         m_robotContainer.intake.stopFeed();
+        HubShiftUtil.initialize();
+
         
 
 
