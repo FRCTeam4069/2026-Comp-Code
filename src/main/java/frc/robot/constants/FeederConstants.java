@@ -4,31 +4,29 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-
 public final class FeederConstants {
 
-    public static final int feederSmartCurrentLimit = 30; 
+    public static final int feederSmartCurrentLimit = 30;
 
     public static final SparkMaxConfig feederConfig = new SparkMaxConfig();
 
     static {
         feederConfig
-            .inverted(true)
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(feederSmartCurrentLimit)
-            .openLoopRampRate(0.0)
-            .closedLoopRampRate(0.0);
+                .inverted(true)
+                .idleMode(IdleMode.kCoast)
+                .smartCurrentLimit(feederSmartCurrentLimit)
+                .openLoopRampRate(0.0)
+                .closedLoopRampRate(0.0);
     }
 
-
-
-    // public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0, 0.0);
-    // public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0, 0.0, 0.0);
+    // public static PIDCoefficients pidCoefficients = new PIDCoefficients(0, 0.0,
+    // 0.0);
+    // public static FFCoefficients ffCoefficients = new FFCoefficients(0.0, 0.0,
+    // 0.0, 0.0);
 
     // NOTE: not sure if these are needed quite yet
-    //public static Constraints constraints = new Constraints(100000.0, 100000.0);
-    //public static double positionTolerance = 0.02;
-    //public static double velocityTolerance = 1.00;
+    // public static Constraints constraints = new Constraints(100000.0, 100000.0);
+    // public static double positionTolerance = 0.02;
+    // public static double velocityTolerance = 1.00;
 
-    
 }

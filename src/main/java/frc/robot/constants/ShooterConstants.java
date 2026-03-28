@@ -16,64 +16,55 @@ public class ShooterConstants {
 
     public static final double kV = 0.001875;
 
-
-    static{
+    static {
         shooterOneMotorOneConfig
-            .inverted(false)
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(40)
-            .secondaryCurrentLimit(124)
-            .closedLoop.pid(kP, kI, 0)
-            .feedForward
+                .inverted(false)
+                .idleMode(IdleMode.kCoast)
+                .smartCurrentLimit(40)
+                .secondaryCurrentLimit(124).closedLoop.pid(kP, kI, 0).feedForward
                 .kV(kV);
     }
 
-     static{
+    static {
         shooterOneMotorTwoConfig
-            .inverted(false)
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(40)
-            .secondaryCurrentLimit(124)
-            .closedLoop.pid(kP, kI, 0)
-            .feedForward
+                .inverted(false)
+                .idleMode(IdleMode.kCoast)
+                .smartCurrentLimit(40)
+                .secondaryCurrentLimit(124).closedLoop.pid(kP, kI, 0).feedForward
                 .kV(kV);
     }
 
-    static{
+    static {
         shooterTwoMotorOneConfig
-            .inverted(false)
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(40)
-            .secondaryCurrentLimit(124)
-            .closedLoop.pid(kP, kI, 0)
-            .feedForward
+                .inverted(false)
+                .idleMode(IdleMode.kCoast)
+                .smartCurrentLimit(40)
+                .secondaryCurrentLimit(124).closedLoop.pid(kP, kI, 0).feedForward
                 .kV(kV);
     }
 
-     static{
+    static {
         shooterTwoMotorTwoConfig
-            .inverted(true)
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(40)
-            .secondaryCurrentLimit(124)
-            .closedLoop.pid(kP, kI, 0)
-            .feedForward
+                .inverted(true)
+                .idleMode(IdleMode.kCoast)
+                .smartCurrentLimit(40)
+                .secondaryCurrentLimit(124).closedLoop.pid(kP, kI, 0).feedForward
                 .kV(kV);
-            //.follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
+        // .follow(DeviceIDs.SHOOTER_TWO_MOTOR_ONE);
     }
-  
+
     // public record ShooterCoefficients(
-     
 
-    //     double kV,
-    //     double kA
+    // double kV,
+    // double kA
 
-    //     ) {}
+    // ) {}
 
-    //     public static ShooterCoefficients shooterCoefficientsOne = new ShooterCoefficients(
+    // public static ShooterCoefficients shooterCoefficientsOne = new
+    // ShooterCoefficients(
 
-    //         0.33,
-    //         0.0
+    // 0.33,
+    // 0.0
 
-    //     );
-    }
+    // );
+}

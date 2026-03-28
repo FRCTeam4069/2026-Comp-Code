@@ -1,7 +1,9 @@
 
 package frc.robot;
+
 import frc.robot.commands.AlignNeg90;
 import frc.robot.commands.AutoAlignAutoCommand;
+import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.FieldCentricDrive;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -24,10 +26,7 @@ import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.ShootWithTimeoutMiddle;
 import frc.robot.commands.DriveToShootPosition;
 
-
-
 public class RobotContainer {
-
 
    public static final SwerveDrivetrain drive = new SwerveDrivetrain();
    public static final IntakeSubsystem intake = new IntakeSubsystem();
@@ -45,20 +44,20 @@ public class RobotContainer {
    public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
    public static final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
 
-   public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder, hopper, pivot);
+   public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder,
+         hopper, pivot);
 
    public static final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
+   public static final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
 
    private String autoName;
 
-
    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-       // addSysIdCommands()
+   // addSysIdCommands()
 
-
-   private final CommandXboxController m_driverController =
-   new CommandXboxController(OperatorConstants.kDriverControllerPort);
+   private final CommandXboxController m_driverController = new CommandXboxController(
+         OperatorConstants.kDriverControllerPort);
 
    public RobotContainer() {
 
@@ -66,13 +65,12 @@ public class RobotContainer {
 
       autoName = "";
 
+      // autoChooser = AutoBuilder.buildAutoChooser();
 
-      //autoChooser = AutoBuilder.buildAutoChooser();
-
-       // addSysIdCommands()
+      // addSysIdCommands()
 
       autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
-      autoChooser.addOption ("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
+      autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
 
       autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
       autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
@@ -80,61 +78,62 @@ public class RobotContainer {
       autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
       autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
 
+      autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
+      autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
 
+      autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
+      autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
 
+      autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
+      autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
 
-      autoChooser.addOption ("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
-      autoChooser.addOption ("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
+      SmartDashboard.putData("Auto Chooser", autoChooser);
 
-      autoChooser.addOption ("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
-      autoChooser.addOption ("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
+      configureBindings();
 
-      autoChooser.addOption ("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
-      autoChooser.addOption ("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+   }
 
-       SmartDashboard.putData("Auto Chooser", autoChooser);
-
-       configureBindings();
-
- }
-
- /**
-  * Use this method to define your trigger->command mappings. Triggers can be created via the
-  * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-  * predicate, or via the named factories in {@link
-  * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-  * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-  * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-  * joysticks}.
-  */
+   /**
+    * Use this method to define your trigger->command mappings. Triggers can be
+    * created via the
+    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+    * an arbitrary
+    * predicate, or via the named factories in {@link
+    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+    * {@link
+    * CommandXboxController
+    * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+    * PS4} controllers or
+    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+    * joysticks}.
+    */
    private void configureBindings() {
       // new Trigger(exampleSubsystem::exampleCondition)
-      //     .onTrue(new ExampleCommand(exampleSubsystem));
+      // .onTrue(new ExampleCommand(exampleSubsystem));
 
       // m_driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
       controller0.povLeft()
-         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.LEFT))
-         .onFalse(drive.stopOnceCommand());
+            .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.LEFT))
+            .onFalse(drive.stopOnceCommand());
       controller0.povDown()
-         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.CENTER))
-         .onFalse(drive.stopOnceCommand());
+            .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.CENTER))
+            .onFalse(drive.stopOnceCommand());
       controller0.povRight()
-         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
-         .onFalse(drive.stopOnceCommand());
+            .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
+            .onFalse(drive.stopOnceCommand());
       controller0.povUp()
-         .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
-         .onFalse(drive.stopOnceCommand());
+            .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
+            .onFalse(drive.stopOnceCommand());
 
-   
    }
 
-   private void registerAutoCommands(){
+   private void registerAutoCommands() {
 
       NamedCommands.registerCommand("intakeOn", intake.intakeOn());
       NamedCommands.registerCommand("intakeOff", intake.intakeOff());
 
       NamedCommands.registerCommand("intakeDown", pivot.intakeDown());
-      NamedCommands.registerCommand ("intakeUp", pivot.intakeUp());
+      NamedCommands.registerCommand("intakeUp", pivot.intakeUp());
 
       NamedCommands.registerCommand("shoot", shootWithTimeout);
       NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
@@ -143,72 +142,72 @@ public class RobotContainer {
       NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
 
       NamedCommands.registerCommand("auto align", autoAlignAutoCommand);
-   
+      NamedCommands.registerCommand("stop shooter", shooter.stopShooterCommand());
+      NamedCommands.registerCommand("auto align infinite", autoAlignInfinite);
+
    }
 
-
- /**
-  * Use this to pass the autonomous command to the main {@link Robot} class.
-  *
-  * @return the command to run in autonomous
-  */
+   /**
+    * Use this to pass the autonomous command to the main {@link Robot} class.
+    *
+    * @return the command to run in autonomous
+    */
    public Command getAutonomousCommand() {
-      //An example command will be run in autonomous
+      // An example command will be run in autonomous
       Command selectedCommand = autoChooser.getSelected();
       if (selectedCommand != null)
          autoName = selectedCommand.getName();
-         return selectedCommand;  
-      }
+      return selectedCommand;
+   }
 
-   public String getAutonomousName(){
+   public String getAutonomousName() {
       return autoName;
    }
 
    public Command defaultDriveCommand() {
       return new FieldCentricDrive(
-               drive,
-               () -> -controller0.getLeftY(), //drive
-               () -> -controller0.getLeftX(), //strafe
-               () -> -controller0.getRightX(), //rotation
-               () -> controller0.getHID().getRightBumperButton(), //autoalign
-               () -> controller0.getHID().getStartButton(), //reset odometry
-               () -> false, //lock closest
-               () ->false, //lock heading
-               () -> false, //miss walls 
-               () -> controller0.getRightY(), //snap modules
-               () -> controller0.getHID().getXButton(), //left
-               () -> controller0.getHID().getBButton(),//right
-               () -> controller0.getHID().getYButton(), //front
-               () -> controller0.getHID().getAButton());//back
+            drive,
+            () -> -controller0.getLeftY(), // drive
+            () -> -controller0.getLeftX(), // strafe
+            () -> -controller0.getRightX(), // rotation
+            () -> controller0.getHID().getRightBumperButton(), // autoalign
+            () -> controller0.getHID().getStartButton(), // reset odometry
+            () -> false, // lock closest
+            () -> false, // lock heading
+            () -> false, // miss walls
+            () -> controller0.getRightY(), // snap modules
+            () -> controller0.getHID().getXButton(), // left
+            () -> controller0.getHID().getBButton(), // right
+            () -> controller0.getHID().getYButton(), // front
+            () -> controller0.getHID().getAButton());// back
 
    }
 
-
    public Command defaultIntakeCommand() {
       return new IntakeCommand(
-              intake,
-              pivot,
-              () -> controller0.getHID().getRightTriggerAxis(), // In //ON DRIVE 1
-              () -> controller0.getHID().getLeftTriggerAxis(),  // out //B for everything out //ON DRIVEr 1
-              () -> controller1.getHID().getRightTriggerAxis(),
-              () -> controller1.getHID().getLeftTriggerAxis(),
-              () -> controller1.getHID().getPOV() == 180,    // up
-              () -> controller1.getHID().getPOV() == 0  // down
-            
+            intake,
+            pivot,
+            () -> controller0.getHID().getRightTriggerAxis(), // In //ON DRIVE 1
+            () -> controller0.getHID().getLeftTriggerAxis(), // out //B for everything out //ON DRIVEr 1
+            () -> controller1.getHID().getRightTriggerAxis(),
+            () -> controller1.getHID().getLeftTriggerAxis(),
+            () -> controller1.getHID().getPOV() == 180, // up
+            () -> controller1.getHID().getPOV() == 0 // down
+
       );
-  }
-  
-  public Command defaultShooterCommand() { 
+   }
+
+   public Command defaultShooterCommand() {
       return new ShooterCommand(
-              shooter,
-              feeder,
-              hopper,
-              () -> controller1.getHID().getAButton(), // shoot 
-              () -> controller1.getHID().getYButton(),//pass
-              () -> controller1.getHID().getLeftBumperButton(),// feeder out
-              () -> controller1.getHID().getRightBumperButton(), //feeder manual
-              () -> controller1.getHID().getXButton(), // manual trench shoot
-              () -> controller1.getHID().getBButton()// manual close shoot
+            shooter,
+            feeder,
+            hopper,
+            () -> controller1.getHID().getAButton(), // shoot
+            () -> controller1.getHID().getYButton(), // pass
+            () -> controller1.getHID().getLeftBumperButton(), // feeder out
+            () -> controller1.getHID().getRightBumperButton(), // feeder manual
+            () -> controller1.getHID().getXButton(), // manual trench shoot
+            () -> controller1.getHID().getBButton()// manual close shoot
       );
 
    }

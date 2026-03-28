@@ -12,25 +12,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
 
-
-public class ShooterCommand extends Command{
+public class ShooterCommand extends Command {
     private final ShooterController shooter;
     private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
-
 
     private final BooleanSupplier shoot;
     private final BooleanSupplier pass;
     private final BooleanSupplier reverseAll;
     private final BooleanSupplier feederManual;
 
-
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
     private static final double feedStartTime = 0.1;
 
-    private final double farPassThresh = 2;
+    private final double farPassThresh = 2.5;
 
     private double deltaX = 0.0;
     private double deltaY = 0.0;
@@ -38,14 +35,12 @@ public class ShooterCommand extends Command{
 
     private Alliance alliance = Alliance.Blue;
 
-    private static final double RPMDiff = 200; 
-
+    private static final double RPMDiff = 200;
 
     private final double redHubX = Units.inchesToMeters(469.1);
     private final double redHubY = Units.inchesToMeters(158.85);
     private final double blueHubX = Units.inchesToMeters(182.1);
     private final double blueHubY = Units.inchesToMeters(158.85);
-
 
     private Boolean shootReady;
     private final Timer timer = new Timer();
@@ -53,34 +48,31 @@ public class ShooterCommand extends Command{
     private final BooleanSupplier towerShoot;
     private final BooleanSupplier closeShoot;
 
-
-
-   
     public ShooterCommand(
 
-        ShooterController shooter,
-        FeederSubsystem feeder,
-        HopperSubsystem hopper,
-        
-        BooleanSupplier shoot,
-        BooleanSupplier pass,
-        BooleanSupplier reverseAll,
-        BooleanSupplier feederManual,
+            ShooterController shooter,
+            FeederSubsystem feeder,
+            HopperSubsystem hopper,
 
-        BooleanSupplier towerShoot,
-        BooleanSupplier closeShoot
+            BooleanSupplier shoot,
+            BooleanSupplier pass,
+            BooleanSupplier reverseAll,
+            BooleanSupplier feederManual,
 
-        // BooleanSupplier passTest,
-        // BooleanSupplier closeShootTest,
-        // BooleanSupplier farShootTest,
-        // BooleanSupplier away
-        // BooleanSupplier testShoot 
-         //DoubleSupplier hopperPowerSupplier
+            BooleanSupplier towerShoot,
+            BooleanSupplier closeShoot
 
-        ){
+    // BooleanSupplier passTest,
+    // BooleanSupplier closeShootTest,
+    // BooleanSupplier farShootTest,
+    // BooleanSupplier away
+    // BooleanSupplier testShoot
+    // DoubleSupplier hopperPowerSupplier
+
+    ) {
 
         this.shooter = shooter;
-        this.feeder = feeder;        
+        this.feeder = feeder;
         this.hopper = hopper;
 
         this.shoot = shoot;
@@ -88,7 +80,7 @@ public class ShooterCommand extends Command{
         this.reverseAll = reverseAll;
         this.feederManual = feederManual;
 
-        this.towerShoot= towerShoot;
+        this.towerShoot = towerShoot;
         this.closeShoot = closeShoot;
 
         // this.passTest = passTest;
@@ -96,41 +88,37 @@ public class ShooterCommand extends Command{
         // this.farShootTest= farShootTest;
         // this.away = away;
         // this.testShoot = testShoot;
-        //this.hopperPowerSupplier = hopperPowerSupplier;
-
-
+        // this.hopperPowerSupplier = hopperPowerSupplier;
 
         addRequirements(shooter, feeder, hopper);
 
-        }
+    }
 
     @Override
-    public void execute(){
+    public void execute() {
         var result = DriverStation.getAlliance();
-       
+
         currentPositionX = shooter.getCurrentRobotPose().getX();
         currentPositionY = shooter.getCurrentRobotPose().getY();
-        
 
         if (result.isPresent()) {
             alliance = result.get();
         }
 
-        if (alliance == Alliance.Blue){
+        if (alliance == Alliance.Blue) {
             hubX = blueHubX;
         }
 
-        else{
+        else {
             hubX = redHubX;
         }
 
+        if (shoot.getAsBoolean()) {
 
-        if (shoot.getAsBoolean()){
-
-            if(alliance == Alliance.Blue){
+            if (alliance == Alliance.Blue) {
 
                 deltaX = blueHubX - currentPositionX;
-                deltaY = blueHubY - currentPositionY; 
+                deltaY = blueHubY - currentPositionY;
 
             }
 
@@ -145,112 +133,110 @@ public class ShooterCommand extends Command{
 
             shooter.shoot(distance);
 
-            if(feederManual.getAsBoolean()){ //FIXME test if this works
+            if (feederManual.getAsBoolean()) { // FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
-            if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
+            if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
+                shootReady = true;
+                timer.start();
             }
 
-            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-            //    shootReady = true;
-            //    timer.start();
+            // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
+            // shooter.hoodInPosition() ) {
+            // shootReady = true;
+            // timer.start();
             // }
 
             // if(shootReady = true && timer.hasElapsed(feedStartTime)){
-            //     feeder.driveFeederIn();
-            //     hopper.driveHopperIn();
+            // feeder.driveFeederIn();
+            // hopper.driveHopperIn();
 
             // }
 
         }
 
-        else if (feederManual.getAsBoolean()){
+        else if (feederManual.getAsBoolean()) {
 
             feeder.driveFeederIn();
             hopper.driveHopperIn();
         }
 
-        else if (reverseAll.getAsBoolean()){
+        else if (reverseAll.getAsBoolean()) {
             feeder.driveFeederOut();
             hopper.driveHopperOut();
         }
- 
-        else if(closeShoot.getAsBoolean()){
+
+        else if (closeShoot.getAsBoolean()) {
             shooter.manualCloseShoot();
 
-        if(feederManual.getAsBoolean()){ //FIXME test if this works
+            if (feederManual.getAsBoolean()) { // FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
-         }
+            }
 
-
-
-            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-            //    shootReady = true;
-            //    timer.start();
+            // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
+            // shooter.hoodInPosition() ) {
+            // shootReady = true;
+            // timer.start();
             // }
 
             // if(shootReady = true && timer.hasElapsed(feedStartTime)){
-            //     feeder.driveFeederIn();
-            //     hopper.driveHopperIn();
+            // feeder.driveFeederIn();
+            // hopper.driveHopperIn();
 
             // }
         }
 
-        else if (towerShoot.getAsBoolean()){
+        else if (towerShoot.getAsBoolean()) {
             shooter.towerShoot();
 
-            //  if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-            //    shootReady = true;
-            //    timer.start();
+            // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
+            // shooter.hoodInPosition() ) {
+            // shootReady = true;
+            // timer.start();
             // }
 
-            if(feederManual.getAsBoolean()){ //FIXME test if this works
+            if (feederManual.getAsBoolean()) { // FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
             // if(shootReady = true && timer.hasElapsed(feedStartTime)){
-            //     feeder.driveFeederIn();
-            //     hopper.driveHopperIn();
+            // feeder.driveFeederIn();
+            // hopper.driveHopperIn();
 
-            }
-        
+        }
 
-        else if (pass.getAsBoolean()){
+        else if (pass.getAsBoolean()) {
 
-            if (Math.abs(currentPositionX - hubX) > farPassThresh){
+            if (Math.abs(currentPositionX - hubX) > farPassThresh) {
                 shooter.farPass();
             }
 
-            else if (Math.abs(currentPositionX - hubX) < farPassThresh){
+            else if (Math.abs(currentPositionX - hubX) < farPassThresh) {
                 shooter.closePass();
             }
 
-            if(feederManual.getAsBoolean()){ //FIXME test if this works
+            if (feederManual.getAsBoolean()) { // FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
-
-             if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff)  && shooter.hoodInPosition() ) { 
-               shootReady = true;
-               timer.start();
+            if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
+                shootReady = true;
+                timer.start();
             }
 
             // if(shootReady = true && timer.hasElapsed(feedStartTime)){
-            //     feeder.driveFeederIn();
-            //     hopper.driveHopperIn();
+            // feeder.driveFeederIn();
+            // hopper.driveHopperIn();
 
             // }
         }
 
-      
-        else{
+        else {
             shooter.stop();
             feeder.stopFeeder();
             hopper.stopHopper();
@@ -261,9 +247,7 @@ public class ShooterCommand extends Command{
             timer.reset();
         }
 
-       
-
-        SmartDashboard.putNumber("distance",distance);
+        SmartDashboard.putNumber("distance", distance);
     }
 
     @Override

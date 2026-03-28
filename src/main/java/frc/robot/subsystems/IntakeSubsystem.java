@@ -11,57 +11,49 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
 
-
 public class IntakeSubsystem extends SubsystemBase {
-    SparkMax intakeMotor;
+  SparkMax intakeMotor;
 
-    private double power = 0.0;
+  private double power = 0.0;
 
-    public IntakeSubsystem(){
-      intakeMotor = new SparkMax(DeviceIDs.INTAKE, MotorType.kBrushless);
+  public IntakeSubsystem() {
+    intakeMotor = new SparkMax(DeviceIDs.INTAKE, MotorType.kBrushless);
 
-      intakeMotor.configure(IntakeConstants.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    intakeMotor.configure(IntakeConstants.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
-  public void driveFeedInTele(double intakePower){
-        power = MathUtil.clamp(Math.pow(intakePower, 2), 0, 0.9);
-        intakeMotor.set((-Math.pow(intakePower, 2)));
+  public void driveFeedInTele(double intakePower) {
+    power = MathUtil.clamp(Math.pow(intakePower, 2), 0, 0.9);
+    intakeMotor.set((-Math.pow(intakePower, 2)));
   }
 
-  public void driveFeedIn(){
-      intakeMotor.set((-1));
+  public void driveFeedIn() {
+    intakeMotor.set((-1));
   }
 
-  public Command intakeOn(){
+  public Command intakeOn() {
     return runOnce(() -> driveFeedIn());
   }
 
-  public Command intakeOff(){
+  public Command intakeOff() {
     return runOnce(() -> stopFeed());
   }
 
-  public void driveFeedOut(){
-      intakeMotor.set((1));
+  public void driveFeedOut() {
+    intakeMotor.set((1));
   }
 
-  public void stopFeed(){
-      intakeMotor.set(0);
+  public void stopFeed() {
+    intakeMotor.set(0);
   }
 
-  public double getFeedSpeed(){
-      return intakeMotor.getAppliedOutput();
+  public double getFeedSpeed() {
+    return intakeMotor.getAppliedOutput();
   }
 
   public void setIntakeSpeed(double speed) {
-      intakeMotor.set(speed);
+    intakeMotor.set(speed);
   }
 
 }
-
-
-
-
-
-
-

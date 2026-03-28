@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class AutoAlignAutoCommand extends Command {
+public class AutoAlignInfinite extends Command {
     private final SwerveDrivetrain drive;
 
     private Pose2d withVision;
@@ -37,7 +37,7 @@ public class AutoAlignAutoCommand extends Command {
 
     private double deltaX = 0.0;
     private double deltaY = 0.0;
-    private double tolerance = 0.5;
+    private double tolerance = 0.3;
     double rotationalSpeed = 0.0;
 
     private ChassisSpeeds driveSpeeds;
@@ -60,7 +60,7 @@ public class AutoAlignAutoCommand extends Command {
      * @param drive swerve drivetrain
      */
 
-    public AutoAlignAutoCommand(
+    public AutoAlignInfinite(
             SwerveDrivetrain drive) {
 
         this.drive = drive;
@@ -116,13 +116,24 @@ public class AutoAlignAutoCommand extends Command {
             if (Math.abs(middleHeadingController.getError()) >= Math.toRadians(tolerance)) {
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
-        } else {
+
+            else {
+                outputSpeeds.omegaRadiansPerSecond = 0;
+            }
+        }
+
+        else {
             rotationalSpeed = middleHeadingController.calculate(
                     drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
 
             if (Math.abs(middleHeadingController.getError()) >= Math.toRadians(tolerance)) {
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
+
+            else {
+                outputSpeeds.omegaRadiansPerSecond = 0;
+            }
+
         }
 
         outputSpeeds.omegaRadiansPerSecond = -outputSpeeds.omegaRadiansPerSecond;
@@ -149,23 +160,6 @@ public class AutoAlignAutoCommand extends Command {
         odometryError = encoderOnly.relativeTo(withVision);
         odometryErrorPublisher.set(odometryError);
 
-    }
-
-    @Override
-    public boolean isFinished() {
-
-        if (Math.abs(middleHeadingController.getError()) < Math.toRadians(tolerance)) {
-            drive.stop();
-            return true;
-        }
-
-        else {
-            return false;
-        }
-    }
-
-    @Override
-    public void end(boolean interrupted) {
     }
 
 }

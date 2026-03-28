@@ -13,11 +13,11 @@ public class TestCommand extends Command {
     private final BooleanSupplier stop;
 
     public TestCommand(
-        TestSubsystem testSubsystem,
-        BooleanSupplier go,
-        BooleanSupplier stop
+            TestSubsystem testSubsystem,
+            BooleanSupplier go,
+            BooleanSupplier stop
 
-    ){
+    ) {
 
         this.go = go;
         this.stop = stop;
@@ -28,21 +28,18 @@ public class TestCommand extends Command {
     }
 
     @Override
-    public void execute(){
-        if (go.getAsBoolean()){
-            testSubsystem.driveWithCustomSpeed( 0.8, 0.8);
+    public void execute() {
+        if (go.getAsBoolean()) {
+            testSubsystem.driveWithCustomSpeed(0.8, 0.8);
 
         }
 
-        else if(stop.getAsBoolean()){
+        else if (stop.getAsBoolean()) {
 
-        testSubsystem.driveWithCustomSpeed( 0.0, 0.0);
+            testSubsystem.driveWithCustomSpeed(0.0, 0.0);
 
         }
 
     }
 
-  
-
-    
 }

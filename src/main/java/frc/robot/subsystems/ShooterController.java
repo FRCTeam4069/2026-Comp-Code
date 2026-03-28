@@ -20,33 +20,32 @@ import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HoodConstants;
 import frc.robot.constants.ShooterConstants;
 
-
 public class ShooterController extends SubsystemBase {
 
-        private DoublePublisher ShooterOneTopRPM = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterOneTopRPM = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterOneTopRPM").publish();
 
-        private DoublePublisher ShooterOneBottomRPM = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterOneBottomRPM = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterOneBottomRPM").publish();
 
-        private DoublePublisher ShooterTwoTopRPM = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterTwoTopRPM = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterTwoTopRPM").publish();
-        
-        private DoublePublisher ShooterTwoBottomRPM = NetworkTableInstance.getDefault()
+
+    private DoublePublisher ShooterTwoBottomRPM = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterTwoBottomRPM").publish();
 
-            private DoublePublisher ShooterOneTopVoltage = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterOneTopVoltage = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterOneTopVoltage").publish();
 
-        private DoublePublisher ShooterOneBottomVoltage = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterOneBottomVoltage = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterOneBottomVoltage").publish();
 
-        private DoublePublisher ShooterTwoTopVoltage = NetworkTableInstance.getDefault()
+    private DoublePublisher ShooterTwoTopVoltage = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterTwoTopVoltage").publish();
-        
-        private DoublePublisher ShooterTwoBottomVoltage = NetworkTableInstance.getDefault()
+
+    private DoublePublisher ShooterTwoBottomVoltage = NetworkTableInstance.getDefault()
             .getDoubleTopic("ShooterTwoBottomVoltage").publish();
-        
+
     SparkFlex shooterOneMotorOne, shooterOneMotorTwo, shooterTwoMotorOne, shooterTwoMotorTwo;
     SparkMax hoodArticulate;
 
@@ -56,25 +55,24 @@ public class ShooterController extends SubsystemBase {
     private static final double hoodTolerace = 0.5;
     private static final double maxDistance = 4.8;
     private static final double minHoodDistance = 2.95;
-    // private static final double  minShootDistance = 1.3;
+    private static final double minShootDistance = 1.3;
 
     PIDController hoodController = new PIDController(
-    HoodConstants.hoodCoefficients.kP(),
-    HoodConstants.hoodCoefficients.kI(),
-    HoodConstants.hoodCoefficients.kD());
+            HoodConstants.hoodCoefficients.kP(),
+            HoodConstants.hoodCoefficients.kI(),
+            HoodConstants.hoodCoefficients.kD());
 
     public double targetRPM = 0.0;
     public double currentRPM = 0.0;
-    public double autoRPM = 4000.0; 
+    public double autoRPM = 4000.0;
 
     public double MetersPerSecondOne = 0.0;
 
-    public double closePassRPM = 3200.0; //FIXME
+    public double closePassRPM = 3200.0; // FIXME
     public double farPassRPM = 4200.0;
 
     double pidOut = 0.0;
-    
-    
+
     double volts = 0.0;
 
     double RPMDiff = 0.0;
@@ -83,20 +81,16 @@ public class ShooterController extends SubsystemBase {
 
     private Pose2d currentRobotPose;
 
-    
-
     SparkClosedLoopController shooterOneTopPID;
     SparkClosedLoopController shooterOneBottomPID;
-    
+
     SparkClosedLoopController shooterTwoTopPID;
     SparkClosedLoopController shooterTwoBottomPID;
 
+    // SimpleMotorFeedforward shooterFFOne = new SimpleMotorFeedforward(0,
+    // ShooterConstants.shooterCoefficientsOne.kV(),ShooterConstants.shooterCoefficientsOne.kA());
 
-
-    //SimpleMotorFeedforward shooterFFOne = new SimpleMotorFeedforward(0, ShooterConstants.shooterCoefficientsOne.kV(),ShooterConstants.shooterCoefficientsOne.kA()); 
-
-
-    public ShooterController(){
+    public ShooterController() {
 
         shooterOneMotorOne = new SparkFlex(DeviceIDs.SHOOTER_ONE_MOTOR_ONE, MotorType.kBrushless);
         shooterOneMotorTwo = new SparkFlex(DeviceIDs.SHOOTER_ONE_MOTOR_TWO, MotorType.kBrushless);
@@ -108,33 +102,37 @@ public class ShooterController extends SubsystemBase {
         shooterTwoTopPID = shooterTwoMotorOne.getClosedLoopController();
         shooterTwoBottomPID = shooterTwoMotorTwo.getClosedLoopController();
 
-        shooterOneMotorOne.configure(ShooterConstants.shooterOneMotorOneConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        shooterOneMotorTwo.configure(ShooterConstants.shooterOneMotorTwoConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        shooterTwoMotorOne.configure(ShooterConstants.shooterTwoMotorOneConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        shooterTwoMotorTwo.configure(ShooterConstants.shooterTwoMotorTwoConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        shooterOneMotorOne.configure(ShooterConstants.shooterOneMotorOneConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        shooterOneMotorTwo.configure(ShooterConstants.shooterOneMotorTwoConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        shooterTwoMotorOne.configure(ShooterConstants.shooterTwoMotorOneConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        shooterTwoMotorTwo.configure(ShooterConstants.shooterTwoMotorTwoConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
 
         currentRobotPose = new Pose2d();
 
         hoodArticulate = new SparkMax(DeviceIDs.HOOD, MotorType.kBrushless);
 
-        hoodArticulate.configure(HoodConstants.hoodConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        hoodArticulate.configure(HoodConstants.hoodConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
 
         hoodArticulate.getEncoder().setPosition(HoodConstants.AWAY);
     }
 
-
-    public void stop(){
+    public void stop() {
 
         targetRPM = 0;
     }
 
-    public void towerShoot(){
-        targetRPM = 3100;
+    public void towerShoot() {
+        targetRPM = 2950;
         targetDeg = 6;
 
     }
 
-    public void manualCloseShoot(){
+    public void manualCloseShoot() {
 
         targetRPM = 2400;
 
@@ -142,128 +140,133 @@ public class ShooterController extends SubsystemBase {
 
     }
 
-    public void autoShoot(){
+    public void autoShoot() {
         targetRPM = 3350;
         targetDeg = 0;
     }
 
-    public void autoShootMiddle(){
+    public void autoShootMiddle() {
         targetRPM = 3100;
         targetDeg = 0;
     }
 
     // public void runShooter(){
-    //     // shooterOneMotorOne.setVoltage(7);        
-    //     shooterOneMotorTwo.setVoltage(7);
+    // // shooterOneMotorOne.setVoltage(7);
+    // shooterOneMotorTwo.setVoltage(7);
 
-    //     // shooterTwoMotorOne.setVoltage(7);
-    //     shooterTwoMotorTwo.setVoltage(7);
-
+    // // shooterTwoMotorOne.setVoltage(7);
+    // shooterTwoMotorTwo.setVoltage(7);
 
     // }
 
-    public void shoot(double distance){
+    public void shoot(double distance) {
 
-        if(distance > maxDistance){ 
+        if (distance > maxDistance) {
             targetRPM = 0;
         }
 
-        else{ 
-        targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4)) + (7929.250003 * Math.pow(distance, 3))
-         - ( 23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
+        else if (distance < minShootDistance) {
+            targetRPM = 2000;
+        }
+
+        else {
+            targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4))
+                    + (7929.250003 * Math.pow(distance, 3))
+                    - (23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
 
         }
 
-        if(distance > maxDistance){
+        if (distance > maxDistance) {
             targetDeg = 0;
         }
 
-        else if (distance < minHoodDistance){
+        else if (distance < minHoodDistance) {
             targetDeg = 0;
         }
 
-        else{
-            targetDeg = (21.44172 * Math.pow(distance, 3)) - (227.32753 * Math.pow(distance, 2)) + (802.95969 * distance) - 940.86642;
+        else {
+            targetDeg = (21.44172 * Math.pow(distance, 3)) - (227.32753 * Math.pow(distance, 2))
+                    + (802.95969 * distance) - 940.86642;
         }
-      
+
     }
 
-    public void hoodAway(){
+    public void hoodAway() {
         targetDeg = HoodConstants.AWAY;
     }
 
     // public void stopHood(){
-    //     hoodArticulate.set(0);
+    // hoodArticulate.set(0);
     // }
 
     // public void testHood( double hoodPower){
-    //     double power = MathUtil.clamp(hoodPower, -0.7, 0.7);
-    //     hoodArticulate.set(power);
+    // double power = MathUtil.clamp(hoodPower, -0.7, 0.7);
+    // hoodArticulate.set(power);
     // }
 
-    //  public void passPosition(){
-    //     targetDeg = HoodConstants.PASS;
+    // public void passPosition(){
+    // targetDeg = HoodConstants.PASS;
     // }
 
-    public void setCurrentRobotPose(Pose2d updatedRobotPose){
+    public void setCurrentRobotPose(Pose2d updatedRobotPose) {
         currentRobotPose = updatedRobotPose;
     }
 
-    public Pose2d getCurrentRobotPose(){
+    public Pose2d getCurrentRobotPose() {
         return currentRobotPose;
     }
 
-    public void farPass(){
+    public void farPass() {
 
         targetRPM = farPassRPM;
         targetDeg = HoodConstants.PASS;
     }
 
-    public void closePass(){
+    public void closePass() {
 
         targetRPM = closePassRPM;
         targetDeg = HoodConstants.PASS;
     }
 
-     public double getHoodPos(){
+    public double getHoodPos() {
         hoodPos = hoodArticulate.getEncoder().getPosition();
-         return hoodPos;
+        return hoodPos;
+    }
 
-     }
+    public void stopShooter() {
+        targetRPM = 0;
+    }
 
-     public double getCurrentRPM(){
+    public double getCurrentRPM() {
 
         currentRPM = shooterOneMotorOne.getEncoder().getVelocity();
         return currentRPM;
-     }
+    }
 
-     public boolean hoodInPosition(){
+    public boolean hoodInPosition() {
         hoodPos = getHoodPos();
 
-        if (Math.abs(targetDeg - hoodPos) < 2){
+        if (Math.abs(targetDeg - hoodPos) < 2) {
             inPosition = true;
         }
 
-        else{
+        else {
             inPosition = false;
         }
 
         return inPosition;
 
-     }
-
-    public Command stopCommand(){
-        return run (()->stop());
     }
 
-    public void periodic(){
+    public Command stopShooterCommand() {
+        return runOnce(() -> stop());
+    }
+
+    public void periodic() {
 
         MetersPerSecondOne = (targetRPM / 60) * 0.31918581;
 
-
-
-
-        if(targetRPM <= 200){
+        if (targetRPM <= 200) {
 
             shooterOneMotorOne.setVoltage(0);
             shooterOneMotorTwo.setVoltage(0);
@@ -272,7 +275,7 @@ public class ShooterController extends SubsystemBase {
 
         }
 
-         else{
+        else {
 
             shooterOneTopPID.setSetpoint(targetRPM, ControlType.kVelocity);
             shooterOneBottomPID.setSetpoint(targetRPM, ControlType.kVelocity);
@@ -288,27 +291,23 @@ public class ShooterController extends SubsystemBase {
             // shooterOneMotorTwo.setVoltage(5);
             // shooterTwoMotorOne.setVoltage(5);
             // shooterTwoMotorTwo.setVoltage(5);
-         }
-       
+        }
+
         hoodPos = getHoodPos();
 
         targetDeg = MathUtil.clamp(targetDeg, HoodConstants.lowerLimit, HoodConstants.upperLimit);
 
-        pidOutHood = hoodController.calculate (hoodPos, targetDeg);
+        pidOutHood = hoodController.calculate(hoodPos, targetDeg);
         pidOutHood = MathUtil.clamp(pidOutHood, -12, 12);
-        
 
-        
-       if (Math.abs(hoodPos - targetDeg) < hoodTolerace){
+        if (Math.abs(hoodPos - targetDeg) < hoodTolerace) {
             hoodArticulate.setVoltage(0.0);
 
         }
 
-
-        else{
+        else {
             hoodArticulate.setVoltage(pidOutHood);
         }
-
 
         ShooterOneTopRPM.set(shooterOneMotorOne.getEncoder().getVelocity());
         ShooterOneBottomRPM.set(shooterOneMotorTwo.getEncoder().getVelocity());
@@ -320,30 +319,26 @@ public class ShooterController extends SubsystemBase {
         ShooterTwoTopVoltage.set(shooterTwoMotorOne.getAppliedOutput());
         ShooterTwoBottomVoltage.set(shooterTwoMotorTwo.getAppliedOutput());
 
-
-
-
-        SmartDashboard.putNumber("target RPM",targetRPM);
+        SmartDashboard.putNumber("target RPM", targetRPM);
 
         SmartDashboard.putNumber("RPM One", currentRPM);
 
         SmartDashboard.putNumber("volts One", volts);
 
-        SmartDashboard.putNumber("current one one",shooterOneMotorOne.getOutputCurrent());
+        SmartDashboard.putNumber("current one one", shooterOneMotorOne.getOutputCurrent());
         SmartDashboard.putNumber("current two one", shooterTwoMotorOne.getOutputCurrent());
-        SmartDashboard.putNumber("current one two",shooterOneMotorTwo.getOutputCurrent());
-         SmartDashboard.putNumber("current two two",shooterTwoMotorTwo.getOutputCurrent());
+        SmartDashboard.putNumber("current one two", shooterOneMotorTwo.getOutputCurrent());
+        SmartDashboard.putNumber("current two two", shooterTwoMotorTwo.getOutputCurrent());
 
-        SmartDashboard.putNumber("RPM one top",shooterOneMotorOne.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM one top", shooterOneMotorOne.getEncoder().getVelocity());
         SmartDashboard.putNumber("RPM one Bottom", shooterTwoMotorOne.getEncoder().getVelocity());
-        SmartDashboard.putNumber("RPM Two top",shooterOneMotorTwo.getEncoder().getVelocity());
-        SmartDashboard.putNumber("RPM two bottom",shooterTwoMotorTwo.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM Two top", shooterOneMotorTwo.getEncoder().getVelocity());
+        SmartDashboard.putNumber("RPM two bottom", shooterTwoMotorTwo.getEncoder().getVelocity());
 
         SmartDashboard.putNumber("Hood Position", hoodArticulate.getEncoder().getPosition());
         SmartDashboard.putNumber("Hood Target", targetDeg);
 
-        //drive better and shoot better and in the net, do what driver says 
-
+        // drive better and shoot better and in the net, do what driver says
 
     }
 }

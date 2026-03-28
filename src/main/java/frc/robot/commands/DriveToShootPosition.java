@@ -20,15 +20,16 @@ public class DriveToShootPosition extends Command {
         RIGHT,
         UP
     }
+
     private final SwerveDrivetrain drive;
     private final DrivetrainPIDController controller;
     private Pose2d setpoint;
     private Alliance alliance;
     private final ClimbTarget target;
     private StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("target pose", Pose2d.struct).publish();
+            .getStructTopic("target pose", Pose2d.struct).publish();
     private StructPublisher<Translation2d> vecPublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("translation", Translation2d.struct).publish();
+            .getStructTopic("translation", Translation2d.struct).publish();
 
     public DriveToShootPosition(SwerveDrivetrain drive, ClimbTarget target) {
         this.drive = drive;
@@ -52,14 +53,14 @@ public class DriveToShootPosition extends Command {
             alliance = Alliance.Blue;
         }
 
-        ArrayList<Pose2d> climbPoses = new ArrayList<>(); //TODO
+        ArrayList<Pose2d> climbPoses = new ArrayList<>(); // TODO
 
         if (alliance == Alliance.Blue) {
-            for (Pose2d pose : DrivetrainConstants.blueClimbPoses) { //TODO 
+            for (Pose2d pose : DrivetrainConstants.blueClimbPoses) { // TODO
                 climbPoses.add(pose);
             }
         } else {
-            for (Pose2d pose : DrivetrainConstants.redClimbPoses) { //TODO 
+            for (Pose2d pose : DrivetrainConstants.redClimbPoses) { // TODO
                 climbPoses.add(pose);
             }
         }
@@ -72,7 +73,8 @@ public class DriveToShootPosition extends Command {
         setpoint = climbPoses.get(index);
         posePublisher.set(setpoint);
 
-        controller.reset(drive.getPose(), ChassisSpeeds.fromRobotRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRotation2d()));
+        controller.reset(drive.getPose(),
+                ChassisSpeeds.fromRobotRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRotation2d()));
         controller.calculate(drive.getPose(), setpoint);
     }
 

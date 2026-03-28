@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-
-
 public class FieldCentricDrive extends Command {
     private final SwerveDrivetrain drive;
     private final DoubleSupplier forwardSpeed;
@@ -37,7 +35,6 @@ public class FieldCentricDrive extends Command {
     private final BooleanSupplier frontSnap;
     private final BooleanSupplier backSnap;
 
-
     private Pose2d withVision;
     private Pose2d encoderOnly;
     private Pose2d odometryError;
@@ -51,19 +48,19 @@ public class FieldCentricDrive extends Command {
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
 
     private PIDController higherHeadingController = new PIDController(
-        DrivetrainConstants.higherHeadingCoefficients.kP(), 
-        DrivetrainConstants.higherHeadingCoefficients.kI(), 
-        DrivetrainConstants.higherHeadingCoefficients.kD());
+            DrivetrainConstants.higherHeadingCoefficients.kP(),
+            DrivetrainConstants.higherHeadingCoefficients.kI(),
+            DrivetrainConstants.higherHeadingCoefficients.kD());
 
     private PIDController middleHeadingController = new PIDController(
-        DrivetrainConstants.middleHeadingCoefficients.kP(),
-        DrivetrainConstants.middleHeadingCoefficients.kI(),
-        DrivetrainConstants.middleHeadingCoefficients.kD());
+            DrivetrainConstants.middleHeadingCoefficients.kP(),
+            DrivetrainConstants.middleHeadingCoefficients.kI(),
+            DrivetrainConstants.middleHeadingCoefficients.kD());
 
     private PIDController lowerHeadingController = new PIDController(
-        DrivetrainConstants.lowerHeadingCoefficients.kP(),
-        DrivetrainConstants.lowerHeadingCoefficients.kI(),
-        DrivetrainConstants.lowerHeadingCoefficients.kD());
+            DrivetrainConstants.lowerHeadingCoefficients.kP(),
+            DrivetrainConstants.lowerHeadingCoefficients.kI(),
+            DrivetrainConstants.lowerHeadingCoefficients.kD());
 
     private Pose2d currentPosition;
     private double desiredHeading = 0.0;
@@ -93,49 +90,48 @@ public class FieldCentricDrive extends Command {
 
     private double buttonTarget = 0.0;
     private boolean buttonActive = false;
-    
+
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
-        .getDoubleTopic("desiredHeading").publish();
+            .getDoubleTopic("desiredHeading").publish();
     private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
-        .getDoubleTopic("deltaX").publish();
+            .getDoubleTopic("deltaX").publish();
     private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
-        .getDoubleTopic("deltaY").publish();
+            .getDoubleTopic("deltaY").publish();
     private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("setPoint", Pose2d.struct).publish();
+            .getStructTopic("setPoint", Pose2d.struct).publish();
 
     private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("odometryError", Pose2d.struct).publish();
+            .getStructTopic("odometryError", Pose2d.struct).publish();
 
     private static double controllerDeadband = 0.05;
     private static final double SNAP_MODULE_ANGLE_THRESH_0 = 0.65;
     private static final double SNAP_MODULE_ANGLE_THRESH_180 = -0.65;
 
-    
     /**
      * Teleop drive command
-     * @param drive swerve drivetrain
+     * 
+     * @param drive        swerve drivetrain
      * @param forwardSpeed -1.0 to 1.0
-     * @param strafeSpeed -1.0 to 1.0
-     * @param turnSpeed -1.0 to 1.0
-     * @param autoAlign true for align to goal
+     * @param strafeSpeed  -1.0 to 1.0
+     * @param turnSpeed    -1.0 to 1.0
+     * @param autoAlign    true for align to goal
      */
     public FieldCentricDrive(
-        SwerveDrivetrain drive, 
-        DoubleSupplier forwardSpeed, 
-        DoubleSupplier strafeSpeed, 
-        DoubleSupplier turnSpeed, 
-        BooleanSupplier autoAlign,
-        BooleanSupplier resetOdometry,
-        BooleanSupplier lockClosest,
-        // BooleanSupplier throughTrench,
-        BooleanSupplier lockHeading,
-        BooleanSupplier missWalls,
-        DoubleSupplier snapModuleAxis,
-        BooleanSupplier leftSnap,
-        BooleanSupplier rightSnap,
-        BooleanSupplier frontSnap,
-        BooleanSupplier backSnap
-        ) {
+            SwerveDrivetrain drive,
+            DoubleSupplier forwardSpeed,
+            DoubleSupplier strafeSpeed,
+            DoubleSupplier turnSpeed,
+            BooleanSupplier autoAlign,
+            BooleanSupplier resetOdometry,
+            BooleanSupplier lockClosest,
+            // BooleanSupplier throughTrench,
+            BooleanSupplier lockHeading,
+            BooleanSupplier missWalls,
+            DoubleSupplier snapModuleAxis,
+            BooleanSupplier leftSnap,
+            BooleanSupplier rightSnap,
+            BooleanSupplier frontSnap,
+            BooleanSupplier backSnap) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
@@ -143,7 +139,7 @@ public class FieldCentricDrive extends Command {
         this.strafeSpeed = strafeSpeed;
         this.autoAlign = autoAlign;
         this.resetOdometry = resetOdometry;
-        this.lockClosest = lockClosest;            
+        this.lockClosest = lockClosest;
         // this.throughTrench = throughTrench;
         this.lockHeading = lockHeading;
         this.missWalls = missWalls;
@@ -161,7 +157,6 @@ public class FieldCentricDrive extends Command {
         addRequirements(drive);
     }
 
-
     @Override
     public void execute() {
         currentPosition = drive.getPose();
@@ -172,188 +167,185 @@ public class FieldCentricDrive extends Command {
             alliance = result.get();
         }
 
-       
-    //    if (throughTrench.getAsBoolean()){
+        // if (throughTrench.getAsBoolean()){
 
-    //         if (!trenchActive) {
-    //             controller.initialize();
-    //             trenchActive = true;
-    //         }
+        // if (!trenchActive) {
+        // controller.initialize();
+        // trenchActive = true;
+        // }
 
-    //     trenchSpeeds = controller.getSpeeds();
-    //     trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
+        // trenchSpeeds = controller.getSpeeds();
+        // trenchSpeeds.omegaRadiansPerSecond = - trenchSpeeds.omegaRadiansPerSecond;
 
-    //     }
+        // }
 
-    //     else {
-    //         trenchActive = false;
-    //     }
+        // else {
+        // trenchActive = false;
+        // }
 
-        //RESET ODOMETRY
-        if (resetOdometry.getAsBoolean()){
+        // RESET ODOMETRY
+        if (resetOdometry.getAsBoolean()) {
             drive.resetDrivePose(currentPosition);
-        } 
+        }
 
         var outputSpeeds = new ChassisSpeeds(
-            xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
-            ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-            Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) * DrivetrainConstants.maxAngularVelocity);
+                xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
+                ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
+                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
+                        * DrivetrainConstants.maxAngularVelocity);
 
-        //SNAP MODULES 180/0 WITH JOYSTICK
+        // SNAP MODULES 180/0 WITH JOYSTICK
         if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
 
-            if(alliance ==Alliance.Blue){
-            double target = 0;
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-            }
-            else if (alliance ==Alliance.Red){
-            double target = 180;
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-            }
-
-        } 
-        else if (snapModulesAxis.getAsDouble() >  SNAP_MODULE_ANGLE_THRESH_0) {
-
-            if(alliance==Alliance.Blue){
-                double target = 180;
-                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-            }
-            else if(alliance==Alliance.Red) {
+            if (alliance == Alliance.Blue) {
                 double target = 0;
-                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(),
+                        Math.toRadians(target));
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            } else if (alliance == Alliance.Red) {
+                double target = 180;
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(),
+                        Math.toRadians(target));
                 outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
             }
-        }  
 
-        //SNAP MODULES FOR WALLPICKUP left and right
+        } else if (snapModulesAxis.getAsDouble() > SNAP_MODULE_ANGLE_THRESH_0) {
+
+            if (alliance == Alliance.Blue) {
+                double target = 180;
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(),
+                        Math.toRadians(target));
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            } else if (alliance == Alliance.Red) {
+                double target = 0;
+                rotationalSpeed = lowerHeadingController.calculate(drive.getRotation2d().getRadians(),
+                        Math.toRadians(target));
+                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+            }
+        }
+
+        // SNAP MODULES FOR WALLPICKUP left and right
         if (leftSnap.getAsBoolean()) {
             double currentDeg = drive.getRotation2d().getDegrees();
-            double target =0;
+            double target = 0;
 
-            if (alliance == Alliance.Blue){
+            if (alliance == Alliance.Blue) {
 
-            if ((currentDeg<90 && currentDeg>0) || (currentDeg>-90&& currentDeg<0)) {
-                target = 18;
-            }
-            else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)) {
-                target = 162;
-            }
+                if ((currentDeg < 90 && currentDeg > 0) || (currentDeg > -90 && currentDeg < 0)) {
+                    target = 18;
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg < -90 && currentDeg > -180)) {
+                    target = 162;
+                }
 
-            }
-
-            else if(alliance==Alliance.Red){
-              if ((currentDeg<90 && currentDeg>0) || (currentDeg>-90&& currentDeg<0)) {
-                target = -18;
-            }
-            else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)) {
-                target = -162;
-            }
- 
             }
 
+            else if (alliance == Alliance.Red) {
+                if ((currentDeg < 90 && currentDeg > 0) || (currentDeg > -90 && currentDeg < 0)) {
+                    target = -18;
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg < -90 && currentDeg > -180)) {
+                    target = -162;
+                }
 
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
+            }
+
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                    Math.toRadians(target));
             outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
 
-        }   
-        else if (rightSnap.getAsBoolean()) {
+        } else if (rightSnap.getAsBoolean()) {
 
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if(alliance==Alliance.Blue){
+            if (alliance == Alliance.Blue) {
 
-                 if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
+                if ((currentDeg < 90 && currentDeg > 0) || currentDeg > -90 && currentDeg < 0) {
                     target = -18;
                 }
 
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
+                else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg < -90 && currentDeg > -180)) {
                     target = -162;
                 }
-            }
-            else if(alliance==Alliance.Red){
+            } else if (alliance == Alliance.Red) {
 
-                 if ((currentDeg<90 && currentDeg>0) || currentDeg>-90&& currentDeg<0) {
+                if ((currentDeg < 90 && currentDeg > 0) || currentDeg > -90 && currentDeg < 0) {
                     target = 18;
                 }
 
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg<-90&& currentDeg>-180)){
+                else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg < -90 && currentDeg > -180)) {
                     target = 162;
                 }
             }
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                    Math.toRadians(target));
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
 
-        }   
+        }
 
-        //front and back pmo. you know what you did.
+        // front and back pmo. you know what you did.
         else if (frontSnap.getAsBoolean()) {
 
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if (alliance == Alliance.Red){
+            if (alliance == Alliance.Red) {
 
-                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                if ((currentDeg < 0 && currentDeg > -90) || (currentDeg < -90 && currentDeg > -180)) {
                     target = -108;
-                }
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg > 0 && currentDeg < 90)) {
                     target = 108;
                 }
             }
 
-            else if (alliance == Alliance.Blue){
+            else if (alliance == Alliance.Blue) {
 
-                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                if ((currentDeg < 0 && currentDeg > -90) || (currentDeg < -90 && currentDeg > -180)) {
                     target = -72;
-                }
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg > 0 && currentDeg < 90)) {
                     target = 72;
                 }
             }
 
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            SmartDashboard.getNumber("target", target);
 
-        } 
-        else if (backSnap.getAsBoolean()) {
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                    Math.toRadians(target));
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+
+        } else if (backSnap.getAsBoolean()) {
 
             double currentDeg = drive.getRotation2d().getDegrees();
             double target = 0;
 
-            if (alliance == Alliance.Red){
+            if (alliance == Alliance.Red) {
 
-                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                if ((currentDeg < 0 && currentDeg > -90) || (currentDeg < -90 && currentDeg > -180)) {
                     target = -72;
-                }
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg > 0 && currentDeg < 90)) {
                     target = 72;
                 }
             }
 
-            else if (alliance == Alliance.Blue){
+            else if (alliance == Alliance.Blue) {
 
-                if ((currentDeg<0 && currentDeg>-90) || (currentDeg<-90 && currentDeg>-180)) {
+                if ((currentDeg < 0 && currentDeg > -90) || (currentDeg < -90 && currentDeg > -180)) {
                     target = -108;
-                }
-                else if ((currentDeg>90&& currentDeg<180) || (currentDeg>0&& currentDeg<90)){
+                } else if ((currentDeg > 90 && currentDeg < 180) || (currentDeg > 0 && currentDeg < 90)) {
                     target = 108;
                 }
             }
 
-            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-        } 
-        
-        
-        if (alliance == Alliance.Blue){
+            SmartDashboard.getNumber("target", target);
+
+            rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                    Math.toRadians(target));
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+        }
+
+        if (alliance == Alliance.Blue) {
             deltaX = blueHubX - currentPosition.getX();
             deltaY = blueHubY - currentPosition.getY();
-        } 
-        else {
+        } else {
             deltaX = redHubX - currentPosition.getX();
             deltaY = redHubY - currentPosition.getY();
         }
@@ -362,195 +354,202 @@ public class FieldCentricDrive extends Command {
         SmartDashboard.putNumber("desiredHeading", desiredHeading);
         desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
 
-        if (autoAlign.getAsBoolean()){
-            if(alliance == Alliance.Blue){
+        if (autoAlign.getAsBoolean()) {
+            if (alliance == Alliance.Blue) {
                 rotationalSpeed = higherHeadingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
 
-                if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)){
-                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+                if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)) {
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
                 }
-            } 
-            else {
-                rotationalSpeed = higherHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
-                
-                if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)){
-                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            } else {
+                rotationalSpeed = higherHeadingController.calculate(
+                        drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
+
+                if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)) {
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
                 }
             }
-            
+
         }
 
-        if(lockHeading.getAsBoolean() && !lockClosestActive){
-            if(!lockHeadingActive){
+        if (lockHeading.getAsBoolean() && !lockClosestActive) {
+            if (!lockHeadingActive) {
                 lockHeadingTarget = drive.getRotation2d().getRadians();
                 lockHeadingActive = true;
             }
 
             rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
         } else {
             lockHeadingActive = false;
         }
 
-        if (lockClosest.getAsBoolean() && !lockHeadingActive){
-            if(!lockClosestActive){
+        if (lockClosest.getAsBoolean() && !lockHeadingActive) {
+            if (!lockClosestActive) {
                 lockClosestTarget = drive.getRotation2d().getDegrees();
-            if (alliance == Alliance.Blue){
-    
-                deltaX = blueHubX - currentPosition.getX();
-                deltaY = blueHubY - currentPosition.getY();
-            }
-    
-            else{
-    
-                deltaX = redHubX - currentPosition.getX();
-                deltaY = redHubY - currentPosition.getY();
-            }
-    
-            desiredHeading = Math.atan(deltaY / deltaX);
+                if (alliance == Alliance.Blue) {
 
-            SmartDashboard.putNumber("desiredHeading", desiredHeading);
-
-            desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
-           
-            // deltaXDoublePublisher.set(deltaX);
-            //deltaYDoublePublisher.set(deltaY);
-    
-            if (autoAlign.getAsBoolean()){
-                
-                if(alliance == Alliance.Blue){
-                    rotationalSpeed = higherHeadingController.calculate(drive.getRotation2d().getRadians(), desiredHeading);
-
-                    if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)){
-                        outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-                        }
-                    }
-                    else {
-                        rotationalSpeed = higherHeadingController.calculate(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(), desiredHeading);
-
-                    if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)){
-                        outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-                        }
-                    }
-                
-            }
-    
-            //TODO COMMENTED OUT LOCKHEADING FOR NOW, DRIVERS MIGHT WANT THIS BACK//
-
-            // if(lockHeading.getAsBoolean() && !lockClosestActive){
-    
-            //     if(!lockHeadingActive){
-            //         lockHeadingTarget = drive.getRotation2d().getRadians();
-            //         lockHeadingActive = true;
-            //     }
-
-            //     rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockHeadingTarget);
-            //     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-            // }  
-            
-            // else{
-            //     lockHeadingActive = false;
-            // }
-
-            if (lockHeading.getAsBoolean() && !lockClosest.getAsBoolean()) {
-                
-                double currentDeg = drive.getRotation2d().getDegrees();
-
-                double distTo0 = Math.abs(currentDeg - 0);
-                double distTo90 = Math.abs(currentDeg - 90);
-
-                double target;
-
-                if (distTo0 < distTo90) {
-                    target = 0.0;
-                } else {
-                    target = 90.0;
+                    deltaX = blueHubX - currentPosition.getX();
+                    deltaY = blueHubY - currentPosition.getY();
                 }
 
-                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-
-                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-            }
-
-            //TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0 but might return to this for driers later thanks//
-            // if (lockClosest.getAsBoolean() && !lockHeadingActive){
-            //     if(!lockClosestActive){
-            //         lockClosestTarget = drive.getRotation2d().getDegrees();
-
-            //         lockClosestTarget = Math.toRadians(90); // keep for test
-
-            //         // if (lockClosestTarget >90 || lockClosestTarget <-90) {
-            //         //     lockClosestTarget = Math.toRadians(180);
-            //         //     desiredModuleState.set(Math.toRadians(180));
-
-            //         // }
-            //         // else {
-            //         //     lockClosestTarget = Math.toRadians(0);
-            //         //     desiredModuleState.set(Math.toRadians(0));
-
-            //         // }
-                    
-            //         lockClosestActive = true;
-            //     }
-
-            //     rotationalSpeed = headingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
-            //     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
-            // }  
-            
-            // else{
-            //     lockClosestActive = false;
-            // }
-
-            if (lockClosest.getAsBoolean() && !lockHeading.getAsBoolean()) {
-
-                double currentDeg = drive.getRotation2d().getDegrees();
-
-                double distTo0 = Math.abs(currentDeg - 0);
-                double distTo90 = Math.abs(currentDeg - 90);
-
-                double target;
-
-                if (distTo0 < distTo90) {
-                    target = 90.0; // near 0, go to 90
-                } else {
-                    target = 0.0;  //near 90, go to 0
-                }
-
-                rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), Math.toRadians(target));
-
-                outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-
-            }
-            
-
-                if (lockClosestTarget >90 || lockClosestTarget <-90) {
-                    lockClosestTarget = Math.toRadians(180);
-                }
                 else {
+
+                    deltaX = redHubX - currentPosition.getX();
+                    deltaY = redHubY - currentPosition.getY();
+                }
+
+                desiredHeading = Math.atan(deltaY / deltaX);
+
+                SmartDashboard.putNumber("desiredHeading", desiredHeading);
+
+                desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
+
+                // deltaXDoublePublisher.set(deltaX);
+                // deltaYDoublePublisher.set(deltaY);
+
+                if (autoAlign.getAsBoolean()) {
+
+                    if (alliance == Alliance.Blue) {
+                        rotationalSpeed = higherHeadingController.calculate(drive.getRotation2d().getRadians(),
+                                desiredHeading);
+
+                        if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)) {
+                            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                        }
+                    } else {
+                        rotationalSpeed = higherHeadingController.calculate(
+                                drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)).getRadians(),
+                                desiredHeading);
+
+                        if (Math.abs(higherHeadingController.getError()) >= Math.toRadians(tolerance)) {
+                            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                        }
+                    }
+
+                }
+
+                // TODO COMMENTED OUT LOCKHEADING FOR NOW, DRIVERS MIGHT WANT THIS BACK//
+
+                // if(lockHeading.getAsBoolean() && !lockClosestActive){
+
+                // if(!lockHeadingActive){
+                // lockHeadingTarget = drive.getRotation2d().getRadians();
+                // lockHeadingActive = true;
+                // }
+
+                // rotationalSpeed =
+                // headingController.calculate(drive.getRotation2d().getRadians(),
+                // lockHeadingTarget);
+                // outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                // }
+
+                // else{
+                // lockHeadingActive = false;
+                // }
+
+                if (lockHeading.getAsBoolean() && !lockClosest.getAsBoolean()) {
+
+                    double currentDeg = drive.getRotation2d().getDegrees();
+
+                    double distTo0 = Math.abs(currentDeg - 0);
+                    double distTo90 = Math.abs(currentDeg - 90);
+
+                    double target;
+
+                    if (distTo0 < distTo90) {
+                        target = 0.0;
+                    } else {
+                        target = 90.0;
+                    }
+
+                    rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                            Math.toRadians(target));
+
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                }
+
+                // TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0
+                // but might return to this for driers later thanks//
+                // if (lockClosest.getAsBoolean() && !lockHeadingActive){
+                // if(!lockClosestActive){
+                // lockClosestTarget = drive.getRotation2d().getDegrees();
+
+                // lockClosestTarget = Math.toRadians(90); // keep for test
+
+                // // if (lockClosestTarget >90 || lockClosestTarget <-90) {
+                // // lockClosestTarget = Math.toRadians(180);
+                // // desiredModuleState.set(Math.toRadians(180));
+
+                // // }
+                // // else {
+                // // lockClosestTarget = Math.toRadians(0);
+                // // desiredModuleState.set(Math.toRadians(0));
+
+                // // }
+
+                // lockClosestActive = true;
+                // }
+
+                // rotationalSpeed =
+                // headingController.calculate(drive.getRotation2d().getRadians(),
+                // lockClosestTarget);
+                // outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                // }
+
+                // else{
+                // lockClosestActive = false;
+                // }
+
+                if (lockClosest.getAsBoolean() && !lockHeading.getAsBoolean()) {
+
+                    double currentDeg = drive.getRotation2d().getDegrees();
+
+                    double distTo0 = Math.abs(currentDeg - 0);
+                    double distTo90 = Math.abs(currentDeg - 90);
+
+                    double target;
+
+                    if (distTo0 < distTo90) {
+                        target = 90.0; // near 0, go to 90
+                    } else {
+                        target = 0.0; // near 90, go to 0
+                    }
+
+                    rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
+                            Math.toRadians(target));
+
+                    outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+
+                }
+
+                if (lockClosestTarget > 90 || lockClosestTarget < -90) {
+                    lockClosestTarget = Math.toRadians(180);
+                } else {
                     lockClosestTarget = Math.toRadians(0);
                 }
-                
+
                 lockClosestActive = true;
             }
 
             rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(), lockClosestTarget);
-            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed; 
+            outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
         } else {
             lockClosestActive = false;
         }
-        
 
-        outputSpeeds.omegaRadiansPerSecond= -outputSpeeds.omegaRadiansPerSecond; 
+        outputSpeeds.omegaRadiansPerSecond = -outputSpeeds.omegaRadiansPerSecond;
 
         // if(throughTrench.getAsBoolean()){
-        // driveSpeeds = trenchSpeeds;     
+        // driveSpeeds = trenchSpeeds;
         // }
 
         // else{
         driveSpeeds = outputSpeeds;
         // }
 
-        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition.getX() > FIELD_MAX_X || currentPosition.getY() < FIELD_MIN_Y || currentPosition.getY() > FIELD_MAX_Y)) {
+        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition.getX() > FIELD_MAX_X
+                || currentPosition.getY() < FIELD_MIN_Y || currentPosition.getY() > FIELD_MAX_Y)) {
             driveSpeeds = new ChassisSpeeds();
         }
 
@@ -560,18 +559,14 @@ public class FieldCentricDrive extends Command {
             drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
         }
 
-
         withVision = drive.poseEstimator.getEstimatedPosition();
         encoderOnly = drive.swerveOdometry.getPoseMeters();
-
 
         odometryError = encoderOnly.relativeTo(withVision);
         odometryErrorPublisher.set(odometryError);
 
     }
 
-    
-    
     @Override
     public boolean isFinished() {
         return false;
@@ -579,11 +574,11 @@ public class FieldCentricDrive extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        
+
     }
 
     private double joystickToVelocity(double n) {
         return Math.pow(MathUtil.applyDeadband(n, controllerDeadband), 3) * DrivetrainConstants.maxVelocity;
     }
-    
+
 }

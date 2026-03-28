@@ -11,7 +11,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.9
+                  "waitTime": 2.1
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.5
+                  "waitTime": 2.45
                 }
               },
               {
@@ -157,13 +157,13 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.5
+                              "waitTime": 4.0
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "stop drivetrain"
+                              "name": "auto align infinite"
                             }
                           }
                         ]
@@ -194,7 +194,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "stop drivetrain"
+                              "name": "auto align infinite"
                             }
                           }
                         ]
