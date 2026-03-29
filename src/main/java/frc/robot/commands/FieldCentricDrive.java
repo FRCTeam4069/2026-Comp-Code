@@ -195,7 +195,7 @@ public class FieldCentricDrive extends Command {
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5) 
+                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25)
                         * DrivetrainConstants.maxAngularVelocity);
 
         if (fastTurn.getAsBoolean()){
@@ -204,7 +204,7 @@ public class FieldCentricDrive extends Command {
             
         
         } else{
-            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5) 
+            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25) 
                         * DrivetrainConstants.maxAngularVelocity;
                 
         }
