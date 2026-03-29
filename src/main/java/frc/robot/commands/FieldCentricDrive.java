@@ -34,6 +34,7 @@ public class FieldCentricDrive extends Command {
     private final BooleanSupplier rightSnap;
     private final BooleanSupplier frontSnap;
     private final BooleanSupplier backSnap;
+    private final BooleanSupplier fastTurn;
 
     private Pose2d withVision;
     private Pose2d encoderOnly;
@@ -131,7 +132,8 @@ public class FieldCentricDrive extends Command {
             BooleanSupplier leftSnap,
             BooleanSupplier rightSnap,
             BooleanSupplier frontSnap,
-            BooleanSupplier backSnap) {
+            BooleanSupplier backSnap,
+            BooleanSupplier fastTurn) {
 
         this.drive = drive;
         this.turnSpeed = turnSpeed;
@@ -148,6 +150,7 @@ public class FieldCentricDrive extends Command {
         this.rightSnap = rightSnap;
         this.frontSnap = frontSnap;
         this.backSnap = backSnap;
+        this.fastTurn = fastTurn;
         // this.controller = new ThroughTrench(drive);
 
         higherHeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -188,11 +191,24 @@ public class FieldCentricDrive extends Command {
             drive.resetDrivePose(currentPosition);
         }
 
+        
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
+                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5) 
                         * DrivetrainConstants.maxAngularVelocity);
+
+        if (fastTurn.getAsBoolean()){
+            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) ) 
+                        * DrivetrainConstants.maxAngularVelocity;
+            
+        
+        } else{
+            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5) 
+                        * DrivetrainConstants.maxAngularVelocity;
+                
+        }
+            
 
         // SNAP MODULES 180/0 WITH JOYSTICK
         if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
@@ -539,6 +555,8 @@ public class FieldCentricDrive extends Command {
         }
 
         outputSpeeds.omegaRadiansPerSecond = -outputSpeeds.omegaRadiansPerSecond;
+
+    
 
         // if(throughTrench.getAsBoolean()){
         // driveSpeeds = trenchSpeeds;
