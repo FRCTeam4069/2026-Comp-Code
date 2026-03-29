@@ -179,7 +179,10 @@ public class RobotContainer {
             () -> controller0.getHID().getXButton(), // left
             () -> controller0.getHID().getBButton(), // right
             () -> controller0.getHID().getYButton(), // front
-            () -> controller0.getHID().getAButton());// back
+            () -> controller0.getHID().getAButton(),// back
+            () -> controller0.getHID().getLeftBumperButton());// back
+
+
 
    }
 
