@@ -191,7 +191,7 @@ public class FieldCentricDrive extends Command {
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
+                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25)
                         * DrivetrainConstants.maxAngularVelocity);
 
         // SNAP MODULES 180/0 WITH JOYSTICK

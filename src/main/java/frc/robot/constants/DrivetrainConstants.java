@@ -42,6 +42,7 @@ public class DrivetrainConstants {
         public static final double moduleOffset = Units.inchesToMeters(10.375);
 
         public static final double maxVelocity = Units.feetToMeters(19.35);
+
         public static final double maxAngularVelocity = maxVelocity
                         / new Rotation2d(moduleOffset, moduleOffset).getRadians();
 
@@ -212,7 +213,7 @@ public class DrivetrainConstants {
 
         public static final PIDCoefficients lowerHeadingCoefficients = new PIDCoefficients(5.0, 0.0, 0.0);
         public static final PIDCoefficients middleHeadingCoefficients = new PIDCoefficients(8.0, 0.0, 0.0);
-        public static final PIDCoefficients higherHeadingCoefficients = new PIDCoefficients(10.0, 0.0, 0.0);
+        public static final PIDCoefficients higherHeadingCoefficients = new PIDCoefficients(14.0, 0.0, 0.0);
 
         public record ModuleCoefficients(
                         double steerKS,
