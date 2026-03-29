@@ -8,12 +8,12 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 30;
 
-    public static final double PASS = 17; // FIXME test
+    public static final double PASS = 34; // FIXME test
 
     public static final double AWAY = 0.0;
 
     public static final double lowerLimit = 0;
-    public static final double upperLimit = 18;
+    public static final double upperLimit = 36;
 
     public static final SparkMaxConfig hoodConfig = new SparkMaxConfig();
 
@@ -26,7 +26,7 @@ public class HoodConstants {
                 .closedLoopRampRate(0.0);
 
         hoodConfig.softLimit
-                .forwardSoftLimit(18)
+                .forwardSoftLimit(36)
                 .reverseSoftLimit(0)
                 .forwardSoftLimitEnabled(true)
                 .reverseSoftLimitEnabled(true);
@@ -42,7 +42,7 @@ public class HoodConstants {
     }
 
     public static HoodCoefficients hoodCoefficients = new HoodCoefficients(
-            1.2,
+            0.9,
             0.0,
             0.0
 

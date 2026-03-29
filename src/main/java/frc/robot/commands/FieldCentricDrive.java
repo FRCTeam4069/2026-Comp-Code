@@ -195,7 +195,7 @@ public class FieldCentricDrive extends Command {
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
-                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25)
+                (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
                         * DrivetrainConstants.maxAngularVelocity);
 
         if (fastTurn.getAsBoolean()){
