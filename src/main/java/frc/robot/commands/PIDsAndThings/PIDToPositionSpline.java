@@ -94,6 +94,13 @@ public class PIDToPositionSpline extends Command {
         ChassisSpeeds speeds = stopPointController.calculate(drive.getPose(), currentTarget);
         if(!currentStopAt) speeds = contPointController.calculate(drive.getPose(), currentTarget);
 
+        double currentSpeed = Math.hypot(speeds.vyMetersPerSecond, speeds.vxMetersPerSecond);
+        if (currentSpeed > DrivetrainConstants.maxVelocity) {
+            double scale = (DrivetrainConstants.maxVelocity)/currentSpeed;
+            speeds.vxMetersPerSecond = speeds.vxMetersPerSecond*scale;
+            speeds.vyMetersPerSecond = speeds.vyMetersPerSecond*scale;
+        }
+
         drive.fieldOrientedDrive(speeds);
     }
 
