@@ -17,35 +17,43 @@ import frc.robot.commands.DrivetrainPIDController;
 
 public class PIDToPositionSpline extends Command {
     private final SwerveDrivetrain drive;
-    private final DrivetrainPIDController controller;
+    private final DrivetrainPIDController stopPointController;
+    private final DrivetrainPIDController contPointController;
     private Pose2d setpoint;  
     private ArrayList<Pose2d> waypoints; 
+    private ArrayList<Double> tolerances;
+    private ArrayList<Boolean> stopAt;
     private int waypointIndex = 0;
     private static final double tolerance = 0.2;  
     private Pose2d currentTarget;
+    private double currentTolerance;
+    private boolean currentStopAt;
     private double distance = 0.0;
     private double lookAhead = 0.5;
 
-    public PIDToPositionSpline(SwerveDrivetrain drive,  ArrayList<Pose2d> waypoints) {
-        this(drive, waypoints, DrivetrainConstants.autoPidToPositionConstants);
+    public PIDToPositionSpline(SwerveDrivetrain drive,  ArrayList<Pose2d> waypoints, ArrayList<Double> tolerances, ArrayList<Boolean> stopAt) {
+        this(drive, waypoints, tolerances, stopAt, DrivetrainConstants.autoPidToPositionConstants, DrivetrainConstants.autoPidToPositionContConstants);
     }
 
-    public PIDToPositionSpline(SwerveDrivetrain drive, ArrayList<Pose2d> waypoints, DrivetrainPIDConstants constants) {
+    public PIDToPositionSpline(SwerveDrivetrain drive, ArrayList<Pose2d> waypoints, ArrayList<Double> tolerances, ArrayList<Boolean> stopAt, DrivetrainPIDConstants stopPointConstants, DrivetrainPIDConstants contPointConstants) {
         this.drive = drive;
-        this.controller = new DrivetrainPIDController(constants);
+        this.stopPointController = new DrivetrainPIDController(stopPointConstants);
+        this.contPointController = new DrivetrainPIDController(contPointConstants);
         this.waypoints = waypoints;
+        this.tolerances = tolerances;
+        this.stopAt = stopAt;
 
         addRequirements(drive);
     }
 
-    public Pose2d backAway(Pose2d pose, double distance) {
-        var angle = pose.getRotation();
+    // public Pose2d backAway(Pose2d pose, double distance) {
+    //     var angle = pose.getRotation();
 
-        Translation2d vec = new Translation2d(Units.inchesToMeters(distance), 0.0);
-        vec = vec.rotateBy(angle);
+    //     Translation2d vec = new Translation2d(Units.inchesToMeters(distance), 0.0);
+    //     vec = vec.rotateBy(angle);
 
-        return new Pose2d(pose.getX() + vec.getX(), pose.getY() + vec.getY(), pose.getRotation());
-    }
+    //     return new Pose2d(pose.getX() + vec.getX(), pose.getY() + vec.getY(), pose.getRotation());
+    // }
 
     public double getDistance(Pose2d a, Pose2d b) {
         return Math.hypot((a.getX()-b.getX()), (a.getY()-b.getY()));
@@ -60,7 +68,7 @@ public class PIDToPositionSpline extends Command {
         }
         waypointIndex = 0;
         setpoint = waypoints.get(0);
-        controller.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
+        stopPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
        
     }
 
@@ -72,16 +80,19 @@ public class PIDToPositionSpline extends Command {
             return;
         }
 
+        currentTarget = waypoints.get(waypointIndex);
+        currentTolerance = tolerances.get(waypointIndex);
+        currentStopAt = stopAt.get(waypointIndex);
+        distance = getDistance(drive.getPose(), currentTarget);
+
+        if (distance < currentTolerance){
+            waypointIndex++;
             currentTarget = waypoints.get(waypointIndex);
-            distance = getDistance(drive.getPose(), currentTarget);
-
-            if (distance < tolerance){
-                waypointIndex++;
-                currentTarget = waypoints.get(waypointIndex);
-             
-            }
-
-        ChassisSpeeds speeds = controller.calculate(drive.getPose(), currentTarget);
+         
+        }
+         
+        ChassisSpeeds speeds = stopPointController.calculate(drive.getPose(), currentTarget);
+        if(!currentStopAt) speeds = contPointController.calculate(drive.getPose(), currentTarget);
 
         drive.fieldOrientedDrive(speeds);
     }

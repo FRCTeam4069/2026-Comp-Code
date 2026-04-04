@@ -203,6 +203,14 @@ public class DrivetrainConstants {
                         new Tolerances(0.02, 0.30),
                         new Tolerances(0.02, 0.20));
 
+        public static volatile DrivetrainPIDConstants autoPidToPositionContConstants = new DrivetrainPIDConstants(
+                        new PIDCoefficients(8.0, 0.0, 0.01),
+                        new PIDCoefficients(8.0, 0.0, 0.6),
+                        new Constraints(5.0, 4.0),
+                        new Constraints(10.0, 10.0),
+                        new Tolerances(0.02, 0.30),
+                        new Tolerances(0.02, 0.20));
+
         public static volatile DrivetrainPIDConstants autoCloseEnoughConstants = new DrivetrainPIDConstants(
                         new PIDCoefficients(5.0, 0.0, 0.01),
                         new PIDCoefficients(8.0, 0.0, 0.6),
