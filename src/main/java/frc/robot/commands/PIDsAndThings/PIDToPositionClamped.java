@@ -24,7 +24,6 @@ public class PIDToPositionClamped extends Command {
     private final SwerveDrivetrain drive;
     private final DrivetrainPIDController controller;
     private Pose2d setpoint;
-    private boolean l4;
     private StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
         .getStructTopic("target pose", Pose2d.struct).publish();
     private StructPublisher<Translation2d> vecPublisher = NetworkTableInstance.getDefault()
@@ -43,7 +42,6 @@ public class PIDToPositionClamped extends Command {
         this.drive = drive;
         this.controller = new DrivetrainPIDController(constants);
         this.setpoint = pose;
-        this.l4 = l4;
         this.velocityTargets = velocityTargets;
 
         addRequirements(drive);
@@ -66,9 +64,7 @@ public class PIDToPositionClamped extends Command {
 
     @Override
     public void initialize() {
-        if (l4) {
-            setpoint = backAway(setpoint, -7.5);
-        }
+       
         posePublisher.set(setpoint);
 
         velocityTargets.add(new VelocityPoint(100.0, 1.0));

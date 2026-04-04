@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -12,12 +13,12 @@ import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  SparkMax intakeMotor;
+  SparkFlex intakeMotor;
 
   private double power = 0.0;
 
   public IntakeSubsystem() {
-    intakeMotor = new SparkMax(DeviceIDs.INTAKE, MotorType.kBrushless);
+    intakeMotor = new SparkFlex(DeviceIDs.INTAKE, MotorType.kBrushless);
 
     intakeMotor.configure(IntakeConstants.intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

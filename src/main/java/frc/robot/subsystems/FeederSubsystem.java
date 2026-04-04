@@ -1,25 +1,22 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.FeederConstants;
 
 public class FeederSubsystem extends SubsystemBase {
-    SparkMax feederMotor;
+    TalonFX feederMotor;
 
     public FeederSubsystem(){
-      feederMotor = new SparkMax(DeviceIDs.FEEDER, MotorType.kBrushless);
+      feederMotor = new TalonFX(DeviceIDs.FEEDER);
 
-      feederMotor.configure(FeederConstants.feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      feederMotor.getConfigurator().apply(FeederConstants.feederConfig);
   }
 
   public void driveFeederIn(){
-      feederMotor.setVoltage((10));
+      feederMotor.setVoltage((12));
   }
 
   public void driveFeederOut(){

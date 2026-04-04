@@ -1,31 +1,36 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HopperConstants;
 
 public class HopperSubsystem extends SubsystemBase {
-  SparkMax hopperMotor;
+  TalonFX hopperMotorOne;
+  TalonFX hopperMotorTwo;
 
   private double volts = 0.0;
 
   public HopperSubsystem() {
-    hopperMotor = new SparkMax(DeviceIDs.HOPPER, MotorType.kBrushless);
+    hopperMotorOne = new TalonFX(DeviceIDs.HOPPER_ONE);
+    hopperMotorTwo = new TalonFX(DeviceIDs.HOPPER_TWO);
 
-    hopperMotor.configure(HopperConstants.hopperConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    hopperMotorOne.getConfigurator().apply(HopperConstants.hopperOneConfig);
+    hopperMotorTwo.getConfigurator().apply(HopperConstants.hopperTwoConfig);
+
   }
 
   public void driveHopperIn() {
-    hopperMotor.setVoltage((10.0));
+    hopperMotorOne.setVoltage((12.0));
+    hopperMotorTwo.setVoltage(12.0);
   }
 
   public void driveHopperOut() {
-    hopperMotor.setVoltage((-7.2));
+    hopperMotorOne.setVoltage((-7.2));
+    hopperMotorTwo.setVoltage(-7.2);
+
   }
 
   // public void driveHopper(double hopperPower){
@@ -33,7 +38,8 @@ public class HopperSubsystem extends SubsystemBase {
   // }
 
   public void stopHopper() {
-    hopperMotor.stopMotor();
+    hopperMotorOne.stopMotor();
+    hopperMotorTwo.stopMotor();
   }
 
   // public void autoHopperIn(){
