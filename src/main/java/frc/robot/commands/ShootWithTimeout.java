@@ -18,7 +18,6 @@ public class ShootWithTimeout extends Command{
     private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
     private final PivotSubsystem pivot;
-    //private final SwerveDrivetrain drive;
 
 
     private double distance = 0.0;
@@ -107,6 +106,10 @@ public class ShootWithTimeout extends Command{
             feeder.driveFeederIn();
             hopper.driveHopperIn();
 
+            if(timer.hasElapsed(2)){
+                pivot.goUpper();
+            }
+
         }
         
         else{
@@ -124,6 +127,7 @@ public class ShootWithTimeout extends Command{
     @Override
     public void end(boolean interrupted) {
         shooter.stop();
+        pivot.goUpper();
         hopper.stopHopper();
         feeder.stopFeeder();
         timer.stop();

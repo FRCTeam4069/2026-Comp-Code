@@ -15,6 +15,8 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.autos.RedTestAuto;
+import frc.robot.commands.autos.RedTwoCycleLeft;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -69,23 +71,27 @@ public class RobotContainer {
 
       // addSysIdCommands()
 
-      autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
-      autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
+      // autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
+      // autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
 
-      autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
-      autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+      // autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
+      // autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
 
-      autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
-      autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
+      // autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
+      // autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
 
-      autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
-      autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
+      // autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
+      // autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
 
-      autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
-      autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
+      // autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
+      // autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
 
-      autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
-      autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+      // autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
+      // autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+
+      //autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
+
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 
