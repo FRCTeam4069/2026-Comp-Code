@@ -23,7 +23,7 @@ public class ShootWithTimeout extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private final double shootTime = 8.0; 
+    private final double shootTime = 5.0; 
 
     private final Timer timer = new Timer();
 

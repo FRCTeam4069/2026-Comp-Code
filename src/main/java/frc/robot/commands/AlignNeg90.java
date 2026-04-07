@@ -4,10 +4,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -15,9 +11,6 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 public class AlignNeg90 extends Command {
     private final SwerveDrivetrain drive;
 
-    private Pose2d withVision;
-    private Pose2d encoderOnly;
-    private Pose2d odometryError;
 
     private PIDController middleHeadingController = new PIDController(
             DrivetrainConstants.middleHeadingCoefficients.kP(),
@@ -26,24 +19,11 @@ public class AlignNeg90 extends Command {
 
     private Pose2d currentPosition;
     private double desiredHeading = -90.0;
-    private Alliance alliance = Alliance.Blue;
 
     private double tolerance = 0.5;
     double rotationalSpeed = 0.0;
 
     private ChassisSpeeds driveSpeeds;
-
-    private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("desiredHeading").publish();
-    private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaX").publish();
-    private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaY").publish();
-    private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
-            .getStructTopic("setPoint", Pose2d.struct).publish();
-
-    private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
-            .getStructTopic("odometryError", Pose2d.struct).publish();
 
     /**
      * Teleop drive command
