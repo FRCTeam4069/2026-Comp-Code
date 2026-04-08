@@ -26,7 +26,7 @@ public class Vision {
     private final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     private Matrix<N3, N1> bad = VecBuilder.fill(6.0, 6.0, 5.0);
-    private Matrix<N3, N1> good = VecBuilder.fill(0.1, 0.1, 2.0); // TODO: Tune x,y theta and too far+too close
+    private Matrix<N3, N1> good = VecBuilder.fill(0.1, 0.1, 2.0); 
 
     public Vision(String name, Transform3d robotToCam, Pose2d startingPose) {
         this(name, robotToCam, startingPose, VecBuilder.fill(6.0, 6.0, 5.0), VecBuilder.fill(0.6, 0.6, 2.0));

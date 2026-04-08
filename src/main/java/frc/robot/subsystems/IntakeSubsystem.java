@@ -2,8 +2,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.MathUtil;
@@ -25,7 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedInTele(double intakePower) {
-    power = MathUtil.clamp(Math.pow(intakePower, 2), 0, 0.9);
+    power = MathUtil.clamp(Math.pow(intakePower, 2), 0, 0.6);
     intakeMotor.set((-Math.pow(intakePower, 2)));
   }
 

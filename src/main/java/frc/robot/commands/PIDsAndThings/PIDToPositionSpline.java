@@ -6,9 +6,7 @@ package frc.robot.commands.PIDsAndThings;
 
 import java.util.ArrayList;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.DrivetrainConstants.DrivetrainPIDConstants;
@@ -69,7 +67,8 @@ public class PIDToPositionSpline extends Command {
         waypointIndex = 0;
         setpoint = waypoints.get(0);
         stopPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
-       
+        contPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
+
     }
 
     @Override
@@ -86,7 +85,9 @@ public class PIDToPositionSpline extends Command {
         distance = getDistance(drive.getPose(), currentTarget);
 
         if (distance < currentTolerance){
-            waypointIndex++;
+            if (waypointIndex < waypoints.size() - 1 ){
+                waypointIndex++;
+            }
             currentTarget = waypoints.get(waypointIndex);
          
         }
@@ -115,6 +116,7 @@ public class PIDToPositionSpline extends Command {
     public boolean isFinished() {
          if (waypoints == null || waypoints.isEmpty()) return true;
             Pose2d finalTarget = waypoints.get(waypoints.size() - 1);
-            return getDistance(drive.getPose(), finalTarget) < tolerance;
+            double finalTolerance = tolerances.get(tolerances.size() - 1);
+            return (getDistance(drive.getPose(), finalTarget) < finalTolerance) && (waypointIndex == (waypoints.size() -1));
         }
 }

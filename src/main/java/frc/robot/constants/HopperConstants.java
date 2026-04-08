@@ -21,10 +21,10 @@ public final class HopperConstants {
     }
 
      static {
-            hopperTwoConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-            hopperTwoConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-            hopperTwoConfig.CurrentLimits.SupplyCurrentLimit = hopperSmartCurrentLimit;
-            hopperTwoConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        hopperTwoConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        hopperTwoConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        hopperTwoConfig.CurrentLimits.SupplyCurrentLimit = hopperSmartCurrentLimit;
+        hopperTwoConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
                 
     }
 

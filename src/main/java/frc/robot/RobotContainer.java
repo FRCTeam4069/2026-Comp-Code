@@ -5,6 +5,7 @@ import frc.robot.commands.AlignNeg90;
 import frc.robot.commands.AutoAlignAutoCommand;
 import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.HopperCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -15,40 +16,37 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.autos.RedTestAuto;
+import frc.robot.commands.autos.RedTwoCycleLeft;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
-import frc.robot.commands.ShootWithTimeoutMiddle;
 import frc.robot.commands.DriveToShootPosition;
 
 public class RobotContainer {
 
-   public static final SwerveDrivetrain drive = new SwerveDrivetrain();
-   public static final IntakeSubsystem intake = new IntakeSubsystem();
-   public static final PivotSubsystem pivot = new PivotSubsystem();
-   public static final FeederSubsystem feeder = new FeederSubsystem();
-   public static final HopperSubsystem hopper = new HopperSubsystem();
+   public final SwerveDrivetrain drive = new SwerveDrivetrain();
+   public final IntakeSubsystem intake = new IntakeSubsystem();
+   public final PivotSubsystem pivot = new PivotSubsystem();
+   public final FeederSubsystem feeder = new FeederSubsystem();
+   public final HopperSubsystem hopper = new HopperSubsystem();
 
-   public static final TestSubsystem testSubsystem = new TestSubsystem();
+   public final TestSubsystem testSubsystem = new TestSubsystem();
 
    private final CommandXboxController controller0 = new CommandXboxController(0);
    private final CommandXboxController controller1 = new CommandXboxController(1);
 
-   public static final ShooterController shooter = new ShooterController();
+   public final ShooterController shooter = new ShooterController();
 
-   public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
-   public static final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
+   private final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+   private final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
 
-   public static final ShootWithTimeoutMiddle shootWithTimeoutMiddle = new ShootWithTimeoutMiddle(shooter, feeder,
-         hopper, pivot);
-
-   public static final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
-   public static final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
+   private final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
+   private final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
 
    private String autoName;
 
@@ -69,23 +67,27 @@ public class RobotContainer {
 
       // addSysIdCommands()
 
-      autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
-      autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
+      // autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
+      // autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
 
-      autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
-      autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+      // autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
+      // autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
 
-      autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
-      autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
+      // autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
+      // autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
 
-      autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
-      autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
+      // autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
+      // autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
 
-      autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
-      autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
+      // autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
+      // autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
 
-      autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
-      autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+      // autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
+      // autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+
+      //autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
+
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -125,6 +127,7 @@ public class RobotContainer {
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
             .onFalse(drive.stopOnceCommand());
 
+
    }
 
    private void registerAutoCommands() {
@@ -138,8 +141,6 @@ public class RobotContainer {
       NamedCommands.registerCommand("shoot", shootWithTimeout);
       NamedCommands.registerCommand("stop drivetrain", drive.stopCommand());
       NamedCommands.registerCommand("align negative 90", alignNeg90);
-
-      NamedCommands.registerCommand("shoot middle", shootWithTimeoutMiddle);
 
       NamedCommands.registerCommand("auto align", autoAlignAutoCommand);
       NamedCommands.registerCommand("stop shooter", shooter.stopShooterCommand());
@@ -214,4 +215,6 @@ public class RobotContainer {
       );
 
    }
+
+
 }

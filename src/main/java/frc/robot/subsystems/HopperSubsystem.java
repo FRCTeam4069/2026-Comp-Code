@@ -24,7 +24,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void driveHopperIn() {
     hopperMotorOne.setVoltage((12.0));
-    hopperMotorTwo.setVoltage(12.0);
+   hopperMotorTwo.setVoltage(12.0);
   }
 
   public void driveHopperOut() {

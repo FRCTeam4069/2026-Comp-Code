@@ -26,7 +26,7 @@ import frc.robot.util.HubShiftUtil;
 public class Robot extends TimedRobot {
   // private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
   private Pose2d currentPosition;
@@ -34,6 +34,10 @@ public class Robot extends TimedRobot {
   // PowerDistribution(DeviceIDs.POWER_DISTRIBUTION_HUB, ModuleType.kRev);
 
   public Robot() {
+  }
+
+  @Override
+  public void robotInit() {
     m_robotContainer = new RobotContainer();
 
     DataLogManager.start();
