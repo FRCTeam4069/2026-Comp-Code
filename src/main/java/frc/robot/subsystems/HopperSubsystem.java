@@ -1,40 +1,35 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkMax;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.HopperConstants;
 
 public class HopperSubsystem extends SubsystemBase {
-  SparkMax hopperMotorOne;
-  //TalonFX hopperMotorTwo;
+  TalonFX hopperMotorOne;
+  TalonFX hopperMotorTwo;
 
   private double volts = 0.0;
 
   public HopperSubsystem() {
-    hopperMotorOne = new SparkMax(DeviceIDs.HOPPER_ONE, MotorType.kBrushless);
-    //hopperMotorOne = new TalonFX(DeviceIDs.HOPPER_ONE);
-    //hopperMotorTwo = new TalonFX(DeviceIDs.HOPPER_TWO);
+    hopperMotorOne = new TalonFX(DeviceIDs.HOPPER_ONE);
+    hopperMotorTwo = new TalonFX(DeviceIDs.HOPPER_TWO);
 
-    hopperMotorOne.configure(HopperConstants.hopperOneConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    // hopperMotorOne.getConfigurator().apply(HopperConstants.hopperOneConfig);
-    // hopperMotorTwo.getConfigurator().apply(HopperConstants.hopperTwoConfig);
+    hopperMotorOne.getConfigurator().apply(HopperConstants.hopperOneConfig);
+    hopperMotorTwo.getConfigurator().apply(HopperConstants.hopperTwoConfig);
 
   }
 
   public void driveHopperIn() {
     hopperMotorOne.setVoltage((12.0));
-   // hopperMotorTwo.setVoltage(12.0);
+   hopperMotorTwo.setVoltage(12.0);
   }
 
   public void driveHopperOut() {
     hopperMotorOne.setVoltage((-7.2));
-    //hopperMotorTwo.setVoltage(-7.2);
+    hopperMotorTwo.setVoltage(-7.2);
 
   }
 
@@ -44,7 +39,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopHopper() {
     hopperMotorOne.stopMotor();
-    //hopperMotorTwo.stopMotor();
+    hopperMotorTwo.stopMotor();
   }
 
   // public void autoHopperIn(){

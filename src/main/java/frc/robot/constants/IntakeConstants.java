@@ -1,14 +1,14 @@
 package frc.robot.constants;
 
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 public final class IntakeConstants {
 
   public static final int intakeSmartCurrentLimit = 40;
 
-  public static final SparkMaxConfig intakeConfig = new SparkMaxConfig();
+  public static final SparkFlexConfig intakeConfig = new SparkFlexConfig();
 
   static {
     intakeConfig

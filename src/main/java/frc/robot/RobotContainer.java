@@ -5,6 +5,7 @@ import frc.robot.commands.AlignNeg90;
 import frc.robot.commands.AutoAlignAutoCommand;
 import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.FieldCentricDrive;
+import frc.robot.commands.HopperCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -28,24 +29,24 @@ import frc.robot.commands.DriveToShootPosition;
 
 public class RobotContainer {
 
-   public static final SwerveDrivetrain drive = new SwerveDrivetrain();
-   public static final IntakeSubsystem intake = new IntakeSubsystem();
-   public static final PivotSubsystem pivot = new PivotSubsystem();
-   public static final FeederSubsystem feeder = new FeederSubsystem();
-   public static final HopperSubsystem hopper = new HopperSubsystem();
+   public final SwerveDrivetrain drive = new SwerveDrivetrain();
+   public final IntakeSubsystem intake = new IntakeSubsystem();
+   public final PivotSubsystem pivot = new PivotSubsystem();
+   public final FeederSubsystem feeder = new FeederSubsystem();
+   public final HopperSubsystem hopper = new HopperSubsystem();
 
-   public static final TestSubsystem testSubsystem = new TestSubsystem();
+   public final TestSubsystem testSubsystem = new TestSubsystem();
 
    private final CommandXboxController controller0 = new CommandXboxController(0);
    private final CommandXboxController controller1 = new CommandXboxController(1);
 
-   public static final ShooterController shooter = new ShooterController();
+   public final ShooterController shooter = new ShooterController();
 
-   public static final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
-   public static final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
+   private final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+   private final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
 
-   public static final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
-   public static final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
+   private final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
+   private final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
 
    private String autoName;
 
@@ -125,6 +126,7 @@ public class RobotContainer {
       controller0.povUp()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
             .onFalse(drive.stopOnceCommand());
+
 
    }
 
@@ -213,4 +215,6 @@ public class RobotContainer {
       );
 
    }
+
+
 }

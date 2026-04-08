@@ -53,14 +53,14 @@ public class DriveToShootPosition extends Command {
             alliance = Alliance.Blue;
         }
 
-        ArrayList<Pose2d> climbPoses = new ArrayList<>(); // TODO
+        ArrayList<Pose2d> climbPoses = new ArrayList<>();
 
         if (alliance == Alliance.Blue) {
-            for (Pose2d pose : DrivetrainConstants.blueClimbPoses) { // TODO
+            for (Pose2d pose : DrivetrainConstants.blueClimbPoses) { 
                 climbPoses.add(pose);
             }
         } else {
-            for (Pose2d pose : DrivetrainConstants.redClimbPoses) { // TODO
+            for (Pose2d pose : DrivetrainConstants.redClimbPoses) { 
                 climbPoses.add(pose);
             }
         }
