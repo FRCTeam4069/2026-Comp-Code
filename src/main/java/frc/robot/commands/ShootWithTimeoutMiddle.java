@@ -115,6 +115,7 @@ public class ShootWithTimeoutMiddle extends Command{
             feeder.stopFeeder();
             timer.stop();
             timer.reset();
+            
         }
     }
 
