@@ -17,7 +17,7 @@ import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.autos.RedTestAuto;
-import frc.robot.commands.autos.RedTwoCycleLeft;
+// import frc.robot.commands.autos.RedTwoCycleLeft;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,11 +42,11 @@ public class RobotContainer {
 
    public final ShooterController shooter = new ShooterController();
 
-   private final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+   public final ShootWithTimeout shootWithTimeout = new ShootWithTimeout(shooter, feeder, hopper, pivot);
    private final AlignNeg90 alignNeg90 = new AlignNeg90(drive);
 
    private final AutoAlignAutoCommand autoAlignAutoCommand = new AutoAlignAutoCommand(drive);
-   private final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
+   public final AutoAlignInfinite autoAlignInfinite = new AutoAlignInfinite(drive);
 
    private String autoName;
 
@@ -86,7 +86,7 @@ public class RobotContainer {
       // autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
 
       //autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper, intake, shooter, pivot));
-      autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
+      // autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
 
 
       SmartDashboard.putData("Auto Chooser", autoChooser);

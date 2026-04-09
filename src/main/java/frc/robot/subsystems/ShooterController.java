@@ -161,20 +161,21 @@ public class ShooterController extends SubsystemBase {
 
     public void shoot(double distance) {
 
-        if (distance > maxDistance) {
-            targetRPM = 0;
-        }
+        // if (distance > maxDistance) {
+        //     targetRPM = 0;
+        // }
 
-        else if (distance < minShootDistance) {
-            targetRPM = 2000;
-        }
+        // else if (distance < minShootDistance) {
+        //     targetRPM = 2550;
+        // }
 
-        else {
-            targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4))
-                    + (7929.250003 * Math.pow(distance, 3))
-                    - (23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
+        // else {
+        //     targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4))
+        //             + (7929.250003 * Math.pow(distance, 3))
+        //             - (23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
 
-        }
+        // }
+        targetRPM = 2650;
 
         if (distance > maxDistance) {
             targetDeg = 0;

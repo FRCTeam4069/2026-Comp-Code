@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterController;
 
 public class ShooterCommand extends Command {
-   // private final ShooterController shooter;
-    //private final FeederSubsystem feeder;
+   private final ShooterController shooter;
+    private final FeederSubsystem feeder;
     private final HopperSubsystem hopper;
 
     private final BooleanSupplier shoot;
@@ -71,8 +71,8 @@ public class ShooterCommand extends Command {
 
     ) {
 
-        //this.shooter = shooter;
-       // this.feeder = feeder;
+        this.shooter = shooter;
+       this.feeder = feeder;
         this.hopper = hopper;
 
         this.shoot = shoot;
@@ -98,8 +98,8 @@ public class ShooterCommand extends Command {
     public void execute() {
         var result = DriverStation.getAlliance();
 
-        // currentPositionX = shooter.getCurrentRobotPose().getX();
-        // currentPositionY = shooter.getCurrentRobotPose().getY();
+        currentPositionX = shooter.getCurrentRobotPose().getX();
+        currentPositionY = shooter.getCurrentRobotPose().getY();
 
         if (result.isPresent()) {
             alliance = result.get();
@@ -131,17 +131,17 @@ public class ShooterCommand extends Command {
 
             distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-            //shooter.shoot(distance);
+            shooter.shoot(distance);
 
             if (feederManual.getAsBoolean()) { // FIXME test if this works
-                //feeder.driveFeederIn();
+                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
-            // if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
-            //     shootReady = true;
-            //     timer.start();
-            // }
+            if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
+                shootReady = true;
+                timer.start();
+            }
 
             // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
             // shooter.hoodInPosition() ) {
@@ -159,20 +159,20 @@ public class ShooterCommand extends Command {
 
         else if (feederManual.getAsBoolean()) {
 
-           // feeder.driveFeederIn();
+           feeder.driveFeederIn();
             hopper.driveHopperIn();
         }
 
         else if (reverseAll.getAsBoolean()) {
-            //feeder.driveFeederOut();
+            feeder.driveFeederOut();
             hopper.driveHopperOut();
         }
 
         else if (closeShoot.getAsBoolean()) {
-           // shooter.manualCloseShoot();
+           shooter.manualCloseShoot();
 
             if (feederManual.getAsBoolean()) { // FIXME test if this works
-               // feeder.driveFeederIn();
+               feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
@@ -190,7 +190,7 @@ public class ShooterCommand extends Command {
         }
 
         else if (towerShoot.getAsBoolean()) {
-            //shooter.towerShoot();
+            shooter.towerShoot();
 
             // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
             // shooter.hoodInPosition() ) {
@@ -199,7 +199,7 @@ public class ShooterCommand extends Command {
             // }
 
             if (feederManual.getAsBoolean()) { // FIXME test if this works
-               // feeder.driveFeederIn();
+               feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
@@ -212,15 +212,15 @@ public class ShooterCommand extends Command {
         else if (pass.getAsBoolean()) {
 
             if (Math.abs(currentPositionX - hubX) > farPassThresh) {
-                //shooter.farPass();
+                shooter.farPass();
             }
 
             else if (Math.abs(currentPositionX - hubX) < farPassThresh) {
-                //shooter.closePass();
+                shooter.closePass();
             }
 
             if (feederManual.getAsBoolean()) { // FIXME test if this works
-                //feeder.driveFeederIn();
+                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
@@ -237,10 +237,10 @@ public class ShooterCommand extends Command {
         }
 
         else {
-            //shooter.stop();
-            //feeder.stopFeeder();
+            shooter.stop();
+            feeder.stopFeeder();
             hopper.stopHopper();
-            //shooter.hoodAway();
+            shooter.hoodAway();
             shootReady = false;
 
             timer.stop();
@@ -252,7 +252,8 @@ public class ShooterCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        //shooter.stop();
-        // feeder.stopFeeder();
+        shooter.stop();
+        feeder.stopFeeder();
+        hopper.stopHopper();
     }
 }

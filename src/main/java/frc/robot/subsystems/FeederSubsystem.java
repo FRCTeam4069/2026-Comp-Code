@@ -12,22 +12,20 @@ import frc.robot.constants.FeederConstants;
 import frc.robot.constants.IntakeConstants;
 
 public class FeederSubsystem extends SubsystemBase {
-    SparkMax feederMotor;
+    TalonFX feederMotor;
 
     public FeederSubsystem(){
-      // feederMotor = new TalonFX(DeviceIDs.FEEDER);
-      feederMotor = new SparkMax(DeviceIDs.FEEDER, MotorType.kBrushless);
+      feederMotor = new TalonFX(DeviceIDs.FEEDER);
 
-      //feederMotor.getConfigurator().apply(FeederConstants.feederConfig);
-      feederMotor.configure(FeederConstants.feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      feederMotor.getConfigurator().apply(FeederConstants.feederConfig);
   }
 
   public void driveFeederIn(){
-      feederMotor.setVoltage((12));
+      feederMotor.setVoltage((6.5));
   }
 
   public void driveFeederOut(){
-      feederMotor.setVoltage((-8));
+      feederMotor.setVoltage((-4));
   }
 
   public void stopFeeder(){

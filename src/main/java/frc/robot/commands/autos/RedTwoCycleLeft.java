@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.PIDsAndThings.PIDToPositionSpline;
@@ -26,12 +27,10 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
             HopperSubsystem hopper,
             IntakeSubsystem intake,
             ShooterController shooter,
-            PivotSubsystem pivot) {
+            PivotSubsystem pivot,
+            RobotContainer robot) {
 
         addRequirements(drive, feeder, hopper, intake, shooter, pivot);
-
-        final AutoAlignInfinite autoAlign = new AutoAlignInfinite(drive);
-        final ShootWithTimeout shoot = new ShootWithTimeout(shooter, feeder, hopper, pivot);
 
 
         Pose2d startPosition = new Pose2d(11.546, 0.472, Rotation2d.fromDegrees(90));
@@ -66,8 +65,8 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                                 new ArrayList<Double>(List.of(0.15, 0.1)),
                                 new ArrayList<Boolean>(List.of(true, true)))),
                 Commands.deadline(
-                        shoot.withTimeout(5),
-                        autoAlign
+                        robot.shootWithTimeout, //TODO check if timeout actually works, should???
+                        robot.autoAlignInfinite
                 ),
 
                 Commands.parallel(
@@ -95,8 +94,8 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                         null)
                 ),
                 Commands.deadline(
-                        shoot.withTimeout(5),
-                        autoAlign
+                        robot.shootWithTimeout, // TODO
+                        robot.autoAlignInfinite
                 )
         );
 
