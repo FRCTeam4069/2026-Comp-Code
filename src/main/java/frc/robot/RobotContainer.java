@@ -175,7 +175,7 @@ public class RobotContainer {
             () -> controller0.getHID().getStartButton(), // reset odometry
             () -> false, // lock closest
             () -> false, // lock heading
-            () -> false, // miss walls
+            () -> true, // miss walls
             () -> controller0.getRightY(), // snap modules
             () -> controller0.getHID().getXButton(), // left
             () -> controller0.getHID().getBButton(), // right
