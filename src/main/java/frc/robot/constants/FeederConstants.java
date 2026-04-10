@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public final class FeederConstants {
 
-    public static final int feederSmartCurrentLimit = 30;
+    public static final int feederSmartCurrentLimit = 40;
 
     public static final TalonFXConfiguration feederConfig = new TalonFXConfiguration();
 

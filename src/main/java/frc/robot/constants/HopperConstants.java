@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public final class HopperConstants {
 
-    public static final int hopperSmartCurrentLimit = 30;
+    public static final int hopperSmartCurrentLimit = 40;
 
     public static final TalonFXConfiguration hopperOneConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration hopperTwoConfig = new TalonFXConfiguration();
