@@ -53,7 +53,7 @@ public class ShooterController extends SubsystemBase {
     private double hoodPos = 0.0;
     private double pidOutHood = 0.0;
     private static final double hoodTolerace = 0.5;
-    private static final double maxDistance = 4.87
+    private static final double maxDistance = 4.9
     ;
     private static final double minHoodDistance = 2.95;
     private static final double minShootDistance = 1.3;
@@ -162,21 +162,20 @@ public class ShooterController extends SubsystemBase {
 
     public void shoot(double distance) {
 
-        // if (distance > maxDistance) {
-        //     targetRPM = 0;
-        // }
+        if (distance > maxDistance) {
+            targetRPM = 0;
+        }
 
-        // else if (distance < minShootDistance) {
-        //     targetRPM = 2550;
-        // }
+        else if (distance < minShootDistance) {
+            targetRPM = 2550;
+        }
 
-        // else {
-        //     targetRPM = (83.112158 * Math.pow(distance, 5)) - (1305.949681 * Math.pow(distance, 4))
-        //             + (7929.250003 * Math.pow(distance, 3))
-        //             - (23315.101833 * Math.pow(distance, 2)) + (33676.298956 * distance) - 16642.169996;
+        else {
+            targetRPM = -(25.6332 * Math.pow(distance, 5)) + (437.014 * Math.pow(distance, 4))
+                    - ( 2913.708 * Math.pow(distance, 3)) + (9398.3912 * Math.pow(distance, 2)) 
+                    - (14254.6479 * distance) - 10537.8741;
 
-        // }
-        targetRPM = 3100;
+        }
 
         if (distance > maxDistance) {
             targetDeg = 0;
