@@ -9,7 +9,6 @@ public final class HopperConstants {
     public static final int hopperSmartCurrentLimit = 40;
 
     public static final TalonFXConfiguration hopperOneConfig = new TalonFXConfiguration();
-    public static final TalonFXConfiguration hopperTwoConfig = new TalonFXConfiguration();
 
 
     static {
@@ -17,19 +16,10 @@ public final class HopperConstants {
         hopperOneConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         hopperOneConfig.CurrentLimits.SupplyCurrentLimit = hopperSmartCurrentLimit;
         hopperOneConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hopperOneConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.75;
-        hopperOneConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.75;
+        hopperOneConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.375;
+        hopperOneConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.375;
                 
     }
 
-     static {
-        hopperTwoConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        hopperTwoConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        hopperTwoConfig.CurrentLimits.SupplyCurrentLimit = hopperSmartCurrentLimit;
-        hopperTwoConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hopperTwoConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.75;
-        hopperTwoConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.75;
-                
-    }
 
 }

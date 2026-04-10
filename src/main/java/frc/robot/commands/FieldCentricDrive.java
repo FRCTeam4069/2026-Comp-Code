@@ -40,10 +40,10 @@ public class FieldCentricDrive extends Command {
     private Pose2d encoderOnly;
     private Pose2d odometryError;
 
-    private final double FIELD_MIN_X = 0.2;
-    private final double FIELD_MAX_X = 16.34;
-    private final double FIELD_MIN_Y = 0.2;
-    private final double FIELD_MAX_Y = 7.87;
+    private final double FIELD_MIN_X = 1;
+    private final double FIELD_MAX_X = 15.54;
+    private final double FIELD_MIN_Y = 1;
+    private final double FIELD_MAX_Y = 7;
 
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
@@ -191,24 +191,23 @@ public class FieldCentricDrive extends Command {
             drive.resetDrivePose(currentPosition);
         }
 
-        
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
                 (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
                         * DrivetrainConstants.maxAngularVelocity);
 
-        if (fastTurn.getAsBoolean()){
-            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) ) 
-                        * DrivetrainConstants.maxAngularVelocity;
-            
-        
-        } else{
-            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25) 
-                        * DrivetrainConstants.maxAngularVelocity;
-                
+        if (fastTurn.getAsBoolean()) {
+            outputSpeeds.omegaRadiansPerSecond = (Math
+                    .pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3))
+                    * DrivetrainConstants.maxAngularVelocity;
+
+        } else {
+            outputSpeeds.omegaRadiansPerSecond = (Math
+                    .pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25)
+                    * DrivetrainConstants.maxAngularVelocity;
+
         }
-            
 
         // SNAP MODULES 180/0 WITH JOYSTICK
         if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
@@ -445,98 +444,49 @@ public class FieldCentricDrive extends Command {
 
                 }
 
-                // TODO COMMENTED OUT LOCKHEADING FOR NOW, DRIVERS MIGHT WANT THIS BACK//
+                if (lockHeading.getAsBoolean() && !lockClosestActive) {
 
-                // if(lockHeading.getAsBoolean() && !lockClosestActive){
-
-                // if(!lockHeadingActive){
-                // lockHeadingTarget = drive.getRotation2d().getRadians();
-                // lockHeadingActive = true;
-                // }
-
-                // rotationalSpeed =
-                // headingController.calculate(drive.getRotation2d().getRadians(),
-                // lockHeadingTarget);
-                // outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-                // }
-
-                // else{
-                // lockHeadingActive = false;
-                // }
-
-                if (lockHeading.getAsBoolean() && !lockClosest.getAsBoolean()) {
-
-                    double currentDeg = drive.getRotation2d().getDegrees();
-
-                    double distTo0 = Math.abs(currentDeg - 0);
-                    double distTo90 = Math.abs(currentDeg - 90);
-
-                    double target;
-
-                    if (distTo0 < distTo90) {
-                        target = 0.0;
-                    } else {
-                        target = 90.0;
+                    if (!lockHeadingActive) {
+                        lockHeadingTarget = drive.getRotation2d().getRadians();
+                        lockHeadingActive = true;
                     }
 
                     rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
-                            Math.toRadians(target));
-
+                            lockHeadingTarget);
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
                 }
 
-                // TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0
-                // but might return to this for driers later thanks//
-                // if (lockClosest.getAsBoolean() && !lockHeadingActive){
-                // if(!lockClosestActive){
-                // lockClosestTarget = drive.getRotation2d().getDegrees();
+                else {
+                    lockHeadingActive = false;
+                }
 
-                // lockClosestTarget = Math.toRadians(90); // keep for test
+                if (lockClosest.getAsBoolean() && !lockHeadingActive) {
+                    if (!lockClosestActive) {
+                        lockClosestTarget = drive.getRotation2d().getDegrees();
 
-                // // if (lockClosestTarget >90 || lockClosestTarget <-90) {
-                // // lockClosestTarget = Math.toRadians(180);
-                // // desiredModuleState.set(Math.toRadians(180));
+                        lockClosestTarget = Math.toRadians(90); // keep for test
 
-                // // }
-                // // else {
-                // // lockClosestTarget = Math.toRadians(0);
-                // // desiredModuleState.set(Math.toRadians(0));
+                        // if (lockClosestTarget >90 || lockClosestTarget <-90) {
+                        // lockClosestTarget = Math.toRadians(180);
+                        // desiredModuleState.set(Math.toRadians(180));
 
-                // // }
+                        // }
+                        // else {
+                        // lockClosestTarget = Math.toRadians(0);
+                        // desiredModuleState.set(Math.toRadians(0));
 
-                // lockClosestActive = true;
-                // }
+                        // }
 
-                // rotationalSpeed =
-                // headingController.calculate(drive.getRotation2d().getRadians(),
-                // lockClosestTarget);
-                // outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
-                // }
-
-                // else{
-                // lockClosestActive = false;
-                // }
-
-                if (lockClosest.getAsBoolean() && !lockHeading.getAsBoolean()) {
-
-                    double currentDeg = drive.getRotation2d().getDegrees();
-
-                    double distTo0 = Math.abs(currentDeg - 0);
-                    double distTo90 = Math.abs(currentDeg - 90);
-
-                    double target;
-
-                    if (distTo0 < distTo90) {
-                        target = 90.0; // near 0, go to 90
-                    } else {
-                        target = 0.0; // near 90, go to 0
+                        lockClosestActive = true;
                     }
 
                     rotationalSpeed = middleHeadingController.calculate(drive.getRotation2d().getRadians(),
-                            Math.toRadians(target));
-
+                            lockClosestTarget);
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
+                }
 
+                else {
+                    lockClosestActive = false;
                 }
 
                 if (lockClosestTarget > 90 || lockClosestTarget < -90) {
@@ -556,8 +506,6 @@ public class FieldCentricDrive extends Command {
 
         outputSpeeds.omegaRadiansPerSecond = -outputSpeeds.omegaRadiansPerSecond;
 
-    
-
         // if(throughTrench.getAsBoolean()){
         // driveSpeeds = trenchSpeeds;
         // }
@@ -566,9 +514,19 @@ public class FieldCentricDrive extends Command {
         driveSpeeds = outputSpeeds;
         // }
 
-        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition.getX() > FIELD_MAX_X
-                || currentPosition.getY() < FIELD_MIN_Y || currentPosition.getY() > FIELD_MAX_Y)) {
-            driveSpeeds = new ChassisSpeeds();
+        if (missWalls.getAsBoolean()) {
+            if (currentPosition.getX() <= FIELD_MIN_X && driveSpeeds.vxMetersPerSecond > 0) {
+                driveSpeeds.vxMetersPerSecond = 0;
+            }
+            if (currentPosition.getX() >= FIELD_MAX_X && driveSpeeds.vxMetersPerSecond < 0) {
+                driveSpeeds.vxMetersPerSecond = 0;
+            }
+            if (currentPosition.getY() <= FIELD_MIN_Y && driveSpeeds.vyMetersPerSecond > 0) {
+                driveSpeeds.vyMetersPerSecond = 0;
+            }
+            if (currentPosition.getY() >= FIELD_MAX_Y && driveSpeeds.vyMetersPerSecond < 0) {
+                driveSpeeds.vyMetersPerSecond = 0;
+            }
         }
 
         if (alliance == Alliance.Blue) {

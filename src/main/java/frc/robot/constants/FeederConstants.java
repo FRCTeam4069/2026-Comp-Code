@@ -17,8 +17,8 @@ public final class FeederConstants {
                 feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
                 feederConfig.CurrentLimits.SupplyCurrentLimit = feederSmartCurrentLimit;
                 feederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-                feederConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.75;
-                feederConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.75;
+                feederConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.375;
+                feederConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.375;
 
                 // feederConfig
                 //     .inverted(true)
