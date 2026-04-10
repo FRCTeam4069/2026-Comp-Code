@@ -9,27 +9,22 @@ import frc.robot.constants.HopperConstants;
 
 public class HopperSubsystem extends SubsystemBase {
   TalonFX hopperMotorOne;
-  TalonFX hopperMotorTwo;
 
   private double volts = 0.0;
 
   public HopperSubsystem() {
     hopperMotorOne = new TalonFX(DeviceIDs.HOPPER_ONE);
-    hopperMotorTwo = new TalonFX(DeviceIDs.HOPPER_TWO);
 
     hopperMotorOne.getConfigurator().apply(HopperConstants.hopperOneConfig);
-    hopperMotorTwo.getConfigurator().apply(HopperConstants.hopperTwoConfig);
 
   }
 
   public void driveHopperIn() {
-    hopperMotorOne.setVoltage((6.5));
-   hopperMotorTwo.setVoltage(6.5);
+    hopperMotorOne.setVoltage((12));
   }
 
   public void driveHopperOut() {
-    hopperMotorOne.setVoltage((-4.0));
-    hopperMotorTwo.setVoltage(-4.0);
+    hopperMotorOne.setVoltage((-8));
 
   }
 
@@ -39,7 +34,6 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopHopper() {
     hopperMotorOne.stopMotor();
-    hopperMotorTwo.stopMotor();
   }
 
   // public void autoHopperIn(){

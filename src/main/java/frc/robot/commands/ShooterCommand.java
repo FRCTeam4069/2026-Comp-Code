@@ -72,7 +72,7 @@ public class ShooterCommand extends Command {
     ) {
 
         this.shooter = shooter;
-       this.feeder = feeder;
+        this.feeder = feeder;
         this.hopper = hopper;
 
         this.shoot = shoot;
@@ -137,6 +137,10 @@ public class ShooterCommand extends Command {
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
+            else  {
+                feeder.stopFeeder();
+                hopper.stopHopper();
+            }
 
             if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
                 shootReady = true;
@@ -159,7 +163,7 @@ public class ShooterCommand extends Command {
 
         else if (feederManual.getAsBoolean()) {
 
-           feeder.driveFeederIn();
+            feeder.driveFeederIn();
             hopper.driveHopperIn();
         }
 
@@ -172,7 +176,7 @@ public class ShooterCommand extends Command {
            shooter.manualCloseShoot();
 
             if (feederManual.getAsBoolean()) { // FIXME test if this works
-               feeder.driveFeederIn();
+                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
 
