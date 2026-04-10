@@ -175,6 +175,10 @@ public class ShooterCommand extends Command {
                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
+            else{
+                feeder.stopFeeder();
+                hopper.stopHopper();
+            }
 
             // if ((Math.abs(shooter.targetRPM -shooter.getCurrentRPM()) <= RPMDiff) &&
             // shooter.hoodInPosition() ) {
@@ -238,9 +242,9 @@ public class ShooterCommand extends Command {
 
         else {
             shooter.stop();
-            feeder.stopFeeder();
-            hopper.stopHopper();
             shooter.hoodAway();
+            hopper.stopHopper();
+            feeder.stopFeeder();
             shootReady = false;
 
             timer.stop();

@@ -5,7 +5,6 @@ import frc.robot.commands.AlignNeg90;
 import frc.robot.commands.AutoAlignAutoCommand;
 import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.FieldCentricDrive;
-import frc.robot.commands.HopperCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -175,7 +174,7 @@ public class RobotContainer {
             () -> controller0.getHID().getStartButton(), // reset odometry
             () -> false, // lock closest
             () -> false, // lock heading
-            () -> false, // miss walls
+            () -> true, // miss walls
             () -> controller0.getRightY(), // snap modules
             () -> controller0.getHID().getXButton(), // left
             () -> controller0.getHID().getBButton(), // right

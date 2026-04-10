@@ -40,10 +40,11 @@ public class FieldCentricDrive extends Command {
     private Pose2d encoderOnly;
     private Pose2d odometryError;
 
-    private final double FIELD_MIN_X = 0.2;
-    private final double FIELD_MAX_X = 16.34;
-    private final double FIELD_MIN_Y = 0.2;
-    private final double FIELD_MAX_Y = 7.87;
+    private final double FIELD_MIN_X = 1;
+    private final double FIELD_MAX_X = 15.54;
+    private final double FIELD_MIN_Y = 1;
+    private final double FIELD_MAX_Y = 7;
+
 
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
@@ -566,17 +567,20 @@ public class FieldCentricDrive extends Command {
         driveSpeeds = outputSpeeds;
         // }
 
-        if (missWalls.getAsBoolean() && (currentPosition.getX() < FIELD_MIN_X || currentPosition.getX() > FIELD_MAX_X
-                || currentPosition.getY() < FIELD_MIN_Y || currentPosition.getY() > FIELD_MAX_Y)) {
-            driveSpeeds = new ChassisSpeeds();
+         if (missWalls.getAsBoolean()) {
+            if (currentPosition.getX() <= FIELD_MIN_X && driveSpeeds.vxMetersPerSecond > 0) {
+                driveSpeeds.vxMetersPerSecond = 0;
+            }
+            if (currentPosition.getX() >= FIELD_MAX_X && driveSpeeds.vxMetersPerSecond < 0) {
+                driveSpeeds.vxMetersPerSecond = 0;
+            }
+            if (currentPosition.getY() <= FIELD_MIN_Y && driveSpeeds.vyMetersPerSecond > 0) {
+                driveSpeeds.vyMetersPerSecond = 0;
+            }
+            if (currentPosition.getY() >= FIELD_MAX_Y && driveSpeeds.vyMetersPerSecond < 0) {
+                driveSpeeds.vyMetersPerSecond = 0;
+            }
         }
-
-        if (alliance == Alliance.Blue) {
-            drive.fieldOrientedDrive(driveSpeeds);
-        } else {
-            drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
-        }
-
         withVision = drive.poseEstimator.getEstimatedPosition();
         encoderOnly = drive.swerveOdometry.getPoseMeters();
 

@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public final class FeederConstants {
 
-    public static final int feederSmartCurrentLimit = 30;
+    public static final int feederSmartCurrentLimit = 40;
 
     public static final TalonFXConfiguration feederConfig = new TalonFXConfiguration();
 
@@ -17,8 +17,8 @@ public final class FeederConstants {
                 feederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
                 feederConfig.CurrentLimits.SupplyCurrentLimit = feederSmartCurrentLimit;
                 feederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-                feederConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.75;
-                feederConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.75;
+                feederConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.375;
+                feederConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.375;
 
                 // feederConfig
                 //     .inverted(true)
