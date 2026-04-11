@@ -171,9 +171,9 @@ public class ShooterController extends SubsystemBase {
         }
 
         else {
-            targetRPM = -(25.6332 * Math.pow(distance, 5)) + (437.014 * Math.pow(distance, 4))
+            targetRPM = (-25.6332 * Math.pow(distance, 5)) + (437.014 * Math.pow(distance, 4))
                     - ( 2913.708 * Math.pow(distance, 3)) + (9398.3912 * Math.pow(distance, 2)) 
-                    - (14254.6479 * distance) - 10537.8741;
+                    - (14254.6479 * distance) + 10537.8741;
 
         }
 

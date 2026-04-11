@@ -11,7 +11,7 @@ public class HopperSubsystem extends SubsystemBase {
   TalonFX hopperMotorOne;
 
   public HopperSubsystem() {
-    hopperMotorOne = new TalonFX(DeviceIDs.HOPPER_ONE);
+    hopperMotorOne = new TalonFX(DeviceIDs.HOPPER);
 
     hopperMotorOne.getConfigurator().apply(HopperConstants.hopperOneConfig);
 

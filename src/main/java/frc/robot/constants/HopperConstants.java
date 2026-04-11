@@ -17,8 +17,8 @@ public final class HopperConstants {
         hopperOneConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         hopperOneConfig.CurrentLimits.SupplyCurrentLimit = hopperSmartCurrentLimit;
         hopperOneConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hopperOneConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.75;
-        hopperOneConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.75;
+        hopperOneConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.375;
+        hopperOneConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.375;
                 
     }
 

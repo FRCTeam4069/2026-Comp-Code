@@ -29,6 +29,7 @@ public class FieldCentricDrive extends Command {
     private BooleanSupplier lockHeading;
     private BooleanSupplier lockClosest;
     private final BooleanSupplier missWalls;
+    private final BooleanSupplier disableMissWalls;
     private final DoubleSupplier snapModulesAxis;
     private final BooleanSupplier leftSnap;
     private final BooleanSupplier rightSnap;
@@ -44,7 +45,6 @@ public class FieldCentricDrive extends Command {
     private final double FIELD_MAX_X = 15.54;
     private final double FIELD_MIN_Y = 1;
     private final double FIELD_MAX_Y = 7;
-
 
     private SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(110.0);
     private SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(110.0);
@@ -129,6 +129,7 @@ public class FieldCentricDrive extends Command {
             // BooleanSupplier throughTrench,
             BooleanSupplier lockHeading,
             BooleanSupplier missWalls,
+            BooleanSupplier disableMissWalls,
             DoubleSupplier snapModuleAxis,
             BooleanSupplier leftSnap,
             BooleanSupplier rightSnap,
@@ -146,6 +147,7 @@ public class FieldCentricDrive extends Command {
         // this.throughTrench = throughTrench;
         this.lockHeading = lockHeading;
         this.missWalls = missWalls;
+        this.disableMissWalls = disableMissWalls;
         this.snapModulesAxis = snapModuleAxis;
         this.leftSnap = leftSnap;
         this.rightSnap = rightSnap;
@@ -192,24 +194,23 @@ public class FieldCentricDrive extends Command {
             drive.resetDrivePose(currentPosition);
         }
 
-        
         var outputSpeeds = new ChassisSpeeds(
                 xSlewRateLimiter.calculate(joystickToVelocity(forwardSpeed.getAsDouble())),
                 ySlewRateLimiter.calculate(joystickToVelocity(strafeSpeed.getAsDouble())),
                 (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.5)
                         * DrivetrainConstants.maxAngularVelocity);
 
-        if (fastTurn.getAsBoolean()){
-            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) ) 
-                        * DrivetrainConstants.maxAngularVelocity;
-            
-        
-        } else{
-            outputSpeeds.omegaRadiansPerSecond = (Math.pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25) 
-                        * DrivetrainConstants.maxAngularVelocity;
-                
+        if (fastTurn.getAsBoolean()) {
+            outputSpeeds.omegaRadiansPerSecond = (Math
+                    .pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3))
+                    * DrivetrainConstants.maxAngularVelocity;
+
+        } else {
+            outputSpeeds.omegaRadiansPerSecond = (Math
+                    .pow(MathUtil.applyDeadband(turnSpeed.getAsDouble(), controllerDeadband), 3) / 1.25)
+                    * DrivetrainConstants.maxAngularVelocity;
+
         }
-            
 
         // SNAP MODULES 180/0 WITH JOYSTICK
         if (snapModulesAxis.getAsDouble() < SNAP_MODULE_ANGLE_THRESH_180) {
@@ -445,7 +446,6 @@ public class FieldCentricDrive extends Command {
                     }
 
                 }
-
                 // TODO COMMENTED OUT LOCKHEADING FOR NOW, DRIVERS MIGHT WANT THIS BACK//
 
                 // if(lockHeading.getAsBoolean() && !lockClosestActive){
@@ -557,8 +557,6 @@ public class FieldCentricDrive extends Command {
 
         outputSpeeds.omegaRadiansPerSecond = -outputSpeeds.omegaRadiansPerSecond;
 
-    
-
         // if(throughTrench.getAsBoolean()){
         // driveSpeeds = trenchSpeeds;
         // }
@@ -567,7 +565,7 @@ public class FieldCentricDrive extends Command {
         driveSpeeds = outputSpeeds;
         // }
 
-         if (missWalls.getAsBoolean()) {
+        if (missWalls.getAsBoolean()&& !disableMissWalls.getAsBoolean()) {
             if (currentPosition.getX() <= FIELD_MIN_X && driveSpeeds.vxMetersPerSecond > 0) {
                 driveSpeeds.vxMetersPerSecond = 0;
             }
@@ -581,11 +579,22 @@ public class FieldCentricDrive extends Command {
                 driveSpeeds.vyMetersPerSecond = 0;
             }
         }
+
+        else {
+             driveSpeeds = outputSpeeds;
+
+        }
         withVision = drive.poseEstimator.getEstimatedPosition();
         encoderOnly = drive.swerveOdometry.getPoseMeters();
 
         odometryError = encoderOnly.relativeTo(withVision);
         odometryErrorPublisher.set(odometryError);
+
+        if (alliance == Alliance.Blue) {
+            drive.fieldOrientedDrive(driveSpeeds);
+        } else {
+            drive.fieldOrientedDrive(driveSpeeds, drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180.0)));
+        }
 
     }
 

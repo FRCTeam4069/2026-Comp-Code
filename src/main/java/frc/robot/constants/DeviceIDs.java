@@ -20,8 +20,8 @@ public class DeviceIDs {
     public static final byte PIVOT = 15; 
     public static final byte FEEDER = 13;
 
-    public static final byte HOPPER_ONE = 14; 
-    public static final byte HOPPER_TWO = 17;
+    // public static final byte HOPPER = 14; 
+    public static final byte HOPPER = 17;
 
 
     public static final byte HOOD = 57; 

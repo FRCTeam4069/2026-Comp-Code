@@ -66,27 +66,38 @@ public class RobotContainer {
 
       // addSysIdCommands()
 
-      // autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One Cycle Left"));
-      // autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One Cycle Left"));
+      // autoChooser.addOption("Blue One Cycle Left", new PathPlannerAuto("Blue One
+      // Cycle Left"));
+      // autoChooser.addOption("Red One Cycle Left", new PathPlannerAuto("Red One
+      // Cycle Left"));
 
-      // autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle Left"));
-      // autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle Right"));
+      // autoChooser.addOption("Blue 2 Cycle Left", new PathPlannerAuto("Blue 2 Cycle
+      // Left"));
+      // autoChooser.addOption("Blue 2 Cycle Right", new PathPlannerAuto("Blue 2 Cycle
+      // Right"));
 
-      // autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle Right"));
-      // autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle Left"));
+      // autoChooser.addOption("Red 2 Cycle Right", new PathPlannerAuto("Red 2 Cycle
+      // Right"));
+      // autoChooser.addOption("Red 2 Cycle Left", new PathPlannerAuto("Red 2 Cycle
+      // Left"));
 
       // autoChooser.addOption("HP Blue Auto", new PathPlannerAuto("HP Blue Auto"));
       // autoChooser.addOption("HP Red Auto", new PathPlannerAuto("HP Red Auto"));
 
-      // autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave Middle"));
-      // autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave Middle"));
+      // autoChooser.addOption("Red Leave Middle", new PathPlannerAuto("Red Leave
+      // Middle"));
+      // autoChooser.addOption("Blue Leave Middle", new PathPlannerAuto("Blue Leave
+      // Middle"));
 
-      // autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue Middle Preload Shoot"));
-      // autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red Middle Preload Shoot"));
+      // autoChooser.addOption("Blue Middle Preload Shoot", new PathPlannerAuto("Blue
+      // Middle Preload Shoot"));
+      // autoChooser.addOption("Red Middle Preload Shoot", new PathPlannerAuto("Red
+      // Middle Preload Shoot"));
 
-      //autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper, intake, shooter, pivot));
-      // autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
-
+      // autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper,
+      // intake, shooter, pivot));
+      // autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive,
+      // feeder, hopper, intake, shooter, pivot));
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -125,7 +136,6 @@ public class RobotContainer {
       controller0.povUp()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
             .onFalse(drive.stopOnceCommand());
-
 
    }
 
@@ -175,14 +185,13 @@ public class RobotContainer {
             () -> false, // lock closest
             () -> false, // lock heading
             () -> true, // miss walls
+            () -> controller0.getHID().getBackButton(), //disable 
             () -> controller0.getRightY(), // snap modules
             () -> controller0.getHID().getXButton(), // left
             () -> controller0.getHID().getBButton(), // right
             () -> controller0.getHID().getYButton(), // front
-            () -> controller0.getHID().getAButton(),// back
+            () -> controller0.getHID().getAButton(), // back
             () -> controller0.getHID().getLeftBumperButton());// back
-
-
 
    }
 
@@ -214,6 +223,5 @@ public class RobotContainer {
       );
 
    }
-
 
 }
