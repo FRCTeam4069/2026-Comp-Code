@@ -11,7 +11,7 @@ public class ShooterConstants {
     public static final SparkFlexConfig shooterTwoMotorOneConfig = new SparkFlexConfig();
     public static final SparkFlexConfig shooterTwoMotorTwoConfig = new SparkFlexConfig();
 
-    public static final double kP = 0.0000004;
+    public static final double kP = 0.0000006;
     public static final double kI = 0.0;
 
     public static final double kV = 0.001875;

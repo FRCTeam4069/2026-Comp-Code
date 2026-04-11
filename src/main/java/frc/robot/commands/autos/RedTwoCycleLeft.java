@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.commands.AutoAlignInfinite;
-import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.PIDsAndThings.PIDToPositionSpline;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -43,7 +41,7 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                 new InstantCommand(() -> drive.resetPose(startPosition)),
                 new InstantCommand(() -> drive.resetDrivePose(startPosition)),
                 Commands.parallel(
-                        new PIDToPositionSpline(
+                        new PIDToPositionSpline( //spiral setup
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
                                         new Pose2d(10.675, 0.9, Rotation2d.fromDegrees(90)),
@@ -53,49 +51,68 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                                 new ArrayList<Boolean>(List.of(false, false, true))),
                         Commands.sequence(
                                 Commands.waitSeconds(0.75),
-                                pivot.intakeDown(),
+                               // pivot.intakeDown(),
                                 intake.intakeOn())),
                 intake.intakeOff(),
-                Commands.parallel(
+                Commands.parallel( //spiral
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(10.671, 0.632, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.799, 0.632, Rotation2d.fromDegrees(110)))),
-                                new ArrayList<Double>(List.of(0.15, 0.1)),
-                                new ArrayList<Boolean>(List.of(true, true)))),
+                                        new Pose2d(9.044, 3.525, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(13.799, 0.632, Rotation2d.fromDegrees(110)),
+                                        new Pose2d(10.750,3.629,Rotation2d.fromDegrees(0)),
+                                        new Pose2d(10.750,2.150,Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(10.019,2.150,Rotation2d.fromDegrees(45)),
+                                        new Pose2d(13.119,2.150, Rotation2d.fromDegrees(45)),
+                                        new Pose2d(13.319, 2.15, Rotation2d.fromDegrees(128.000)))),
+                                new ArrayList<Double>(List.of(0.4, 0.4,0.4,0.4,0.4,0.4)),
+                                new ArrayList<Boolean>(List.of(false, false, false, false, true, true)))),
+                new InstantCommand(() -> drive.resetPose(startPosition)),
+                new InstantCommand(() -> drive.resetDrivePose(startPosition)),
                 Commands.deadline(
-                        robot.shootWithTimeout, //TODO check if timeout actually works, should???
+                        Commands.waitSeconds(5),
+                        intake.intakeOff(),
                         robot.autoAlignInfinite
+                        // robot.shootWithTimeout //TODO check if timeout actually works, should??? 
                 ),
 
-                Commands.parallel(
-                    new PIDToPositionSpline(
-                        drive, 
-                        new ArrayList<Pose2d>(List.of(
-                                new Pose2d(10.671, 0.632, Rotation2d.fromDegrees(90)),
-                                new Pose2d(10.825, 3.964, Rotation2d.fromDegrees(90)))),
-                         new ArrayList<Double>(List.of(0.1, 0.4)), 
-                         new ArrayList<Boolean>(List.of(false,true))),
+                // second cycle
+                 Commands.parallel(
+                        new PIDToPositionSpline( //spiral setup
+                                drive,
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(13.319, 0.655,Rotation2d.fromDegrees(90)),
+                                        new Pose2d(11.799,0.488,Rotation2d.fromDegrees(90)),
+                                        new Pose2d(10.675, 0.9, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(9.044, 1.253, Rotation2d.fromDegrees(90)),
+                                        pickUpPosition)),
+                                new ArrayList<Double>(List.of(0.4, 0.4, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, false, true))),
                         Commands.sequence(
-                                Commands.waitSeconds(1),
-                                pivot.intakeDown(),
-                                intake.intakeOn()
-                        )    
-                ),
+                                Commands.waitSeconds(0.75),
+                                //pivot.intakeDown(),
+                                intake.intakeOn())),
                 intake.intakeOff(),
-                Commands.parallel(
+                Commands.parallel( //spiral
                         new PIDToPositionSpline(
-                        drive, 
-                        new ArrayList<Pose2d>(List.of(
-                                new Pose2d(10.671, 0.528, Rotation2d.fromDegrees(90)), 
-                                new Pose2d(13.469, 0.528, Rotation2d.fromDegrees(110)))),
-                        new ArrayList<Double>(List.of(0.1, 0.4)), 
-                        null)
-                ),
+                                drive,
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(9.044, 3.525, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(13.799, 0.632, Rotation2d.fromDegrees(110)),
+                                        new Pose2d(10.750,3.629,Rotation2d.fromDegrees(0)),
+                                        new Pose2d(10.750,2.150,Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(10.019,2.150,Rotation2d.fromDegrees(45)),
+                                        new Pose2d(13.119,2.150, Rotation2d.fromDegrees(45)),
+                                        new Pose2d(13.319, 2.15, Rotation2d.fromDegrees(128.000)))),
+                                new ArrayList<Double>(List.of(0.4, 0.4,0.4,0.4,0.4,0.4)),
+                                new ArrayList<Boolean>(List.of(false, false, false, false, true, true)))),
+                new InstantCommand(() -> drive.resetPose(startPosition)),
+                new InstantCommand(() -> drive.resetDrivePose(startPosition)),
                 Commands.deadline(
-                        robot.shootWithTimeout, // TODO
+                        Commands.waitSeconds(5),
+                        intake.intakeOff(),
                         robot.autoAlignInfinite
+                        //robot.shootWithTimeout //TODO check if timeout actually works, should??? 
                 )
         );
 
