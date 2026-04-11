@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
+import frc.robot.commands.AutoAlignInfinite;
 import frc.robot.commands.PIDsAndThings.PIDToPositionSpline;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -19,16 +19,20 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class RedTwoCycleLeft extends SequentialCommandGroup {
 
+    AutoAlignInfinite alignInfinite1;
+    AutoAlignInfinite alignInfinite2;
+
     public RedTwoCycleLeft(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
             IntakeSubsystem intake,
             ShooterController shooter,
-            PivotSubsystem pivot,
-            RobotContainer robot) {
+            PivotSubsystem pivot) {
 
         addRequirements(drive, feeder, hopper, intake, shooter, pivot);
+
+        alignInfinite1 = new AutoAlignInfinite(drive);
 
 
         Pose2d startPosition = new Pose2d(11.546, 0.472, Rotation2d.fromDegrees(90));
@@ -72,7 +76,7 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                 Commands.deadline(
                         Commands.waitSeconds(5),
                         intake.intakeOff(),
-                        robot.autoAlignInfinite
+                        alignInfinite1
                         // robot.shootWithTimeout //TODO check if timeout actually works, should??? 
                 ),
 
@@ -111,7 +115,7 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
                 Commands.deadline(
                         Commands.waitSeconds(5),
                         intake.intakeOff(),
-                        robot.autoAlignInfinite
+                        alignInfinite2
                         //robot.shootWithTimeout //TODO check if timeout actually works, should??? 
                 )
         );

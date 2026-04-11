@@ -95,7 +95,7 @@ public class RobotContainer {
 
       // autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper,
       // intake, shooter, pivot));
-      //autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 
