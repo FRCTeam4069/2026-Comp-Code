@@ -33,7 +33,7 @@ public class RedTwoCycleLeft extends SequentialCommandGroup {
         addRequirements(drive, feeder, hopper, intake, shooter, pivot);
 
         alignInfinite1 = new AutoAlignInfinite(drive);
-
+        alignInfinite2 = new AutoAlignInfinite(drive);
 
         Pose2d startPosition = new Pose2d(11.546, 0.472, Rotation2d.fromDegrees(90));
         Pose2d pickUpPosition = new Pose2d(8.887, 3.765, Rotation2d.fromDegrees(90));
