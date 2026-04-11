@@ -15,7 +15,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.autos.RedTwoCycleLeft;
+import frc.robot.commands.autos.RedLeftBump;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.DriveToShootPosition;
+import frc.robot.commands.autos.RedLeftTrench;
 
 public class RobotContainer {
 
@@ -95,7 +96,9 @@ public class RobotContainer {
 
       // autoChooser.addOption("Red Test Auto", new RedTestAuto(drive, feeder, hopper,
       // intake, shooter, pivot));
-      autoChooser.addOption("Red Two Cycle Left PID", new RedTwoCycleLeft(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Left Bump", new RedLeftBump(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Left Trench", new RedLeftTrench(drive, feeder, hopper, intake, shooter, pivot));
+
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -182,7 +185,7 @@ public class RobotContainer {
             () -> controller0.getHID().getStartButton(), // reset odometry
             () -> false, // lock closest
             () -> false, // lock heading
-            () -> true, // miss walls
+            () -> false, // miss walls
             () -> controller0.getHID().getBackButton(), //disable 
             () -> controller0.getRightY(), // snap modules
             () -> controller0.getHID().getXButton(), // left

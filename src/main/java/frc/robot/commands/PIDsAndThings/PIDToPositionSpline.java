@@ -30,7 +30,7 @@ public class PIDToPositionSpline extends Command {
     private double lookAhead = 0.5;
 
     public PIDToPositionSpline(SwerveDrivetrain drive,  ArrayList<Pose2d> waypoints, ArrayList<Double> tolerances, ArrayList<Boolean> stopAt) {
-        this(drive, waypoints, tolerances, stopAt, DrivetrainConstants.autoPidToPositionConstants, DrivetrainConstants.autoPidToPositionContConstants);
+        this(drive, waypoints, tolerances, stopAt, DrivetrainConstants.autoPidToPositionConstants, DrivetrainConstants.contAutoPidToPositionConstants);
     }
 
     public PIDToPositionSpline(SwerveDrivetrain drive, ArrayList<Pose2d> waypoints, ArrayList<Double> tolerances, ArrayList<Boolean> stopAt, DrivetrainPIDConstants stopPointConstants, DrivetrainPIDConstants contPointConstants) {
