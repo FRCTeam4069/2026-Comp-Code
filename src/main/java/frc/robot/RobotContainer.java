@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.DriveToShootPosition;
 import frc.robot.commands.autos.RedLeftTrench;
+import frc.robot.commands.autos.RedLeftTrenchV2;
 
 public class RobotContainer {
 
@@ -98,6 +99,7 @@ public class RobotContainer {
       // intake, shooter, pivot));
       autoChooser.addOption("Red Left Bump", new RedLeftBump(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Left Trench", new RedLeftTrench(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Left V2", new RedLeftTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
 
 
       SmartDashboard.putData("Auto Chooser", autoChooser);

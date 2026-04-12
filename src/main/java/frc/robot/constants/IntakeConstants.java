@@ -13,7 +13,7 @@ public final class IntakeConstants {
   static {
     intakeConfig
         .inverted(true)
-        .idleMode(IdleMode.kBrake)
+        .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(intakeSmartCurrentLimit)
         .openLoopRampRate(0.0)
         .closedLoopRampRate(0.0);
