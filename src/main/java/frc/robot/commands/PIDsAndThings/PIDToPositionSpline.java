@@ -23,6 +23,7 @@ public class PIDToPositionSpline extends Command {
     private ArrayList<Boolean> stopAt;
     private int waypointIndex = 0;
     private static final double tolerance = 0.2;  
+    private static final double toleranceDegrees = 5.0;
     private Pose2d currentTarget;
     private double currentTolerance;
     private boolean currentStopAt;
@@ -84,7 +85,7 @@ public class PIDToPositionSpline extends Command {
         currentStopAt = stopAt.get(waypointIndex);
         distance = getDistance(drive.getPose(), currentTarget);
 
-        if (distance < currentTolerance){
+        if ((distance < currentTolerance) && (Math.abs(drive.getPose().getRotation().getDegrees() - currentTarget.getRotation().getDegrees()) <= toleranceDegrees)){
             if (waypointIndex < waypoints.size() - 1 ){
                 waypointIndex++;
                 stopPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));

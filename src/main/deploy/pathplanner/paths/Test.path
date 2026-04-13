@@ -3,201 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.546,
-        "y": 0.472
+        "x": 13.1,
+        "y": 1.551
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.546,
-        "y": 1.4692659602405935
+        "x": 12.468308714199656,
+        "y": 1.5510000000000002
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.731,
-        "y": 1.046
+        "x": 100.0,
+        "y": 0.8050385362694306
       },
       "prevControl": {
-        "x": 8.731,
-        "y": 0.48533934450427685
-      },
-      "nextControl": {
-        "x": 8.731,
-        "y": 1.6066606554957232
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.887,
-        "y": 3.765
-      },
-      "prevControl": {
-        "x": 8.887,
-        "y": 3.515
-      },
-      "nextControl": {
-        "x": 8.887,
-        "y": 4.015
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 9.952,
-        "y": 0.605
-      },
-      "prevControl": {
-        "x": 9.952,
-        "y": 0.3550000000000004
-      },
-      "nextControl": {
-        "x": 9.952,
-        "y": 0.8549999999999995
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 13.281,
-        "y": 0.583
-      },
-      "prevControl": {
-        "x": 13.527201938253054,
-        "y": 0.5395879555832672
-      },
-      "nextControl": {
-        "x": 13.034798061746947,
-        "y": 0.6264120444167327
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 13.581,
-        "y": 0.583
-      },
-      "prevControl": {
-        "x": 13.686654565435175,
-        "y": 0.3564230532408378
-      },
-      "nextControl": {
-        "x": 13.475345434564824,
-        "y": 0.8095769467591621
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 10.669,
-        "y": 0.583
-      },
-      "prevControl": {
-        "x": 10.669,
-        "y": 0.3330000000000002
-      },
-      "nextControl": {
-        "x": 10.669,
-        "y": 0.8330000000000002
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 10.882,
-        "y": 3.606
-      },
-      "prevControl": {
-        "x": 10.882,
-        "y": 3.356
-      },
-      "nextControl": {
-        "x": 10.882,
-        "y": 3.856
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 9.952,
-        "y": 3.066
-      },
-      "prevControl": {
-        "x": 9.952,
-        "y": 3.5238238016336147
-      },
-      "nextControl": {
-        "x": 9.952,
-        "y": 2.608176198366385
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 9.652,
-        "y": 0.598
-      },
-      "prevControl": {
-        "x": 9.652,
-        "y": 0.8479999999999999
-      },
-      "nextControl": {
-        "x": 9.652,
-        "y": 0.34799999999999986
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 9.652,
-        "y": 1.0
-      },
-      "prevControl": {
-        "x": 9.402,
-        "y": 1.0
-      },
-      "nextControl": {
-        "x": 9.902,
-        "y": 1.0
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 12.885,
-        "y": 0.585
-      },
-      "prevControl": {
-        "x": 12.319458654191994,
-        "y": 0.585
-      },
-      "nextControl": {
-        "x": 13.450541345808006,
-        "y": 0.585
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 13.581,
-        "y": 0.583
-      },
-      "prevControl": {
-        "x": 13.690055543466784,
-        "y": 0.3491296323155515
+        "x": 99.48473057786313,
+        "y": 0.9541387683975073
       },
       "nextControl": null,
       "isLocked": false,

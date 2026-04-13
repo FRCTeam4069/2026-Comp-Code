@@ -62,62 +62,68 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline( //spiral setup
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(8.731, 1.046, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(8.731, 0.846, Rotation2d.fromDegrees(90)),
                                         pickUpPosition)),
                                 new ArrayList<Double>(List.of(0.4, 0.4)),
-                                new ArrayList<Boolean>(List.of(false, true)))
-                        // intake.intakeOn(),
-                        // Commands.sequence(
-                        //         Commands.waitSeconds(0.75),
-                        //         pivot.intakeDown())
+                                new ArrayList<Boolean>(List.of(false, false))),
+                        intake.intakeOn(),
+                        Commands.sequence(
+                                Commands.waitSeconds(0.75),
+                                pivot.intakeDown())
                                 ),
-                Commands.parallel( 
+                Commands.race( 
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(9.952,0.583, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(9.552,0.683, Rotation2d.fromDegrees(90)),
                                         new Pose2d(13.181, 0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.581,0.583,Rotation2d.fromDegrees(115)))),
-                                new ArrayList<Double>(List.of(0.1, 0.2, 0.4)),
-                                new ArrayList<Boolean>(List.of(true, false, true)))),
-                // autoAlign1,
-                // Commands.deadline(
-                //         Commands.waitSeconds(5),
-                //         intake.intakeOff(),
-                //         alignInfinite1,
-                //         shoot1, //TODO check if timeout actually works, should??? 
-                // ),
+                                        new Pose2d(13.581,1.083,Rotation2d.fromDegrees(115)))),
+                                new ArrayList<Double>(List.of(0.1, 0.2, 0.1)),
+                                new ArrayList<Boolean>(List.of(true, false, true))),
+                                Commands.waitSeconds(5)),
+                Commands.race(
+                        Commands.waitSeconds(0.5),
+                        autoAlign1,
+                        intake.intakeOff()),
+                Commands.deadline(
+                        shoot1,                        
+                        alignInfinite1
+                         //TODO check if timeout actually works, should??? 
+                ),
 
                 // second cycle
                  Commands.parallel(
                         new PIDToPositionSpline(
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(10.669, 0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.5, 3.606, Rotation2d.fromDegrees(90)))),
-                                new ArrayList<Double>(List.of(0.4, 0.4)),
-                                new ArrayList<Boolean>(List.of(false, true)))
-                        // Commands.sequence(
-                        //         Commands.waitSeconds(0.75),
-                        //         pivot.intakeDown(),
-                        //         intake.intakeOn())
+                                        new Pose2d(10.8, 0.583,Rotation2d.fromDegrees(90)),
+                                        new Pose2d(10.8, 3.806, Rotation2d.fromDegrees(90)))),
+                                new ArrayList<Double>(List.of(0.3, 0.3)),
+                                new ArrayList<Boolean>(List.of(false, true))),
+                        Commands.sequence(
+                                Commands.waitSeconds(0.75),
+                                pivot.intakeDown(),
+                                intake.intakeOn())
                         ),
-                Commands.parallel(
+                Commands.race(
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(                           
-                                        new Pose2d(10.25, 0.65, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(10.5, 0.65, Rotation2d.fromDegrees(90)),
                                         new Pose2d(13.181,0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.581,0.583, Rotation2d.fromDegrees(115)))),
-                                new ArrayList<Double>(List.of(0.1, 0.2, 0.2)),
-                                new ArrayList<Boolean>(List.of(true, false, true))))
-                // autoAlign2,
-                // Commands.deadline(
-                //         Commands.waitSeconds(5),
-                //         intake.intakeOff(),
-                //         alignInfinite2,
-                //         shoot2 //TODO check if timeout actually works, should??? 
-                // )
+                                        new Pose2d(13.581,1.083, Rotation2d.fromDegrees(115)))),
+                                new ArrayList<Double>(List.of(0.2, 0.2, 0.1)),
+                                new ArrayList<Boolean>(List.of(true, false, true))),
+                                Commands.waitSeconds(5)),
+                 Commands.deadline(
+                        Commands.waitSeconds(0.5),
+                        autoAlign2,
+                        intake.intakeOff()),
+                Commands.deadline(
+                        Commands.waitSeconds(5),
+                        alignInfinite2,
+                        shoot2 //TODO check if timeout actually works, should??? 
+                )
         );
 
     }
