@@ -62,9 +62,9 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline( //spiral setup
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(8.731, 0.846, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(8.731, 1.346, Rotation2d.fromDegrees(90)),
                                         pickUpPosition)),
-                                new ArrayList<Double>(List.of(0.4, 0.4)),
+                                new ArrayList<Double>(List.of(0.4, 0.5)),
                                 new ArrayList<Boolean>(List.of(false, false))),
                         intake.intakeOn(),
                         Commands.sequence(
@@ -75,11 +75,10 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(9.552,0.683, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.181, 0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.581,1.083,Rotation2d.fromDegrees(115)))),
-                                new ArrayList<Double>(List.of(0.1, 0.2, 0.1)),
-                                new ArrayList<Boolean>(List.of(true, false, true))),
+                                        new Pose2d(10.5,0.783, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(12.442,0.65,Rotation2d.fromDegrees(98)))),
+                                new ArrayList<Double>(List.of(0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, true))),
                                 Commands.waitSeconds(5)),
                 Commands.race(
                         Commands.waitSeconds(0.5),
@@ -109,11 +108,10 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(                           
-                                        new Pose2d(10.5, 0.65, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.181,0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.581,1.083, Rotation2d.fromDegrees(115)))),
-                                new ArrayList<Double>(List.of(0.2, 0.2, 0.1)),
-                                new ArrayList<Boolean>(List.of(true, false, true))),
+                                        new Pose2d(10.78, 0.8, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(12.442,0.65,Rotation2d.fromDegrees(98)))),
+                                new ArrayList<Double>(List.of(0.2, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, true))),
                                 Commands.waitSeconds(5)),
                  Commands.deadline(
                         Commands.waitSeconds(0.5),
