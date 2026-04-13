@@ -14,7 +14,7 @@ public class ShooterConstants {
     public static final double kP = 0.0000006;
     public static final double kI = 0.0;
 
-    public static final double kV = 0.001875;
+    public static final double kV = 0.00188; //1875
 
     static {
         shooterOneMotorOneConfig

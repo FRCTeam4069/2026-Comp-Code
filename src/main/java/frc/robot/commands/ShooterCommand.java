@@ -137,6 +137,10 @@ public class ShooterCommand extends Command {
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
+            else{
+                feeder.stopFeeder();
+                hopper.stopHopper();
+            }
 
             if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {
                 shootReady = true;
@@ -207,6 +211,11 @@ public class ShooterCommand extends Command {
                 hopper.driveHopperIn();
             }
 
+            else{
+                feeder.stopFeeder();
+                hopper.stopHopper();
+            }
+
             // if(shootReady = true && timer.hasElapsed(feedStartTime)){
             // feeder.driveFeederIn();
             // hopper.driveHopperIn();
@@ -226,6 +235,10 @@ public class ShooterCommand extends Command {
             if (feederManual.getAsBoolean()) { // FIXME test if this works
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
+            }
+            else{
+                feeder.stopFeeder();
+                hopper.stopHopper();
             }
 
             // if ((Math.abs(shooter.targetRPM - shooter.getCurrentRPM()) <= RPMDiff) && shooter.hoodInPosition()) {

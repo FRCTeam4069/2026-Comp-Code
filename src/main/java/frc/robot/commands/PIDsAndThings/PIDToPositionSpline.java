@@ -87,6 +87,8 @@ public class PIDToPositionSpline extends Command {
         if (distance < currentTolerance){
             if (waypointIndex < waypoints.size() - 1 ){
                 waypointIndex++;
+                stopPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
+                contPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
             }
             currentTarget = waypoints.get(waypointIndex);
          
