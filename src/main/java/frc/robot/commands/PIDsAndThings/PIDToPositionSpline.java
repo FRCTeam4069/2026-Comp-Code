@@ -7,6 +7,8 @@ package frc.robot.commands.PIDsAndThings;
 import java.util.ArrayList;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.DrivetrainConstants.DrivetrainPIDConstants;
@@ -23,11 +25,18 @@ public class PIDToPositionSpline extends Command {
     private ArrayList<Boolean> stopAt;
     private int waypointIndex = 0;
     private static final double tolerance = 0.2;  
+    private static final double toleranceDegrees = 5.0;
     private Pose2d currentTarget;
     private double currentTolerance;
     private boolean currentStopAt;
     private double distance = 0.0;
     private double lookAhead = 0.5;
+    private Pose2d currentPose;
+
+    private StructPublisher<Pose2d> targetPosePublisher = NetworkTableInstance.getDefault()
+            .getStructTopic("splineTargetPose", Pose2d.struct).publish();
+    private StructPublisher<Pose2d> currentPosePublisher = NetworkTableInstance.getDefault()
+            .getStructTopic("splineCurrentPose", Pose2d.struct).publish();
 
     public PIDToPositionSpline(SwerveDrivetrain drive,  ArrayList<Pose2d> waypoints, ArrayList<Double> tolerances, ArrayList<Boolean> stopAt) {
         this(drive, waypoints, tolerances, stopAt, DrivetrainConstants.autoPidToPositionConstants, DrivetrainConstants.contAutoPidToPositionConstants);
@@ -84,9 +93,15 @@ public class PIDToPositionSpline extends Command {
         currentStopAt = stopAt.get(waypointIndex);
         distance = getDistance(drive.getPose(), currentTarget);
 
-        if (distance < currentTolerance){
+        if ((distance < currentTolerance) && (Math.abs(drive.getPose().getRotation().getDegrees() - currentTarget.getRotation().getDegrees()) <= toleranceDegrees)){
             if (waypointIndex < waypoints.size() - 1 ){
                 waypointIndex++;
+                stopPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
+                contPointController.reset(drive.getPose(), ChassisSpeeds.fromFieldRelativeSpeeds(drive.getRobotRelativeSpeeds(), drive.getRawRotation2d()));
+           
+                ChassisSpeeds speeds = stopPointController.calculate(drive.getPose(), currentTarget);
+                if(!currentStopAt) speeds = contPointController.calculate(drive.getPose(), currentTarget);
+
             }
             currentTarget = waypoints.get(waypointIndex);
          
@@ -102,7 +117,11 @@ public class PIDToPositionSpline extends Command {
             speeds.vyMetersPerSecond = speeds.vyMetersPerSecond*scale;
         }
 
+        currentPose = drive.getPose();
         drive.fieldOrientedDrive(speeds);
+        targetPosePublisher.set(currentTarget);
+        currentPosePublisher.set(currentPose);
+
     }
 
     // Called once the command ends or is interrupted.

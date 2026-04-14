@@ -23,7 +23,7 @@ public class ShootWithTimeout extends Command{
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private final double shootTime = 5.0; 
+    private final double shootTime = 4.5; 
 
     private final Timer timer = new Timer();
 
@@ -106,7 +106,7 @@ public class ShootWithTimeout extends Command{
             feeder.driveFeederIn();
             hopper.driveHopperIn();
 
-            if(timer.hasElapsed(2)){
+            if(timer.hasElapsed(2.5)){
                 pivot.goUpper();
             }
 

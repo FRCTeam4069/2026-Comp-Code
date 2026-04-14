@@ -19,7 +19,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class RedLeftTrenchV2 extends SequentialCommandGroup {
+public class BlueRightTrenchV2 extends SequentialCommandGroup {
 
     AutoAlignInfinite alignInfinite1;
     AutoAlignInfinite alignInfinite2;
@@ -32,7 +32,7 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
     ShootWithTimeout shoot1;
     ShootWithTimeout shoot2;
 
-    public RedLeftTrenchV2(
+    public BlueRightTrenchV2(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
@@ -52,8 +52,8 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
         autoAlign2 = new AutoAlignAutoCommand(drive);
 
 
-        Pose2d startPosition = new Pose2d(12.175, 0.472, Rotation2d.fromDegrees(90));
-        Pose2d pickUpPosition = new Pose2d(8.887, 3.765, Rotation2d.fromDegrees(90));
+        Pose2d startPosition = new Pose2d(4.365, 0.472, Rotation2d.fromDegrees(90));
+        Pose2d pickUpPosition = new Pose2d(7.653, 3.765, Rotation2d.fromDegrees(90));
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),
@@ -77,9 +77,9 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(10.2, 0.6, Rotation2d.fromDegrees(0)),
-                                        new Pose2d(13.0, 0.45, Rotation2d.fromDegrees(0)),
-                                        new Pose2d(13.242,0.75,Rotation2d.fromDegrees(102)))),
+                                        new Pose2d(6.34, 0.6, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.54, 0.45, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.298,0.75,Rotation2d.fromDegrees(78)))),
                                 new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
                                 new ArrayList<Boolean>(List.of(false, false, true))),
                                 Commands.waitSeconds(5)),
@@ -99,8 +99,8 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(10.8, 0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.8, 3.806, Rotation2d.fromDegrees(90)))),
+                                        new Pose2d(5.74, 0.583,Rotation2d.fromDegrees(90)),
+                                        new Pose2d(5.74, 3.806, Rotation2d.fromDegrees(90)))),
                                 new ArrayList<Double>(List.of(0.3, 0.3)),
                                 new ArrayList<Boolean>(List.of(false, true))),
                         Commands.sequence(
@@ -112,10 +112,10 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(10.78, 0.9, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.78, 0.75, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(11.0, 0.75,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.00,0.75,Rotation2d.fromDegrees(103)))),
+                                        new Pose2d(5.76, 0.9, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(5.76, 0.75, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(5.54, 0.75,Rotation2d.fromDegrees(90)),
+                                        new Pose2d(3.54,0.75,Rotation2d.fromDegrees(77)))),
                                 new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
                                 new ArrayList<Boolean>(List.of(false, false,false,true))),
                                 Commands.waitSeconds(5)),

@@ -27,6 +27,8 @@ import frc.robot.commands.DriveToShootPosition;
 import frc.robot.commands.autos.RedLeftTrench;
 import frc.robot.commands.autos.RedLeftTrenchV2;
 import frc.robot.commands.autos.RedLeftTrenchV3;
+import frc.robot.commands.autos.RedMiddle;
+
 
 public class RobotContainer {
 
@@ -102,6 +104,7 @@ public class RobotContainer {
       autoChooser.addOption("Red Left Trench", new RedLeftTrench(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Left V2", new RedLeftTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Left V3", new RedLeftTrenchV3(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Middle", new RedMiddle(drive, feeder, hopper, intake, shooter, pivot));
 
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -132,13 +135,13 @@ public class RobotContainer {
       controller0.povLeft()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.LEFT))
             .onFalse(drive.stopOnceCommand());
-      controller0.povDown()
+      controller0.povUp()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.CENTER))
             .onFalse(drive.stopOnceCommand());
       controller0.povRight()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
             .onFalse(drive.stopOnceCommand());
-      controller0.povUp()
+      controller0.povDown()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
             .onFalse(drive.stopOnceCommand());
 

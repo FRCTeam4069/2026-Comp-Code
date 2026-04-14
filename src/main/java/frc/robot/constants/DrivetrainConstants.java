@@ -126,7 +126,7 @@ public class DrivetrainConstants {
                         new Pose2d(3.7, 6.1, Rotation2d.fromDegrees(-68.5)), 
                         new Pose2d(3.0, 4.1, Rotation2d.fromDegrees(0)), 
                         new Pose2d(3.7, 1.9, Rotation2d.fromDegrees(68.5)), 
-                        new Pose2d(0.889, 4.69, Rotation2d.fromDegrees(-6.12))
+                        new Pose2d(0.889, 4.69, Rotation2d.fromDegrees(-8))
 
         };
 
@@ -134,7 +134,7 @@ public class DrivetrainConstants {
                         new Pose2d(12.84, 1.9, Rotation2d.fromDegrees(111.5)), 
                         new Pose2d(13.54, 4.035, Rotation2d.fromDegrees(180.0)),
                         new Pose2d(12.84, 6.1, Rotation2d.fromDegrees(-111.5)),
-                        new Pose2d(15.651, 3.38, Rotation2d.fromDegrees(173.88))
+                        new Pose2d(15.651, 3.38, Rotation2d.fromDegrees(168))
                         
         };
 
@@ -196,17 +196,17 @@ public class DrivetrainConstants {
                         new Tolerances(0.02, 0.20));
 
         public static volatile DrivetrainPIDConstants autoPidToPositionConstants = new DrivetrainPIDConstants(
-                        new PIDCoefficients(4.0, 0.0, 0.02),
+                        new PIDCoefficients(4.5, 0.0, 0.02),
                         new PIDCoefficients(7.0, 0.0, 0.0), //0.6
-                        new Constraints(5.0, 4.0),
+                        new Constraints(5.5, 5.0),
                         new Constraints(10.0, 10.0),
                         new Tolerances(0.02, 0.30),
                         new Tolerances(0.02, 0.20));
 
         public static volatile DrivetrainPIDConstants contAutoPidToPositionConstants = new DrivetrainPIDConstants(
-                        new PIDCoefficients(4.5, 0.0, 0.01),
+                        new PIDCoefficients(5.0, 0.0, 0.01),
                         new PIDCoefficients(7.0, 0.0, 0.0), //0.6
-                        new Constraints(5.0, 4.0),
+                        new Constraints(5.5, 5.0),
                         new Constraints(10.0, 10.0),
                         new Tolerances(0.02, 0.30),
                         new Tolerances(0.02, 0.20));

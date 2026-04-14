@@ -128,8 +128,8 @@ public class ShooterController extends SubsystemBase {
     }
 
     public void towerShoot() {
-        targetRPM = 2950;
-        targetDeg = 6;
+        targetRPM = 2925;
+        targetDeg = 12;
 
     }
 

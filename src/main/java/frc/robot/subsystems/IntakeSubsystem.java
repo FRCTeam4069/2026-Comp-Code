@@ -24,12 +24,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedInTele(double intakePower) {
-    power = MathUtil.clamp(Math.pow(intakePower, 2), 0, 0.6);
-    intakeMotor.set((-Math.pow(intakePower, 2)));
+    power = MathUtil.clamp((intakePower * 12), 0, 10);
+    intakeMotor.setVoltage((Math.pow(intakePower, 2)));
   }
 
   public void driveFeedIn() {
-    intakeMotor.set((-1));
+    intakeMotor.setVoltage((12));
   }
 
   public Command intakeOn() {
@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedOut() {
-    intakeMotor.set((1));
+    intakeMotor.setVoltage((-12));
   }
 
   public void stopFeed() {
