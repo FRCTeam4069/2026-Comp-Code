@@ -132,13 +132,13 @@ public class RobotContainer {
       controller0.povLeft()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.LEFT))
             .onFalse(drive.stopOnceCommand());
-      controller0.povDown()
+      controller0.povUp()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.CENTER))
             .onFalse(drive.stopOnceCommand());
       controller0.povRight()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.RIGHT))
             .onFalse(drive.stopOnceCommand());
-      controller0.povUp()
+      controller0.povDown()
             .onTrue(new DriveToShootPosition(drive, DriveToShootPosition.ClimbTarget.UP))
             .onFalse(drive.stopOnceCommand());
 

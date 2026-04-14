@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedOut() {
-    intakeMotor.set((1));
+    intakeMotor.setVoltage((-12));
   }
 
   public void stopFeed() {
