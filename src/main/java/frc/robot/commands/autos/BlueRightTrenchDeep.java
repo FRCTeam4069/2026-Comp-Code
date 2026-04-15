@@ -19,7 +19,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class BlueRightTrenchV2 extends SequentialCommandGroup {
+public class BlueRightTrenchDeep extends SequentialCommandGroup {
 
     AutoAlignInfinite alignInfinite1;
     AutoAlignInfinite alignInfinite2;
@@ -32,7 +32,7 @@ public class BlueRightTrenchV2 extends SequentialCommandGroup {
     ShootWithTimeout shoot1;
     ShootWithTimeout shoot2;
 
-    public BlueRightTrenchV2(
+    public BlueRightTrenchDeep(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
@@ -53,7 +53,7 @@ public class BlueRightTrenchV2 extends SequentialCommandGroup {
 
 
         Pose2d startPosition = new Pose2d(4.365, 0.472, Rotation2d.fromDegrees(90));
-        Pose2d pickUpPosition = new Pose2d(7.653, 3.765, Rotation2d.fromDegrees(90));
+        Pose2d pickUpPosition = new Pose2d(7.653, 4.165, Rotation2d.fromDegrees(90));
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),

@@ -52,8 +52,8 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
         autoAlign2 = new AutoAlignAutoCommand(drive);
 
 
-        Pose2d startPosition = new Pose2d(4.365, 7.596, Rotation2d.fromDegrees(90));
-        Pose2d pickUpPosition = new Pose2d(7.653, 4.303, Rotation2d.fromDegrees(90));
+        Pose2d startPosition = new Pose2d(4.444, 7.596, Rotation2d.fromDegrees(-90));
+        Pose2d pickUpPosition = new Pose2d(7.653, 4.303, Rotation2d.fromDegrees(-90)); //4.303
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),
@@ -62,24 +62,25 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline( //spiral setup
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(8.731, 6.922, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(7.809, 6.722, Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(7.609, 6.52, Rotation2d.fromDegrees(-90)),
                                         pickUpPosition)),
-                                new ArrayList<Double>(List.of(0.4, 0.5)),
-                                new ArrayList<Boolean>(List.of(false, false))),
+                                new ArrayList<Double>(List.of(0.2, 0.4, 0.5)),
+                                new ArrayList<Boolean>(List.of(false, false, false))),
                         intake.intakeOn(),
                         Commands.sequence(
                                 Commands.waitSeconds(1.0),
                                 pivot.intakeDown())
                                 ),
-                          new InstantCommand(() -> drive.resetPose(drive.getPose())),
+                        new InstantCommand(() -> drive.resetPose(drive.getPose())),
                         new InstantCommand(() -> drive.resetDrivePose(drive.getPose())),
                 Commands.race( 
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
                                         new Pose2d(6.34, 7.468, Rotation2d.fromDegrees(180)),
-                                        new Pose2d(3.54, 7.618, Rotation2d.fromDegrees(180)),
-                                        new Pose2d(3.298,7.318,Rotation2d.fromDegrees(78)))),
+                                        new Pose2d(3.54, 7.518, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.298,7.318,Rotation2d.fromDegrees(-78)))),
                                 new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
                                 new ArrayList<Boolean>(List.of(false, false, true))),
                                 Commands.waitSeconds(5)),
@@ -99,8 +100,8 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(5.74, 7.485,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(5.74, 4.262, Rotation2d.fromDegrees(90)))),
+                                        new Pose2d(6.04, 7.485,Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(6.04, 4.262, Rotation2d.fromDegrees(-90)))),
                                 new ArrayList<Double>(List.of(0.3, 0.3)),
                                 new ArrayList<Boolean>(List.of(false, true))),
                         Commands.sequence(
@@ -112,10 +113,10 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(5.76, 7.168, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(5.76, 7.318, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(5.54, 7.318,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(3.54,7.318,Rotation2d.fromDegrees(77)))),
+                                        new Pose2d(6.06, 7.168, Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(6.06, 7.418, Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(5.74, 7.418,Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(3.54,7.418,Rotation2d.fromDegrees(-77)))),
                                 new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
                                 new ArrayList<Boolean>(List.of(false, false,false,true))),
                                 Commands.waitSeconds(5)),

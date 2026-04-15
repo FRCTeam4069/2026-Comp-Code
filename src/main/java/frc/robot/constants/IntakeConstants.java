@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 public final class IntakeConstants {
 
-  public static final int intakeSmartCurrentLimit = 60;
+  public static final int intakeSmartCurrentLimit = 55;
 
   public static final SparkFlexConfig intakeConfig = new SparkFlexConfig();
 
@@ -15,7 +15,7 @@ public final class IntakeConstants {
         .inverted(false)
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(intakeSmartCurrentLimit)
-        .secondaryCurrentLimit(80)
+        //.secondaryCurrentLimit(80)
         .openLoopRampRate(0.0)
         .closedLoopRampRate(0.0);
   }
