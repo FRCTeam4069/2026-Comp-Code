@@ -20,7 +20,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class RedMiddle extends SequentialCommandGroup {
+public class RedMiddleDepot extends SequentialCommandGroup {
 
     AutoAlignInfinite alignInfinite;
     AutoAlignInfinite alignInfinite2;
@@ -32,7 +32,7 @@ public class RedMiddle extends SequentialCommandGroup {
     ShootWithTimeout shoot2;
 
 
-    public RedMiddle(
+    public RedMiddleDepot(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
@@ -71,7 +71,43 @@ public class RedMiddle extends SequentialCommandGroup {
                     shoot,
                     alignInfinite
                 ),
-                intake.intakeOff());
+
+                intake.intakeOff(),
+                new ParallelCommandGroup(
+                    new PIDToPositionSpline(
+                        drive,
+                         new ArrayList<Pose2d>(List.of(
+                            new Pose2d( 14.399, 5.951, Rotation2d.fromDegrees(0)))),
+                        new ArrayList<Double>(List.of(0.1)),
+                        new ArrayList<Boolean>(List.of(true))),
+                    Commands.sequence(
+                        pivot.intakeDown(),
+                        intake.intakeOn()
+                    )),
+                new InstantCommand(() -> drive.resetPose(drive.getPose())),
+                new InstantCommand(() -> drive.resetDrivePose(drive.getPose())),
+                new PIDToPositionSpline(
+                    drive,
+                     new ArrayList<Pose2d>(List.of(
+                        new Pose2d(14.925, 5.951,Rotation2d.fromDegrees(0)),
+                        new Pose2d(15.286,5.951,Rotation2d.fromDegrees(0)),
+                        new Pose2d(15.84,5.951,Rotation2d.fromDegrees(0)),
+
+                        new Pose2d(14.886,5.951,Rotation2d.fromDegrees(0)),
+                        new Pose2d(14.486,5.951,Rotation2d.fromDegrees(135)))),
+                         new ArrayList<Double>(List.of(0.1, 0.1, 0.1, 0.2, 0.4)), 
+                         new ArrayList<Boolean>(List.of(false, false, true, false, true))),
+                Commands.race(
+                        Commands.waitSeconds(0.75),
+                        autoAlign2
+                 ),
+                Commands.deadline(
+                        Commands.waitSeconds(4.5),
+                        alignInfinite2,
+                        shoot2 //TODO check if timeout actually works, should??? 
+                ),
+                intake.intakeOff()    
+                );
 
     }
 

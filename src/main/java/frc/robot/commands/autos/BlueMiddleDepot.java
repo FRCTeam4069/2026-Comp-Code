@@ -20,7 +20,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class RedMiddle extends SequentialCommandGroup {
+public class BlueMiddleDepot extends SequentialCommandGroup {
 
     AutoAlignInfinite alignInfinite;
     AutoAlignInfinite alignInfinite2;
@@ -32,7 +32,7 @@ public class RedMiddle extends SequentialCommandGroup {
     ShootWithTimeout shoot2;
 
 
-    public RedMiddle(
+    public BlueMiddleDepot(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
@@ -45,16 +45,18 @@ public class RedMiddle extends SequentialCommandGroup {
         alignInfinite = new AutoAlignInfinite(drive);
         alignInfinite2 = new AutoAlignInfinite(drive);
 
+
         shoot = new ShootWithTimeout(shooter, feeder, hopper, pivot);
         shoot2 = new ShootWithTimeout(shooter, feeder, hopper, pivot);
+
 
         autoAlign = new AutoAlignAutoCommand(drive);
         autoAlign2 = new AutoAlignAutoCommand(drive);
 
 
 
-        Pose2d startPosition = new Pose2d(12.950, 3.996, Rotation2d.fromDegrees(180));
-        Pose2d shootPosition = new Pose2d(14.399, 3.996, Rotation2d.fromDegrees(180));
+        Pose2d startPosition = new Pose2d(3.59, 3.996, Rotation2d.fromDegrees(0));
+        Pose2d shootPosition = new Pose2d(2.141, 3.996, Rotation2d.fromDegrees(0));
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),
@@ -68,11 +70,46 @@ public class RedMiddle extends SequentialCommandGroup {
                 autoAlign,
                 intake.intakeOn(),
                 Commands.deadline(
+                    Commands.waitSeconds(4.5),
                     shoot,
                     alignInfinite
                 ),
-                intake.intakeOff());
+                intake.intakeOff(),
+                new ParallelCommandGroup(
+                    new PIDToPositionSpline(
+                        drive,
+                         new ArrayList<Pose2d>(List.of(
+                            new Pose2d( 2.141, 5.951, Rotation2d.fromDegrees(180)))),
+                        new ArrayList<Double>(List.of(0.1)),
+                        new ArrayList<Boolean>(List.of(true))),
+                    Commands.sequence(
+                        pivot.intakeDown(),
+                        intake.intakeOn()
+                    )),
+                new InstantCommand(() -> drive.resetPose(drive.getPose())),
+                new InstantCommand(() -> drive.resetDrivePose(drive.getPose())),
+                new PIDToPositionSpline(
+                    drive,
+                     new ArrayList<Pose2d>(List.of(
+                        new Pose2d(1.615, 5.951,Rotation2d.fromDegrees(180)),
+                        new Pose2d(1.254,5.951,Rotation2d.fromDegrees(180)),
+                        new Pose2d(0.7,5.951,Rotation2d.fromDegrees(180)),
 
+                        new Pose2d(1.654,5.951,Rotation2d.fromDegrees(180)),
+                        new Pose2d(2.054,5.951,Rotation2d.fromDegrees(45)))),
+                         new ArrayList<Double>(List.of(0.1, 0.1, 0.1, 0.2, 0.4)), 
+                         new ArrayList<Boolean>(List.of(false, false, true, false, true))),
+                Commands.race(
+                        Commands.waitSeconds(0.75),
+                        autoAlign2
+                 ),
+                Commands.deadline(
+                        Commands.waitSeconds(4.5),
+                        alignInfinite2,
+                        shoot2 //TODO check if timeout actually works, should??? 
+                ),
+                intake.intakeOff()    
+                );
     }
 
 }

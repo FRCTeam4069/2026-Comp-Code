@@ -74,41 +74,7 @@ public class BlueMiddle extends SequentialCommandGroup {
                     shoot,
                     alignInfinite
                 ),
-                intake.intakeOff(),
-                new ParallelCommandGroup(
-                    new PIDToPositionSpline(
-                        drive,
-                         new ArrayList<Pose2d>(List.of(
-                            new Pose2d( 2.141, 5.951, Rotation2d.fromDegrees(180)))),
-                        new ArrayList<Double>(List.of(0.1)),
-                        new ArrayList<Boolean>(List.of(true))),
-                    Commands.sequence(
-                        pivot.intakeDown(),
-                        intake.intakeOn()
-                    )),
-                new InstantCommand(() -> drive.resetPose(drive.getPose())),
-                new InstantCommand(() -> drive.resetDrivePose(drive.getPose())),
-                new PIDToPositionSpline(
-                    drive,
-                     new ArrayList<Pose2d>(List.of(
-                        new Pose2d(1.615, 5.951,Rotation2d.fromDegrees(180)),
-                        new Pose2d(1.254,5.951,Rotation2d.fromDegrees(180)),
-                        new Pose2d(0.7,5.951,Rotation2d.fromDegrees(180)),
-
-                        new Pose2d(1.654,5.951,Rotation2d.fromDegrees(180)),
-                        new Pose2d(2.054,5.951,Rotation2d.fromDegrees(45)))),
-                         new ArrayList<Double>(List.of(0.1, 0.1, 0.1, 0.2, 0.4)), 
-                         new ArrayList<Boolean>(List.of(false, false, true, false, true))),
-                Commands.race(
-                        Commands.waitSeconds(0.75),
-                        autoAlign2
-                 ),
-                Commands.deadline(
-                        Commands.waitSeconds(4.5),
-                        alignInfinite2,
-                        shoot2 //TODO check if timeout actually works, should??? 
-                ),
-                intake.intakeOff()    
+                intake.intakeOff()
                 );
     }
 

@@ -18,6 +18,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.autos.BlueLeftTrenchDeep;
 import frc.robot.commands.autos.BlueLeftTrenchV2;
 import frc.robot.commands.autos.BlueMiddle;
+import frc.robot.commands.autos.BlueMiddleDepot;
 import frc.robot.commands.autos.BlueRightTrenchDeep;
 import frc.robot.commands.autos.BlueRightTrenchV2;
 import frc.robot.commands.autos.RedLeftBump;
@@ -32,8 +33,9 @@ import frc.robot.commands.DriveToShootPosition;
 import frc.robot.commands.autos.RedLeftTrench;
 import frc.robot.commands.autos.RedLeftTrenchDeep;
 import frc.robot.commands.autos.RedLeftTrenchV2;
-// import frc.robot.commands.autos.RedLeftTrenchV3;
 import frc.robot.commands.autos.RedMiddle;
+// import frc.robot.commands.autos.RedLeftTrenchV3;
+import frc.robot.commands.autos.RedMiddleDepot;
 import frc.robot.commands.autos.RedRightTrenchDeep;
 import frc.robot.commands.autos.RedRightTrenchV2;
 
@@ -111,12 +113,12 @@ public class RobotContainer {
       //autoChooser.addOption("Red Left Bump", new RedLeftBump(drive, feeder, hopper, intake, shooter, pivot));
      // autoChooser.addOption("Red Left Trench", new RedLeftTrench(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Left", new RedLeftTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
-      autoChooser.addOption("Red Middle", new RedMiddle(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Middle Depot", new RedMiddleDepot(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Right", new RedRightTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
 
       // autoChooser.addOption("Red Left V3", new RedLeftTrenchV3(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue Right", new BlueRightTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
-      autoChooser.addOption("Blue Middle", new BlueMiddle(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Blue Middle Depot", new BlueMiddleDepot(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue left", new BlueLeftTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
 
       autoChooser.addOption("Red Left Deep", new RedLeftTrenchDeep(drive, feeder, hopper, intake, shooter, pivot));
@@ -124,6 +126,9 @@ public class RobotContainer {
 
       autoChooser.addOption("Blue Left Deep", new BlueLeftTrenchDeep(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue Right Deep", new BlueRightTrenchDeep(drive, feeder, hopper, intake, shooter, pivot));
+
+      autoChooser.addOption("Blue Middle ", new BlueMiddle(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Middle ", new RedMiddle(drive, feeder, hopper, intake, shooter, pivot));
 
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
