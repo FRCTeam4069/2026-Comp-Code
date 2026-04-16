@@ -77,7 +77,7 @@ public class RedMiddleDepot extends SequentialCommandGroup {
                     new PIDToPositionSpline(
                         drive,
                          new ArrayList<Pose2d>(List.of(
-                            new Pose2d( 14.399, 5.951, Rotation2d.fromDegrees(0)))),
+                            new Pose2d( 14.399, 2.119, Rotation2d.fromDegrees(0)))),
                         new ArrayList<Double>(List.of(0.1)),
                         new ArrayList<Boolean>(List.of(true))),
                     Commands.sequence(
@@ -89,12 +89,12 @@ public class RedMiddleDepot extends SequentialCommandGroup {
                 new PIDToPositionSpline(
                     drive,
                      new ArrayList<Pose2d>(List.of(
-                        new Pose2d(14.925, 5.951,Rotation2d.fromDegrees(0)),
-                        new Pose2d(15.286,5.951,Rotation2d.fromDegrees(0)),
-                        new Pose2d(15.84,5.951,Rotation2d.fromDegrees(0)),
+                        new Pose2d(14.925, 2.119,Rotation2d.fromDegrees(0)),
+                        new Pose2d(15.286,2.119,Rotation2d.fromDegrees(0)),
+                        new Pose2d(16.04,2.119,Rotation2d.fromDegrees(0)),
 
-                        new Pose2d(14.886,5.951,Rotation2d.fromDegrees(0)),
-                        new Pose2d(14.486,5.951,Rotation2d.fromDegrees(135)))),
+                        new Pose2d(14.886,2.119,Rotation2d.fromDegrees(0)),
+                        new Pose2d(14.486,2.119,Rotation2d.fromDegrees(135)))),
                          new ArrayList<Double>(List.of(0.1, 0.1, 0.1, 0.2, 0.4)), 
                          new ArrayList<Boolean>(List.of(false, false, true, false, true))),
                 Commands.race(
