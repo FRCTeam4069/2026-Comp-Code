@@ -107,7 +107,7 @@ public class BlueMiddleDepot extends SequentialCommandGroup {
                 Commands.deadline(
                         Commands.waitSeconds(4.75),
                         alignInfinite2,
-                        shoot2 //TODO check if timeout actually works, should??? 
+                        shoot2  
                 ),
                 intake.intakeOff()    
                 );

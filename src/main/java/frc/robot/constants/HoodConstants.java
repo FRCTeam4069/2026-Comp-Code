@@ -8,7 +8,7 @@ public class HoodConstants {
 
     public static final int hoodSmartCurrentLimit = 30;
 
-    public static final double PASS = 34; // FIXME test
+    public static final double PASS = 34; 
 
     public static final double AWAY = 0.0;
 

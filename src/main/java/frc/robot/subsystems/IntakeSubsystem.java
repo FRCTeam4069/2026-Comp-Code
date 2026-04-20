@@ -5,7 +5,6 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkFlex;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs;
@@ -13,8 +12,6 @@ import frc.robot.constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   SparkFlex intakeMotor;
-
-  private double power = 0.0;
 
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(DeviceIDs.INTAKE, MotorType.kBrushless);
@@ -24,7 +21,6 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedInTele(double intakePower) {
-    power = MathUtil.clamp((intakePower), 0, 1.0);
     intakeMotor.set((Math.pow(intakePower, 2)));
   }
 

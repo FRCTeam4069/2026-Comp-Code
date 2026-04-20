@@ -19,14 +19,14 @@ public class ThroughTrench extends Command {
 
     private final DrivetrainPIDController controller;
 
-    Pose2d redLeftShoot = new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(52.5)); // red left //TODO
-    Pose2d redRightShoot = new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(-52.5)); // red right //TODO
+    Pose2d redLeftShoot = new Pose2d(3.69, 3.02, Rotation2d.fromDegrees(52.5)); // red left 
+    Pose2d redRightShoot = new Pose2d(3.22, 4.21, Rotation2d.fromDegrees(-52.5)); // red right 
 
     Pose2d blueLeftShoot = new Pose2d(2.304, 7.402, Rotation2d.fromDegrees(-52.5)); // blue left
     Pose2d blueRightShoot = new Pose2d(2.304, 0.668, Rotation2d.fromDegrees(52.5)); // blue right
 
-    Pose2d redLeftPickup = new Pose2d(6.20, 4.02, Rotation2d.fromDegrees(180.0)); // FIXME
-    Pose2d redRightPickup = new Pose2d(5.91, 4.02, Rotation2d.fromDegrees(180.0));// FIXME
+    Pose2d redLeftPickup = new Pose2d(6.20, 4.02, Rotation2d.fromDegrees(180.0)); 
+    Pose2d redRightPickup = new Pose2d(5.91, 4.02, Rotation2d.fromDegrees(180.0));
     Pose2d blueLeftPickup = new Pose2d(6.2, 7.402, Rotation2d.fromDegrees(0));
     Pose2d blueRightPickup = new Pose2d(6.2, 0.668, Rotation2d.fromDegrees(0));
 

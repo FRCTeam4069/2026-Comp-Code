@@ -91,7 +91,7 @@ public class RedRightWide extends SequentialCommandGroup {
                         Commands.waitSeconds(4.75),
                         shoot1,                        
                         alignInfinite1
-                         //TODO check if timeout actually works, should??? 
+                          
                 ),
 
                 // second cycle

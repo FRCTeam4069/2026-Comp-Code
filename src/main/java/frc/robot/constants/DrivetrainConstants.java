@@ -50,9 +50,9 @@ public class DrivetrainConstants {
         public static final double angularVelocityDeadband = 0.01;
         public static final double headingCorrectionDeadband = 0.05;
 
-        public static final double mass = Pounds.of(139.0).in(Kilograms); // FIXME 141 prob with shooter
+        public static final double mass = Pounds.of(139.0).in(Kilograms); 
 
-        // TODO: ADD THESE MEASUREMENTS
+        // ADD THESE MEASUREMENTS
         public static final double FIELD_MIN_X = 0.0;
         public static final double FIELD_MAX_X = 0.0;
         public static final double FIELD_MIN_Y = 0.0;

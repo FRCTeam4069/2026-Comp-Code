@@ -90,8 +90,7 @@ public class FieldCentricDrive extends Command {
     private boolean lockClosestActive = false;
     private double lockClosestTarget;
 
-    private double buttonTarget = 0.0;
-    private boolean buttonActive = false;
+   
 
     private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
             .getDoubleTopic("desiredHeading").publish();
@@ -446,8 +445,7 @@ public class FieldCentricDrive extends Command {
                     }
 
                 }
-                // TODO COMMENTED OUT LOCKHEADING FOR NOW, DRIVERS MIGHT WANT THIS BACK//
-
+                
                 // if(lockHeading.getAsBoolean() && !lockClosestActive){
 
                 // if(!lockHeadingActive){
@@ -486,8 +484,9 @@ public class FieldCentricDrive extends Command {
                     outputSpeeds.omegaRadiansPerSecond = rotationalSpeed;
                 }
 
-                // TODO hijicking? hijacking? lock closest for testing to snap between 90 and 0
-                // but might return to this for driers later thanks//
+                // lock closest for testing to snap between 90 and 0
+                // but might return to this for driers later thanks
+                
                 // if (lockClosest.getAsBoolean() && !lockHeadingActive){
                 // if(!lockClosestActive){
                 // lockClosestTarget = drive.getRotation2d().getDegrees();

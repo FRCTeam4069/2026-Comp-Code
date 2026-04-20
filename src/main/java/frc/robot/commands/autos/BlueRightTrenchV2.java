@@ -91,7 +91,7 @@ public class BlueRightTrenchV2 extends SequentialCommandGroup {
                         Commands.waitSeconds(4.0),
                         shoot1,                        
                         alignInfinite1
-                         //TODO check if timeout actually works, should??? 
+                          
                 ),
 
                 // second cycle
@@ -134,7 +134,7 @@ public class BlueRightTrenchV2 extends SequentialCommandGroup {
                 Commands.deadline(
                         Commands.waitSeconds(4.0),
                         alignInfinite2,
-                        shoot2 //TODO check if timeout actually works, should??? 
+                        shoot2  
                 ),
                 intake.intakeOff()
         );

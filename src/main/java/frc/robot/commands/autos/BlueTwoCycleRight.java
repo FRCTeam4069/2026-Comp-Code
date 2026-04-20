@@ -38,7 +38,7 @@
 //             Pose2d pickUpPosition = new Pose2d(7.953, 3.810, Rotation2d.fromDegrees(90));
 
 //             addCommands(
-//                 new InstantCommand(() -> drive.resetDrivePose(startPosition)), //TODO look at this
+//                 new InstantCommand(() -> drive.resetDrivePose(startPosition)), 
 //                 Commands.parallel(
 //                     new PIDToPositionSpline(
 //                         drive,

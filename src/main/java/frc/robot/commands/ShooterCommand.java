@@ -25,8 +25,7 @@ public class ShooterCommand extends Command {
     private double distance = 0.0;
     private double currentPositionX = 0.0;
     private double currentPositionY = 0.0;
-    private static final double feedStartTime = 0.1;
-
+    
     private final double farPassThresh = Units.inchesToMeters(287);
 
     private double deltaX = 0.0;
@@ -133,7 +132,7 @@ public class ShooterCommand extends Command {
 
             shooter.shoot(distance);
 
-            if (feederManual.getAsBoolean()) { // FIXME test if this works
+            if (feederManual.getAsBoolean()) { 
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
@@ -175,7 +174,7 @@ public class ShooterCommand extends Command {
         else if (closeShoot.getAsBoolean()) {
            shooter.manualCloseShoot();
 
-            if (feederManual.getAsBoolean()) { // FIXME test if this works
+            if (feederManual.getAsBoolean()) { 
                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
@@ -206,7 +205,7 @@ public class ShooterCommand extends Command {
             // timer.start();
             // }
 
-            if (feederManual.getAsBoolean()) { // FIXME test if this works
+            if (feederManual.getAsBoolean()) { 
                feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }
@@ -232,7 +231,7 @@ public class ShooterCommand extends Command {
                 shooter.closePass();
             }
 
-            if (feederManual.getAsBoolean()) { // FIXME test if this works
+            if (feederManual.getAsBoolean()) { 
                 feeder.driveFeederIn();
                 hopper.driveHopperIn();
             }

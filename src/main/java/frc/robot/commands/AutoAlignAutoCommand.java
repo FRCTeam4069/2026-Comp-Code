@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,15 +40,6 @@ public class AutoAlignAutoCommand extends Command {
     double rotationalSpeed = 0.0;
 
     private ChassisSpeeds driveSpeeds;
-
-    private DoublePublisher desiredHeadingPublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("desiredHeading").publish();
-    private DoublePublisher deltaXDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaX").publish();
-    private DoublePublisher deltaYDoublePublisher = NetworkTableInstance.getDefault()
-            .getDoubleTopic("deltaY").publish();
-    private StructPublisher<Pose2d> setPointPublisher = NetworkTableInstance.getDefault()
-            .getStructTopic("setPoint", Pose2d.struct).publish();
 
     private StructPublisher<Pose2d> odometryErrorPublisher = NetworkTableInstance.getDefault()
             .getStructTopic("odometryError", Pose2d.struct).publish();
@@ -105,7 +95,6 @@ public class AutoAlignAutoCommand extends Command {
 
         desiredHeading = Math.atan(deltaY / deltaX);
         SmartDashboard.putNumber("desiredHeading", desiredHeading);
-        desiredHeadingPublisher.set(Math.toDegrees(-desiredHeading));
 
         // deltaXDoublePublisher.set(deltaX);
         // deltaYDoublePublisher.set(deltaY);

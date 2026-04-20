@@ -93,7 +93,7 @@ public class RedLeftBump extends SequentialCommandGroup {
                         Commands.waitSeconds(5),
                         intake.intakeOff(),
                         alignInfinite1,
-                        shoot1 //TODO check if timeout actually works, should??? 
+                        shoot1 
                 ),
 
                 // second cycle
@@ -132,7 +132,7 @@ public class RedLeftBump extends SequentialCommandGroup {
                         Commands.waitSeconds(5),
                         intake.intakeOff(),
                         alignInfinite2,
-                        shoot2 //TODO check if timeout actually works, should??? 
+                        shoot2  
                 )
         );
 
