@@ -70,7 +70,7 @@ public class BlueMiddleDepot extends SequentialCommandGroup {
                 autoAlign,
                 intake.intakeOn(),
                 Commands.deadline(
-                    Commands.waitSeconds(4.5),
+                    Commands.waitSeconds(3.0),
                     shoot,
                     alignInfinite
                 ),
@@ -93,18 +93,19 @@ public class BlueMiddleDepot extends SequentialCommandGroup {
                      new ArrayList<Pose2d>(List.of(
                         new Pose2d(1.615, 5.951,Rotation2d.fromDegrees(180)),
                         new Pose2d(1.254,5.951,Rotation2d.fromDegrees(180)),
-                        new Pose2d(0.7,5.951,Rotation2d.fromDegrees(180)),
+                        new Pose2d(0.4,5.951,Rotation2d.fromDegrees(180)),
 
                         new Pose2d(1.654,5.951,Rotation2d.fromDegrees(180)),
                         new Pose2d(2.054,5.951,Rotation2d.fromDegrees(45)))),
-                         new ArrayList<Double>(List.of(0.1, 0.1, 0.1, 0.2, 0.4)), 
+                         new ArrayList<Double>(List.of(0.1, 0.1, 0.2, 0.2, 0.4)), 
                          new ArrayList<Boolean>(List.of(false, false, true, false, true))),
+                
                 Commands.race(
                         Commands.waitSeconds(0.75),
                         autoAlign2
                  ),
                 Commands.deadline(
-                        Commands.waitSeconds(4.5),
+                        Commands.waitSeconds(4.75),
                         alignInfinite2,
                         shoot2 //TODO check if timeout actually works, should??? 
                 ),

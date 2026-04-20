@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void driveFeedInTele(double intakePower) {
-    power = MathUtil.clamp((intakePower), 0, 0.8);
+    power = MathUtil.clamp((intakePower), 0, 1.0);
     intakeMotor.set((Math.pow(intakePower, 2)));
   }
 

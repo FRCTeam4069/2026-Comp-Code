@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.HubShiftUtil;
+import frc.robot.util.MatchTimer;
 
 
 /**
@@ -25,6 +26,8 @@ import frc.robot.util.HubShiftUtil;
  */
 public class Robot extends TimedRobot {
   // private Command m_autonomousCommand;
+
+  // private static MatchTimer matchTimer = new MatchTimer();
 
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
@@ -72,10 +75,12 @@ public class Robot extends TimedRobot {
     currentPosition = m_robotContainer.drive.getPose();
 
      var shift = HubShiftUtil.getShiftedShiftInfo();
-      SmartDashboard.putString("Shifts/Game State", shift.currentShift().toString());
-      SmartDashboard.putBoolean("Shifts/Shift Active", shift.active());
+      SmartDashboard.putString("Shifts/Game State", MatchTimer.get_current_phase().toString());
+      SmartDashboard.putBoolean("Shifts/Shift Active", MatchTimer.is_hub_active());
       SmartDashboard.putNumber(
-        "Shifts/Remaining Shift Time", Math.max(shift.remainingTime(), 0.0));
+        "Shifts/Remaining Shift Time", MatchTimer.seconds_left_in_shift());
+
+
 
   }
 
@@ -83,7 +88,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // m_robotContainer.pivot.setBrakeState(1);
-    HubShiftUtil.initialize();
+   // matchTimer.auto_init();
 
 
   }
@@ -103,7 +108,10 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.drive.setDefaultCommand(m_robotContainer.drive.stopCommand());
 
-    HubShiftUtil.initialize();
+    MatchTimer.auto_init();
+
+
+   // HubShiftUtil.initialize();
 
 
     // schedule the autonomous command (example)
@@ -128,8 +136,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // m_robotContainer.pivot.setBrakeState(0);
     m_robotContainer.intake.stopFeed();
-    HubShiftUtil.initialize();
-
+    //HubShiftUtil.initialize();
+    MatchTimer.tele_init();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

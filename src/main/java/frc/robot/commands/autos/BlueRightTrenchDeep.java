@@ -88,7 +88,7 @@ public class BlueRightTrenchDeep extends SequentialCommandGroup {
                         Commands.waitSeconds(0.5),
                         autoAlign1),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         shoot1,                        
                         alignInfinite1
                          //TODO check if timeout actually works, should??? 
@@ -125,7 +125,7 @@ public class BlueRightTrenchDeep extends SequentialCommandGroup {
                         autoAlign2
                  ),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         alignInfinite2,
                         shoot2 //TODO check if timeout actually works, should??? 
                 ),

@@ -68,6 +68,7 @@ public class RedMiddleDepot extends SequentialCommandGroup {
                 autoAlign,
                 intake.intakeOn(),
                 Commands.deadline(
+                    Commands.waitSeconds(3),
                     shoot,
                     alignInfinite
                 ),
@@ -91,7 +92,7 @@ public class RedMiddleDepot extends SequentialCommandGroup {
                      new ArrayList<Pose2d>(List.of(
                         new Pose2d(14.925, 2.119,Rotation2d.fromDegrees(0)),
                         new Pose2d(15.286,2.119,Rotation2d.fromDegrees(0)),
-                        new Pose2d(16.04,2.119,Rotation2d.fromDegrees(0)),
+                        new Pose2d(16.24,2.119,Rotation2d.fromDegrees(0)),
 
                         new Pose2d(14.886,2.119,Rotation2d.fromDegrees(0)),
                         new Pose2d(14.486,2.119,Rotation2d.fromDegrees(135)))),

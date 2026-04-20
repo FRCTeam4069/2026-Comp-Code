@@ -69,7 +69,7 @@ public class ShooterController extends SubsystemBase {
 
     public double MetersPerSecondOne = 0.0;
 
-    public double closePassRPM = 3200.0; // FIXME
+    public double closePassRPM = 3500.0; // FIXME
     public double farPassRPM = 4200.0;
 
     double pidOut = 0.0;

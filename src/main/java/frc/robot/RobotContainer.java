@@ -15,13 +15,15 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.autos.BlueLeftDefense;
 import frc.robot.commands.autos.BlueLeftTrenchDeep;
 import frc.robot.commands.autos.BlueLeftTrenchV2;
 import frc.robot.commands.autos.BlueMiddle;
 import frc.robot.commands.autos.BlueMiddleDepot;
+import frc.robot.commands.autos.BlueRightDefense;
 import frc.robot.commands.autos.BlueRightTrenchDeep;
 import frc.robot.commands.autos.BlueRightTrenchV2;
-import frc.robot.commands.autos.RedLeftBump;
+import frc.robot.commands.autos.RedLeftDefense;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,12 +32,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ShootWithTimeout;
 import frc.robot.commands.DriveToShootPosition;
-import frc.robot.commands.autos.RedLeftTrench;
 import frc.robot.commands.autos.RedLeftTrenchDeep;
 import frc.robot.commands.autos.RedLeftTrenchV2;
 import frc.robot.commands.autos.RedMiddle;
-// import frc.robot.commands.autos.RedLeftTrenchV3;
 import frc.robot.commands.autos.RedMiddleDepot;
+import frc.robot.commands.autos.RedRightDefense;
 import frc.robot.commands.autos.RedRightTrenchDeep;
 import frc.robot.commands.autos.RedRightTrenchV2;
 
@@ -130,6 +131,10 @@ public class RobotContainer {
       autoChooser.addOption("Blue Middle ", new BlueMiddle(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Middle ", new RedMiddle(drive, feeder, hopper, intake, shooter, pivot));
 
+      autoChooser.addOption("Blue Left Defense", new BlueLeftDefense(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Blue Right Defense", new BlueRightDefense(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Left Defense", new RedLeftDefense(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("Red Right Defense", new RedRightDefense(drive, feeder, hopper, intake, shooter, pivot));
 
       SmartDashboard.putData("Auto Chooser", autoChooser);
 

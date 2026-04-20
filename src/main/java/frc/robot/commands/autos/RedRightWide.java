@@ -19,7 +19,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterController;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class RedRightTrenchV2 extends SequentialCommandGroup {
+public class RedRightWide extends SequentialCommandGroup {
 
     AutoAlignInfinite alignInfinite1;
     AutoAlignInfinite alignInfinite2;
@@ -32,7 +32,7 @@ public class RedRightTrenchV2 extends SequentialCommandGroup {
     ShootWithTimeout shoot1;
     ShootWithTimeout shoot2;
 
-    public RedRightTrenchV2(
+    public RedRightWide(
             SwerveDrivetrain drive,
             FeederSubsystem feeder,
             HopperSubsystem hopper,
@@ -53,7 +53,7 @@ public class RedRightTrenchV2 extends SequentialCommandGroup {
 
 
         Pose2d startPosition = new Pose2d(12.175, 7.596, Rotation2d.fromDegrees(-90));
-        Pose2d pickUpPosition = new Pose2d(8.887, 4.303 , Rotation2d.fromDegrees(-90));
+        Pose2d pickUpPosition = new Pose2d(8.04, 4.303 , Rotation2d.fromDegrees(-90));
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),
@@ -62,7 +62,7 @@ public class RedRightTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline( //spiral setup
                                 drive,
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(8.731, 6.922, Rotation2d.fromDegrees(-90)),
+                                        new Pose2d(8.2, 6.922, Rotation2d.fromDegrees(-90)),
                                         pickUpPosition)),
                                 new ArrayList<Double>(List.of(0.4, 0.5)),
                                 new ArrayList<Boolean>(List.of(false, false))),
@@ -99,44 +99,14 @@ public class RedRightTrenchV2 extends SequentialCommandGroup {
                         new PIDToPositionSpline(
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
-                                        new Pose2d(10.8, 7.485,Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(10.8, 4.762, Rotation2d.fromDegrees(-90)))),
-                                new ArrayList<Double>(List.of(0.3, 0.3)),
+                                        new Pose2d(9.04, 7.485,Rotation2d.fromDegrees(-90)))),
+                                new ArrayList<Double>(List.of(0.3)),
                                 new ArrayList<Boolean>(List.of(false, true))),
                         Commands.sequence(
                                 Commands.waitSeconds(1.0),
                                 pivot.intakeDown(),
                                 intake.intakeOn())
                         ),
-                Commands.sequence(
-                        // new PIDToPositionSpline(
-                        //         drive,
-                        //         new ArrayList<Pose2d>(List.of( 
-                        //                 new Pose2d(10.78, 7.168, Rotation2d.fromDegrees(-90)),
-                        //                 new Pose2d(10.78, 7.318 , Rotation2d.fromDegrees(-90)),
-                        //                 new Pose2d(11.0, 7.318,Rotation2d.fromDegrees(-90)),
-                        //                 new Pose2d(13.00,7.318,Rotation2d.fromDegrees(-103)))),
-                        //         new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
-                        //         new ArrayList<Boolean>(List.of(false, false,false,true))),
-                        //         Commands.waitSeconds(5)),
-
-                         new PIDToPositionSpline(
-                                drive,
-                                new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(10.78, 7.168, Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(10.78, 7.318 , Rotation2d.fromDegrees(-90)))),
-                                new ArrayList<Double>(List.of(0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false,true)))),
-                // intake.intakeOff(),
-                 Commands.race(
-                        Commands.waitSeconds(0.5),
-                        autoAlign2
-                 ),
-                Commands.deadline(
-                        Commands.waitSeconds(4.75),
-                        alignInfinite2,
-                        shoot2 //TODO check if timeout actually works, should??? 
-                ),
                 intake.intakeOff()
         );
 

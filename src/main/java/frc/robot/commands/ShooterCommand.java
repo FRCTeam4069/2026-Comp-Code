@@ -27,7 +27,7 @@ public class ShooterCommand extends Command {
     private double currentPositionY = 0.0;
     private static final double feedStartTime = 0.1;
 
-    private final double farPassThresh = 2.5;
+    private final double farPassThresh = Units.inchesToMeters(287);
 
     private double deltaX = 0.0;
     private double deltaY = 0.0;
@@ -228,7 +228,7 @@ public class ShooterCommand extends Command {
                 shooter.farPass();
             }
 
-            else if (Math.abs(currentPositionX - hubX) < farPassThresh) {
+            else {
                 shooter.closePass();
             }
 

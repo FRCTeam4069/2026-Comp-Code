@@ -89,7 +89,7 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                         Commands.waitSeconds(0.5),
                         autoAlign1),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         shoot1,                        
                         alignInfinite1
                          //TODO check if timeout actually works, should??? 
@@ -101,7 +101,7 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
                                         new Pose2d(6.04, 7.485,Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(6.04, 4.262, Rotation2d.fromDegrees(-90)))),
+                                        new Pose2d(6.04, 4.762, Rotation2d.fromDegrees(-90)))),
                                 new ArrayList<Double>(List.of(0.3, 0.3)),
                                 new ArrayList<Boolean>(List.of(false, true))),
                         Commands.sequence(
@@ -110,23 +110,31 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                                 intake.intakeOn())
                         ),
                 Commands.sequence(
-                        new PIDToPositionSpline(
+                        // new PIDToPositionSpline(
+                        //         drive,
+                        //         new ArrayList<Pose2d>(List.of( 
+                        //                 new Pose2d(6.06, 7.168, Rotation2d.fromDegrees(-90)),
+                        //                 new Pose2d(6.06, 7.418, Rotation2d.fromDegrees(-90)),
+                        //                 new Pose2d(5.74, 7.418,Rotation2d.fromDegrees(-90)),
+                        //                 new Pose2d(3.54,7.418,Rotation2d.fromDegrees(-77)))),
+                        //         new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
+                        //         new ArrayList<Boolean>(List.of(false, false,false,true))),
+                        //         Commands.waitSeconds(5)),
+
+                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of( 
                                         new Pose2d(6.06, 7.168, Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(6.06, 7.418, Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(5.74, 7.418,Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(3.54,7.418,Rotation2d.fromDegrees(-77)))),
-                                new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false, false,false,true))),
-                                Commands.waitSeconds(5)),
+                                        new Pose2d(6.06, 7.418, Rotation2d.fromDegrees(-90)))),
+                                new ArrayList<Double>(List.of( 0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false,true)))),
                 // intake.intakeOff(),
                  Commands.race(
                         Commands.waitSeconds(0.5),
                         autoAlign2
                  ),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         alignInfinite2,
                         shoot2 //TODO check if timeout actually works, should??? 
                 ),

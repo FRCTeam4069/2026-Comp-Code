@@ -53,7 +53,7 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
 
 
         Pose2d startPosition = new Pose2d(12.175, 0.472, Rotation2d.fromDegrees(90));
-        Pose2d pickUpPosition = new Pose2d(8.887, 3.765, Rotation2d.fromDegrees(90));
+        Pose2d pickUpPosition = new Pose2d(8.887, 3.165, Rotation2d.fromDegrees(90)); // put up 60 
 
         addCommands(
                 new InstantCommand(() -> drive.resetPose(startPosition)),
@@ -88,7 +88,7 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         Commands.waitSeconds(0.5),
                         autoAlign1),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         shoot1,                        
                         alignInfinite1
                          //TODO check if timeout actually works, should??? 
@@ -100,7 +100,7 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                                 drive, //drive out of trench
                                 new ArrayList<Pose2d>(List.of(
                                         new Pose2d(10.8, 0.583,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.8, 3.806, Rotation2d.fromDegrees(90)))),
+                                        new Pose2d(10.8, 3.306, Rotation2d.fromDegrees(90)))),
                                 new ArrayList<Double>(List.of(0.3, 0.3)),
                                 new ArrayList<Boolean>(List.of(false, true))),
                         Commands.sequence(
@@ -109,23 +109,31 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                                 intake.intakeOn())
                         ),
                 Commands.sequence(
-                        new PIDToPositionSpline(
+                        // new PIDToPositionSpline(
+                        //         drive,
+                        //         new ArrayList<Pose2d>(List.of( 
+                        //                 new Pose2d(10.78, 0.9, Rotation2d.fromDegrees(90)),
+                        //                 new Pose2d(10.78, 0.75, Rotation2d.fromDegrees(90)),
+                        //                 new Pose2d(11.0, 0.75,Rotation2d.fromDegrees(90)),
+                        //                 new Pose2d(13.00,0.75,Rotation2d.fromDegrees(103)))),
+                        //         new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
+                        //         new ArrayList<Boolean>(List.of(false, false,false,true))),
+                        //         Commands.waitSeconds(5)),
+
+                         new PIDToPositionSpline(
                                 drive,
                                 new ArrayList<Pose2d>(List.of( 
                                         new Pose2d(10.78, 0.9, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.78, 0.75, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(11.0, 0.75,Rotation2d.fromDegrees(90)),
-                                        new Pose2d(13.00,0.75,Rotation2d.fromDegrees(103)))),
-                                new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false, false,false,true))),
-                                Commands.waitSeconds(5)),
+                                        new Pose2d(10.78, 0.75, Rotation2d.fromDegrees(90)))),
+                                new ArrayList<Double>(List.of( 0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false,true)))),
                 // intake.intakeOff(),
                  Commands.race(
                         Commands.waitSeconds(0.5),
                         autoAlign2
                  ),
                 Commands.deadline(
-                        Commands.waitSeconds(4.0),
+                        Commands.waitSeconds(4.75),
                         alignInfinite2,
                         shoot2 //TODO check if timeout actually works, should??? 
                 ),
