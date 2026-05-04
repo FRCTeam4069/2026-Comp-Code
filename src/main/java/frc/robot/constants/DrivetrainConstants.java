@@ -205,7 +205,7 @@ public class DrivetrainConstants {
 
         public static volatile DrivetrainPIDConstants contAutoPidToPositionConstants = new DrivetrainPIDConstants(
                         new PIDCoefficients(5.0, 0.0, 0.01),
-                        new PIDCoefficients(7.0, 0.0, 0.0), //0.6
+                        new PIDCoefficients(8.0, 0.0, 0.0), //0.6
                         new Constraints(5.5, 5.0),
                         new Constraints(10.0, 10.0),
                         new Tolerances(0.02, 0.30),

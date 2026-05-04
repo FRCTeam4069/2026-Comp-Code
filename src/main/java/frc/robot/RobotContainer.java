@@ -39,6 +39,7 @@ import frc.robot.commands.autos.RedMiddleDepot;
 import frc.robot.commands.autos.RedRightDefense;
 import frc.robot.commands.autos.RedRightTrenchDeep;
 import frc.robot.commands.autos.RedRightTrenchV2;
+import frc.robot.commands.autos.RedLeftTrenchV3;
 
 
 public class RobotContainer {
@@ -117,7 +118,7 @@ public class RobotContainer {
       autoChooser.addOption("Red Middle Depot", new RedMiddleDepot(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Red Right", new RedRightTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
 
-      // autoChooser.addOption("Red Left V3", new RedLeftTrenchV3(drive, feeder, hopper, intake, shooter, pivot));
+      autoChooser.addOption("RedLeftTrenchV3", new RedLeftTrenchV3(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue Right", new BlueRightTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue Middle Depot", new BlueMiddleDepot(drive, feeder, hopper, intake, shooter, pivot));
       autoChooser.addOption("Blue left", new BlueLeftTrenchV2(drive, feeder, hopper, intake, shooter, pivot));
