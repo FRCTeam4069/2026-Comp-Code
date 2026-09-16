@@ -22,9 +22,9 @@ public class AutoAlignAutoCommand extends Command {
     private Pose2d odometryError;
 
     private PIDController middleHeadingController = new PIDController(
-            DrivetrainConstants.middleHeadingCoefficients.kP(),
-            DrivetrainConstants.middleHeadingCoefficients.kI(),
-            DrivetrainConstants.middleHeadingCoefficients.kD());
+            DrivetrainConstants.lowerHeadingCoefficients.kP(),
+            DrivetrainConstants.lowerHeadingCoefficients.kI(),
+            DrivetrainConstants.lowerHeadingCoefficients.kD());
 
     private Pose2d currentPosition;
     private double desiredHeading = 0.0;

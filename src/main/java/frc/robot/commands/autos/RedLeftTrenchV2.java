@@ -80,7 +80,7 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                                         new Pose2d(10.2, 0.6, Rotation2d.fromDegrees(0)),
                                         new Pose2d(13.0, 0.45, Rotation2d.fromDegrees(0)),
                                         new Pose2d(13.242,0.75,Rotation2d.fromDegrees(102)))),
-                                new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
+                                new ArrayList<Double>(List.of(0.4, 0.3, 0.3)),
                                 new ArrayList<Boolean>(List.of(false, false, true))),
                                 Commands.waitSeconds(5)),
                 // intake.intakeOff(),
@@ -122,11 +122,14 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
 
                          new PIDToPositionSpline(
                                 drive,
-                                new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(10.78, 0.9, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(10.78, 0.75, Rotation2d.fromDegrees(90)))),
-                                new ArrayList<Double>(List.of( 0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false,true)))),
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(10.2, 1.0, Rotation2d.fromDegrees(90)),
+                                        new Pose2d(10.2, 0.6, Rotation2d.fromDegrees(0)),
+                                        new Pose2d(13.0, 0.45, Rotation2d.fromDegrees(0)),
+                                        new Pose2d(13.242,0.75,Rotation2d.fromDegrees(102)))),
+                                new ArrayList<Double>(List.of(0.4, 0.4, 0.3, 0.3)),
+                                new ArrayList<Boolean>(List.of(false, false, false, true))),
+                                Commands.waitSeconds(5)),
                 // intake.intakeOff(),
                  Commands.race(
                         Commands.waitSeconds(0.5),
@@ -138,6 +141,8 @@ public class RedLeftTrenchV2 extends SequentialCommandGroup {
                         shoot2  
                 ),
                 intake.intakeOff()
+
+        
         );
 
     }
