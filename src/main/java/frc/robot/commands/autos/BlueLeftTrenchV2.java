@@ -110,6 +110,7 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                                 intake.intakeOn())
                         ),
                 Commands.sequence(
+                        
                         // new PIDToPositionSpline(
                         //         drive,
                         //         new ArrayList<Pose2d>(List.of( 
@@ -120,16 +121,16 @@ public class BlueLeftTrenchV2 extends SequentialCommandGroup {
                         //         new ArrayList<Double>(List.of( 0.3,0.3, 0.3, 0.1)),
                         //         new ArrayList<Boolean>(List.of(false, false,false,true))),
                         //         Commands.waitSeconds(5)),
-
-                         new PIDToPositionSpline(
+                        new PIDToPositionSpline(
                                 drive,
-                                new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(6.06, 7.168, Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(6.06, 7.418, Rotation2d.fromDegrees(-90)))),
-                                new ArrayList<Double>(List.of( 0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false,true)))),
-                // intake.intakeOff(),
-                 Commands.race(
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(6.34, 7.468, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.54, 7.518, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.298,7.318,Rotation2d.fromDegrees(-78)))),
+                                new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, false, true))),
+                                Commands.waitSeconds(5)),
+                Commands.race(
                         Commands.waitSeconds(0.5),
                         autoAlign2
                  ),
