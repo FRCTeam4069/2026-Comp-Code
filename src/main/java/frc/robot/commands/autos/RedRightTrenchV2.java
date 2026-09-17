@@ -120,13 +120,15 @@ public class RedRightTrenchV2 extends SequentialCommandGroup {
                         //         new ArrayList<Boolean>(List.of(false, false,false,true))),
                         //         Commands.waitSeconds(5)),
 
-                         new PIDToPositionSpline(
+                        new PIDToPositionSpline(
                                 drive,
-                                new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(10.78, 7.168, Rotation2d.fromDegrees(-90)),
-                                        new Pose2d(10.78, 7.318 , Rotation2d.fromDegrees(-90)))),
-                                new ArrayList<Double>(List.of(0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false,true)))),
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(10.2, 7.468, Rotation2d.fromDegrees(0)),
+                                        new Pose2d(13.0, 7.618, Rotation2d.fromDegrees(0)),
+                                        new Pose2d(13.242,7.318,Rotation2d.fromDegrees(-102)))),
+                                new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, false, true))),
+                                Commands.waitSeconds(5)),
                 // intake.intakeOff(),
                  Commands.race(
                         Commands.waitSeconds(0.5),

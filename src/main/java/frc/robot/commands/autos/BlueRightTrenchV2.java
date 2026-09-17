@@ -120,13 +120,16 @@ public class BlueRightTrenchV2 extends SequentialCommandGroup {
                         //         new ArrayList<Boolean>(List.of(false, false,false,true))),
                         //         Commands.waitSeconds(5)),
 
-                           new PIDToPositionSpline(
+                        new PIDToPositionSpline(
                                 drive,
-                                new ArrayList<Pose2d>(List.of( 
-                                        new Pose2d(6.06, 0.9, Rotation2d.fromDegrees(90)),
-                                        new Pose2d(6.06, 0.75, Rotation2d.fromDegrees(90)))),
-                                new ArrayList<Double>(List.of(  0.3, 0.1)),
-                                new ArrayList<Boolean>(List.of(false,true)))),                // intake.intakeOff(),
+                                new ArrayList<Pose2d>(List.of(
+                                        new Pose2d(6.34, 0.6, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.54, 0.45, Rotation2d.fromDegrees(180)),
+                                        new Pose2d(3.298,0.75,Rotation2d.fromDegrees(78)))),
+                                new ArrayList<Double>(List.of(0.4, 0.3, 0.1)),
+                                new ArrayList<Boolean>(List.of(false, false, true))),
+                                Commands.waitSeconds(5)),
+
                  Commands.race(
                         Commands.waitSeconds(0.5),
                         autoAlign2
